@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://ukvahbhmmcid" path="res://player_input.gd" id="7_1jxqw"]
 [ext_resource type="Script" uid="uid://d350u8evihs1u" path="res://addons/netfox/rollback/rollback-synchronizer.gd" id="8_dw050"]
 [ext_resource type="Script" uid="uid://dour8fehaaugp" path="res://addons/netfox/tick-interpolator.gd" id="9_b26j0"]
+[ext_resource type="Script" uid="uid://dfextq23gkqj5" path="res://components/health_manager.gd" id="10_n7ghd"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_sh265"]
 
@@ -38,7 +39,7 @@ metadata/_custom_type_script = "uid://cpiuf65vuu0oa"
 [node name="RollbackSynchronizer" type="Node" parent="." unique_id=807505259 node_paths=PackedStringArray("root")]
 script = ExtResource("8_dw050")
 root = NodePath("..")
-state_properties = Array[String]([":global_transform"])
+state_properties = Array[String]([":global_transform", "HealthManager:health"])
 input_properties = Array[String](["PlayerInput:input_dir", "PlayerInput:is_jumping", "PlayerCamera:rotation"])
 metadata/_custom_type_script = "uid://d350u8evihs1u"
 
@@ -47,3 +48,6 @@ script = ExtResource("9_b26j0")
 root = NodePath("..")
 properties = Array[String]([":global_transform"])
 metadata/_custom_type_script = "uid://dour8fehaaugp"
+
+[node name="HealthManager" type="Node" parent="." unique_id=145100033]
+script = ExtResource("10_n7ghd")

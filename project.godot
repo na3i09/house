@@ -33,6 +33,7 @@ enabled=PackedStringArray("res://addons/guide/plugin.cfg", "res://addons/netfox.
 [file_customization]
 
 folder_colors={
+"res://components/": "gray",
 "res://input/": "green"
 }
 
