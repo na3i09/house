@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://cnk5imma5mmyj"]
+
+[ext_resource type="Script" uid="uid://c36nu8qad14us" path="res://rifle.gd" id="1_j33d7"]
+[ext_resource type="Resource" uid="uid://ce4cakmfii2rl" path="res://input/player_shoot.tres" id="2_jao7y"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_j33d7"]
+size = Vector3(0.1, 0.1, 0.6)
+
+[node name="Rifle" type="Node3D" unique_id=2020046742]
+script = ExtResource("1_j33d7")
+fire_action = ExtResource("2_jao7y")
+collision_mask = 4294902017
+metadata/_custom_type_script = "uid://daf6uabdxsfwq"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=326877001]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.3)
+mesh = SubResource("BoxMesh_j33d7")
