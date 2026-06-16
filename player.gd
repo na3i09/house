@@ -32,6 +32,10 @@ func _rollback_tick(delta: float, _tick, _is_fresh):
 			_jump()
 			player_input.is_jumping = false
 		
+		if player_input.fire:
+			_fire()
+			player_input.fire = false
+		
 		# Get the input direction and handle the movement/deceleration.
 		# As good practice, you should replace UI actions with custom gameplay actions.
 		var direction := (transform.basis * Vector3(player_input.input_dir.x, 0, player_input.input_dir.y)).normalized()
@@ -49,3 +53,9 @@ func _rollback_tick(delta: float, _tick, _is_fresh):
 
 func _jump() -> void:
 	velocity.y = JUMP_VELOCITY
+
+func _fire() -> void:
+	$PlayerCamera/RayCast3D.force_raycast_update()
+	
+	if $PlayerCamera/RayCast3D.is_colliding():
+		print("hit")
