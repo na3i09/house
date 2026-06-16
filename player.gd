@@ -16,9 +16,11 @@ func _ready() -> void:
 func _initialize_multiplayer() -> void:
 	await get_tree().process_frame
 	set_multiplayer_authority(1)
-	player_input.set_multiplayer_authority(peer_id)
+	player_input.set_multiplayer_authority(name.to_int())
+	$PlayerCamera.set_multiplayer_authority(name.to_int())
+	$PlayerCamera.set_camera_active()
 	rollback_synchronizer.process_settings()
-	if is_multiplayer_authority():
+	if player_input.is_multiplayer_authority():
 		GUIDE.enable_mapping_context(mapping_context)
 
 func _rollback_tick(delta: float, _tick, _is_fresh):

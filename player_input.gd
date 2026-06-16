@@ -33,6 +33,9 @@ func _gather():
 	input_samples = 0
 
 func _gather_always() -> void:
+	if not is_multiplayer_authority():
+		return
+	
 	is_jumping = is_jumping_buffer
 	is_jumping_buffer = false
 

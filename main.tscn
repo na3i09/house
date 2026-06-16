@@ -3,12 +3,16 @@
 [ext_resource type="PackedScene" uid="uid://b87k85bwe5um6" path="res://level.tscn" id="1_0xm2m"]
 [ext_resource type="Script" uid="uid://da8wwp1qhkc0r" path="res://main.gd" id="1_h2yge"]
 [ext_resource type="PackedScene" uid="uid://cnv06ugmt1xiu" path="res://player.tscn" id="2_h2yge"]
+[ext_resource type="Resource" uid="uid://bifumi31kn7" path="res://input/menu_mapping.tres" id="3_lquwl"]
+[ext_resource type="Resource" uid="uid://d2516cp1tbkju" path="res://input/exit_action.tres" id="4_7mycd"]
 
 [sub_resource type="Environment" id="Environment_0xm2m"]
 
 [node name="Main" type="Node3D" unique_id=1886403943]
 script = ExtResource("1_h2yge")
 Player = ExtResource("2_h2yge")
+menu_mapping = ExtResource("3_lquwl")
+exit_action = ExtResource("4_7mycd")
 
 [node name="Level" parent="." unique_id=1280929139 instance=ExtResource("1_0xm2m")]
 
@@ -17,3 +21,78 @@ environment = SubResource("Environment_0xm2m")
 
 [node name="PlayerSpawnPoint" type="Marker3D" parent="." unique_id=300567180]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.430535, 0)
+
+[node name="MainMenu" type="CanvasLayer" parent="." unique_id=1874915617]
+
+[node name="HostButton" type="Button" parent="MainMenu" unique_id=384761435]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -128.5
+offset_right = 325.0
+offset_bottom = 128.5
+grow_vertical = 2
+text = "Host"
+metadata/_edit_use_anchors_ = true
+
+[node name="ClientButton" type="Button" parent="MainMenu" unique_id=1650096134]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -321.0
+offset_top = -128.0
+offset_bottom = 128.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "Client
+"
+metadata/_edit_use_anchors_ = true
+
+[node name="LineEdit" type="LineEdit" parent="MainMenu" unique_id=1417837330]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -34.25
+offset_top = -15.5
+offset_right = 34.25
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "127.0.0.1"
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=119053612]
+_spawnable_scenes = PackedStringArray("uid://cnv06ugmt1xiu")
+spawn_path = NodePath("..")
+
+[node name="WorldLight" type="DirectionalLight3D" parent="." unique_id=311411883]
+transform = Transform3D(1, 0, 0, 0, 0.7634467, 0.64587086, 0, -0.64587086, 0.7634467, 0, 19.133778, 27.970188)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1237720176]
+transform = Transform3D(1, 0, 0, 0, 0.6795822, 0.73359936, 0, -0.73359936, 0.6795822, 0, 9.134973, 11.695151)
+current = true
+
+[node name="RespawnMenu" type="CanvasLayer" parent="." unique_id=490160215]
+visible = false
+
+[node name="Respawn" type="Button" parent="RespawnMenu" unique_id=200570768]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -103.5
+offset_top = -70.25
+offset_right = 103.5
+offset_bottom = 70.25
+grow_horizontal = 2
+grow_vertical = 2
+text = "Respawn"
+
+[connection signal="pressed" from="MainMenu/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="MainMenu/ClientButton" to="." method="_on_client_button_pressed"]
+[connection signal="text_submitted" from="MainMenu/LineEdit" to="." method="_on_line_edit_text_submitted"]
