@@ -8,8 +8,6 @@ const JUMP_VELOCITY = 4.5
 @onready var player_input: Node = $PlayerInput
 @onready var rollback_synchronizer: RollbackSynchronizer = $RollbackSynchronizer
 
-var peer_id = 0
-
 func _ready() -> void:
 	_initialize_multiplayer.call_deferred()
 

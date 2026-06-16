@@ -15,7 +15,6 @@ func _ready() -> void:
 
 func _spawn_player(id: int = 1) -> void:
 	var player = Player.instantiate()
-	player.peer_id = id
 	player.name = str(id)
 	
 	_place_player.call_deferred(player,$PlayerSpawnPoint)
