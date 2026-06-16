@@ -50,9 +50,3 @@ func _rollback_tick(delta: float, _tick, _is_fresh):
 
 func _jump() -> void:
 	velocity.y = JUMP_VELOCITY
-
-func _fire() -> void:
-	$PlayerCamera/RayCast3D.force_raycast_update()
-	
-	if $PlayerCamera/RayCast3D.is_colliding():
-		print("hit")
