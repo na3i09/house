@@ -2,38 +2,50 @@ extends CharacterBody3D
 
 @export var mapping_context: GUIDEMappingContext
 
-@export var movement_action: GUIDEAction
-@export var jump_action: GUIDEAction
-
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
+@onready var player_input: Node = $PlayerInput
+@onready var rollback_synchronizer: RollbackSynchronizer = $RollbackSynchronizer
+
+var peer_id = 0
+
 func _ready() -> void:
-	GUIDE.enable_mapping_context(mapping_context)
-	jump_action.just_triggered.connect(_jump)
+	_initialize_multiplayer.call_deferred()
 
-func _physics_process(delta: float) -> void:
-	# Add the gravity.
-	if not is_on_floor():
-		velocity += get_gravity() * delta
+func _initialize_multiplayer() -> void:
+	await get_tree().process_frame
+	set_multiplayer_authority(1)
+	player_input.set_multiplayer_authority(peer_id)
+	rollback_synchronizer.process_settings()
+	if is_multiplayer_authority():
+		GUIDE.enable_mapping_context(mapping_context)
 
-	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+func _rollback_tick(delta: float, _tick, _is_fresh):
+	if is_multiplayer_authority():
+		# Add the gravity.
+		if not is_on_floor():
+			velocity += get_gravity() * delta
 
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var input_dir: Vector2 = movement_action.value_axis_2d
-	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	direction = direction.rotated(Vector3.UP,$PlayerCamera.rotation.y + rotation.y)
-	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		# Handle jump.
+		if player_input.is_jumping:
+			_jump()
+			player_input.is_jumping = false
+		
+		# Get the input direction and handle the movement/deceleration.
+		# As good practice, you should replace UI actions with custom gameplay actions.
+		var direction := (transform.basis * Vector3(player_input.input_dir.x, 0, player_input.input_dir.y)).normalized()
+		direction = direction.rotated(Vector3.UP,$PlayerCamera.rotation.y + rotation.y)
+		if direction:
+			velocity.x = direction.x * SPEED
+			velocity.z = direction.z * SPEED
+		else:
+			velocity.x = move_toward(velocity.x, 0, SPEED)
+			velocity.z = move_toward(velocity.z, 0, SPEED)
 
-	move_and_slide()
+		velocity *= NetworkTime.physics_factor
+		move_and_slide()
+		velocity /= NetworkTime.physics_factor
 
 func _jump() -> void:
 	velocity.y = JUMP_VELOCITY

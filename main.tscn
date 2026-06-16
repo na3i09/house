@@ -1,11 +1,19 @@
 [gd_scene format=3 uid="uid://mrqmpmjf40j1"]
 
 [ext_resource type="PackedScene" uid="uid://b87k85bwe5um6" path="res://level.tscn" id="1_0xm2m"]
+[ext_resource type="Script" uid="uid://da8wwp1qhkc0r" path="res://main.gd" id="1_h2yge"]
 [ext_resource type="PackedScene" uid="uid://cnv06ugmt1xiu" path="res://player.tscn" id="2_h2yge"]
 
+[sub_resource type="Environment" id="Environment_0xm2m"]
+
 [node name="Main" type="Node3D" unique_id=1886403943]
+script = ExtResource("1_h2yge")
+Player = ExtResource("2_h2yge")
 
 [node name="Level" parent="." unique_id=1280929139 instance=ExtResource("1_0xm2m")]
 
-[node name="CharacterBody3D" parent="." unique_id=856101085 instance=ExtResource("2_h2yge")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2163248, 0)
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=574534553]
+environment = SubResource("Environment_0xm2m")
+
+[node name="PlayerSpawnPoint" type="Marker3D" parent="." unique_id=300567180]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.430535, 0)

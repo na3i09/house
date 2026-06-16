@@ -6,6 +6,9 @@
 [ext_resource type="Script" uid="uid://csotq3amhia5r" path="res://player_camera.gd" id="3_i3pqv"]
 [ext_resource type="Resource" uid="uid://7chyphxfdx2n" path="res://input/player_jump.tres" id="4_1jxqw"]
 [ext_resource type="Resource" uid="uid://rirkrrk4604g" path="res://input/player_camera.tres" id="4_hqtel"]
+[ext_resource type="Script" uid="uid://ukvahbhmmcid" path="res://player_input.gd" id="7_1jxqw"]
+[ext_resource type="Script" uid="uid://d350u8evihs1u" path="res://addons/netfox/rollback/rollback-synchronizer.gd" id="8_dw050"]
+[ext_resource type="Script" uid="uid://dour8fehaaugp" path="res://addons/netfox/tick-interpolator.gd" id="9_b26j0"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_sh265"]
 
@@ -14,8 +17,6 @@
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=856101085]
 script = ExtResource("1_4flbx")
 mapping_context = ExtResource("2_onrkg")
-movement_action = ExtResource("3_2hs0m")
-jump_action = ExtResource("4_1jxqw")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1080898210]
 mesh = SubResource("CapsuleMesh_sh265")
@@ -27,3 +28,22 @@ shape = SubResource("CapsuleShape3D_4flbx")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36669618, 0)
 script = ExtResource("3_i3pqv")
 camera_action = ExtResource("4_hqtel")
+
+[node name="PlayerInput" type="Node" parent="." unique_id=1747372638]
+script = ExtResource("7_1jxqw")
+movement_action = ExtResource("3_2hs0m")
+jump_action = ExtResource("4_1jxqw")
+metadata/_custom_type_script = "uid://cpiuf65vuu0oa"
+
+[node name="RollbackSynchronizer" type="Node" parent="." unique_id=807505259 node_paths=PackedStringArray("root")]
+script = ExtResource("8_dw050")
+root = NodePath("..")
+state_properties = Array[String]([":global_transform"])
+input_properties = Array[String](["PlayerInput:input_dir", "PlayerInput:is_jumping"])
+metadata/_custom_type_script = "uid://d350u8evihs1u"
+
+[node name="TickInterpolator" type="Node" parent="." unique_id=796364604 node_paths=PackedStringArray("root")]
+script = ExtResource("9_b26j0")
+root = NodePath("..")
+properties = Array[String]([":global_transform"])
+metadata/_custom_type_script = "uid://dour8fehaaugp"
