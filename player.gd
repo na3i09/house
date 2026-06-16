@@ -1,4 +1,5 @@
 extends CharacterBody3D
+class_name Player
 
 @export var mapping_context: GUIDEMappingContext
 
