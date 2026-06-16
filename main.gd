@@ -4,7 +4,7 @@ const PORT: int = 1027
 
 var peer = ENetMultiplayerPeer.new()
 
-@export var Player: PackedScene
+@export var PlayerScene: PackedScene
 
 @export var menu_mapping: GUIDEMappingContext
 @export var exit_action: GUIDEAction
@@ -14,7 +14,7 @@ func _ready() -> void:
 	exit_action.triggered.connect(quit_game)
 
 func _spawn_player(id: int = 1) -> void:
-	var player = Player.instantiate()
+	var player = PlayerScene.instantiate()
 	player.name = str(id)
 	
 	_place_player.call_deferred(player,$PlayerSpawnPoint)

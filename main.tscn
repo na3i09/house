@@ -10,7 +10,7 @@
 
 [node name="Main" type="Node3D" unique_id=1886403943]
 script = ExtResource("1_h2yge")
-Player = ExtResource("2_h2yge")
+PlayerScene = ExtResource("2_h2yge")
 menu_mapping = ExtResource("3_lquwl")
 exit_action = ExtResource("4_7mycd")
 
