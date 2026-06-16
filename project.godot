@@ -37,6 +37,11 @@ folder_colors={
 "res://input/": "green"
 }
 
+[layer_names]
+
+3d_physics/layer_1="Physics"
+3d_physics/layer_9="PlayerPhysics"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

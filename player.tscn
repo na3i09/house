@@ -17,6 +17,8 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4flbx"]
 
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=856101085]
+collision_layer = 257
+collision_mask = 257
 script = ExtResource("1_4flbx")
 mapping_context = ExtResource("2_onrkg")
 
