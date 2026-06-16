@@ -21,5 +21,7 @@ func _on_fire():
 
 func _on_hit(result: Dictionary) -> void:
 	if result["collider"] is Player:
+		var hit_target: Player = result["collider"]
+		hit_target.die()
 		if multiplayer.get_unique_id() == player_peer_id:
-			print("hit")
+			print("hit " + hit_target.name)

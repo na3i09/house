@@ -33,9 +33,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36669618, 0)
 script = ExtResource("3_i3pqv")
 camera_action = ExtResource("4_hqtel")
 
-[node name="Rifle" parent="PlayerCamera" unique_id=2020046742 node_paths=PackedStringArray("player") instance=ExtResource("12_ivps1")]
+[node name="RiflePivot" type="Node3D" parent="PlayerCamera" unique_id=2129162258]
+
+[node name="Rifle" parent="PlayerCamera/RiflePivot" unique_id=2020046742 node_paths=PackedStringArray("player") instance=ExtResource("12_ivps1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.36669618, -0.5)
-player = NodePath("../..")
+player = NodePath("../../..")
 
 [node name="PlayerInput" type="Node" parent="." unique_id=1747372638]
 script = ExtResource("7_1jxqw")
@@ -47,7 +49,7 @@ metadata/_custom_type_script = "uid://cpiuf65vuu0oa"
 script = ExtResource("8_dw050")
 root = NodePath("..")
 enable_prediction = true
-state_properties = Array[String]([":global_transform", "HealthManager:health"])
+state_properties = Array[String]([":global_transform", "HealthManager:health", ":cam_rotation"])
 input_properties = Array[String](["PlayerInput:input_dir", "PlayerInput:is_jumping", "PlayerCamera:rotation"])
 enable_input_broadcast = false
 metadata/_custom_type_script = "uid://d350u8evihs1u"
@@ -55,7 +57,7 @@ metadata/_custom_type_script = "uid://d350u8evihs1u"
 [node name="TickInterpolator" type="Node" parent="." unique_id=796364604 node_paths=PackedStringArray("root")]
 script = ExtResource("9_b26j0")
 root = NodePath("..")
-properties = Array[String]([":global_transform"])
+properties = Array[String]([":global_transform", ":cam_rotation"])
 metadata/_custom_type_script = "uid://dour8fehaaugp"
 
 [node name="HealthManager" type="Node" parent="." unique_id=145100033]
