@@ -39,8 +39,10 @@ metadata/_custom_type_script = "uid://cpiuf65vuu0oa"
 [node name="RollbackSynchronizer" type="Node" parent="." unique_id=807505259 node_paths=PackedStringArray("root")]
 script = ExtResource("8_dw050")
 root = NodePath("..")
+enable_prediction = true
 state_properties = Array[String]([":global_transform", "HealthManager:health"])
 input_properties = Array[String](["PlayerInput:input_dir", "PlayerInput:is_jumping", "PlayerCamera:rotation"])
+enable_input_broadcast = false
 metadata/_custom_type_script = "uid://d350u8evihs1u"
 
 [node name="TickInterpolator" type="Node" parent="." unique_id=796364604 node_paths=PackedStringArray("root")]
