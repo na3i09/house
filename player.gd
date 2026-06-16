@@ -27,15 +27,11 @@ func _rollback_tick(delta: float, _tick, _is_fresh):
 		# Add the gravity.
 		if not is_on_floor():
 			velocity += get_gravity() * delta
-
+		
 		# Handle jump.
 		if player_input.is_jumping:
 			_jump()
 			player_input.is_jumping = false
-		
-		if player_input.fire:
-			_fire()
-			player_input.fire = false
 		
 		# Get the input direction and handle the movement/deceleration.
 		# As good practice, you should replace UI actions with custom gameplay actions.
