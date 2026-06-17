@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://csotq3amhia5r" path="res://player_camera.gd" id="3_i3pqv"]
 [ext_resource type="Resource" uid="uid://7chyphxfdx2n" path="res://input/player_jump.tres" id="4_1jxqw"]
 [ext_resource type="Resource" uid="uid://rirkrrk4604g" path="res://input/player_camera.tres" id="4_hqtel"]
+[ext_resource type="Material" uid="uid://cjprf6h2vo15j" path="res://materials/ping_shader_material.tres" id="6_ivps1"]
 [ext_resource type="Script" uid="uid://ukvahbhmmcid" path="res://player_input.gd" id="7_1jxqw"]
 [ext_resource type="Script" uid="uid://d350u8evihs1u" path="res://addons/netfox/rollback/rollback-synchronizer.gd" id="8_dw050"]
 [ext_resource type="Script" uid="uid://dour8fehaaugp" path="res://addons/netfox/tick-interpolator.gd" id="9_b26j0"]
@@ -15,6 +16,11 @@
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_sh265"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4flbx"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_nvl01"]
+material = ExtResource("6_ivps1")
+flip_faces = true
+size = Vector2(2, 2)
 
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=856101085]
 collision_layer = 257
@@ -38,6 +44,10 @@ camera_action = ExtResource("4_hqtel")
 [node name="Rifle" parent="PlayerCamera/RiflePivot" unique_id=2020046742 node_paths=PackedStringArray("player") instance=ExtResource("12_ivps1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.36669618, -0.5)
 player = NodePath("../../..")
+
+[node name="PingQuad" type="MeshInstance3D" parent="PlayerCamera" unique_id=794713480]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.98955595)
+mesh = SubResource("QuadMesh_nvl01")
 
 [node name="PlayerInput" type="Node" parent="." unique_id=1747372638]
 script = ExtResource("7_1jxqw")
