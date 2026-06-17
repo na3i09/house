@@ -9,16 +9,12 @@ uniform float size = 0.2;
 instance uniform float max_dist = 15.0;
 instance uniform float opacity = 1.0;
 instance uniform float min_dist = 0.0;
+instance uniform vec3 origin_point = vec3(0.0);
 
 uniform vec4 ping_color : source_color;
 
-varying vec3 world_coords;
-
-#include "world_aware.gdshaderinc"
-
 void vertex() {
 	POSITION = vec4(VERTEX.xy, 1.0, 1.0);
-	world_coords = get_coords(MODEL_MATRIX,vec3(0.0));
 }
 
 void fragment() {
@@ -34,7 +30,7 @@ void fragment() {
 	// Visualize linear depth
 	//ALBEDO.rgb = vec3(fract(linear_depth));
 	
-	float dist_from_orig = distance(world_position,world_coords);
+	float dist_from_orig = distance(world_position,origin_point);
 	if (dist_from_orig > max_dist || dist_from_orig < min_dist) {
 		discard;
 	}

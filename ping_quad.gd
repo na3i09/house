@@ -20,6 +20,7 @@ func attempt_ping() -> void:
 func fire_ping() -> void:
 	set_max_dist(0.0)
 	set_min_dist(0.0)
+	set_origin_point(owner.global_position) #TODO: change to something less likely to break if node heirearchy is changed
 	show()
 	if leading_edge_tween:
 		leading_edge_tween.kill()
@@ -39,3 +40,6 @@ func set_min_dist(val: float) -> void:
 
 func set_opacity(val: float) -> void:
 	set_instance_shader_parameter("opacity",val)
+
+func set_origin_point(val: Vector3) -> void:
+	set_instance_shader_parameter("origin_point",val)
