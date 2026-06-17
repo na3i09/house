@@ -20,6 +20,7 @@ func attempt_ping() -> void:
 func fire_ping() -> void:
 	set_max_dist(0.0)
 	set_min_dist(0.0)
+	set_opacity(0.2)
 	set_origin_point(owner.global_position) #TODO: change to something less likely to break if node heirearchy is changed
 	show()
 	if leading_edge_tween:
@@ -28,8 +29,12 @@ func fire_ping() -> void:
 	leading_edge_tween = create_tween()
 	
 	leading_edge_tween.tween_method(set_max_dist,0.0,ping_max_range,0.8)
+	leading_edge_tween.parallel()
+	leading_edge_tween.tween_method(set_opacity,0.2,1.0,0.6)
 	leading_edge_tween.tween_interval(ping_time)
 	leading_edge_tween.tween_method(set_min_dist,0.0,ping_max_range,1.2)
+	leading_edge_tween.parallel()
+	leading_edge_tween.tween_method(set_opacity,1.0,0.0,1.2)
 	leading_edge_tween.tween_callback(hide)
 
 func set_max_dist(val: float) -> void:
