@@ -6,8 +6,6 @@
 [ext_resource type="Resource" uid="uid://bifumi31kn7" path="res://input/menu_mapping.tres" id="3_lquwl"]
 [ext_resource type="Resource" uid="uid://d2516cp1tbkju" path="res://input/exit_action.tres" id="4_7mycd"]
 
-[sub_resource type="Environment" id="Environment_0xm2m"]
-
 [node name="Main" type="Node3D" unique_id=1886403943]
 script = ExtResource("1_h2yge")
 PlayerScene = ExtResource("2_h2yge")
@@ -15,9 +13,6 @@ menu_mapping = ExtResource("3_lquwl")
 exit_action = ExtResource("4_7mycd")
 
 [node name="Level" parent="." unique_id=1280929139 instance=ExtResource("1_0xm2m")]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=574534553]
-environment = SubResource("Environment_0xm2m")
 
 [node name="PlayerSpawnPoint" type="Marker3D" parent="." unique_id=300567180]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.430535, 0)
