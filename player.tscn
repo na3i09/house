@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dgxfg6ck11r1g" path="res://player.gd" id="1_4flbx"]
 [ext_resource type="Resource" uid="uid://cyx1fr5fa6glj" path="res://input/player_controls.tres" id="2_onrkg"]
 [ext_resource type="Resource" uid="uid://cduoxipskxtuo" path="res://input/player_movement.tres" id="3_2hs0m"]
+[ext_resource type="PackedScene" uid="uid://cbqvs7ytvvu20" path="res://player_ghost.tscn" id="3_606se"]
 [ext_resource type="Script" uid="uid://csotq3amhia5r" path="res://player_camera.gd" id="3_i3pqv"]
 [ext_resource type="Resource" uid="uid://7chyphxfdx2n" path="res://input/player_jump.tres" id="4_1jxqw"]
 [ext_resource type="Resource" uid="uid://rirkrrk4604g" path="res://input/player_camera.tres" id="4_hqtel"]
@@ -29,11 +30,12 @@ material = ExtResource("6_ivps1")
 flip_faces = true
 size = Vector2(2, 2)
 
-[node name="CharacterBody3D" type="CharacterBody3D" unique_id=856101085]
+[node name="CharacterBody3D" type="CharacterBody3D" unique_id=856101085 groups=["Players"]]
 collision_layer = 257
 collision_mask = 257
 script = ExtResource("1_4flbx")
 mapping_context = ExtResource("2_onrkg")
+GhostScene = ExtResource("3_606se")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1080898210]
 mesh = SubResource("CapsuleMesh_sh265")

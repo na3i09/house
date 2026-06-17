@@ -18,6 +18,7 @@ func attempt_ping() -> void:
 		fire_ping()
 
 func fire_ping() -> void:
+	get_tree().call_group("Players","flash_for_ping",owner.name.to_int())
 	set_max_dist(0.0)
 	set_min_dist(0.0)
 	set_opacity(0.2)

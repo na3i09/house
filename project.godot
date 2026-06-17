@@ -38,6 +38,10 @@ folder_colors={
 "res://materials/": "purple"
 }
 
+[global_group]
+
+Players=""
+
 [layer_names]
 
 3d_physics/layer_1="Physics"

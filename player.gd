@@ -2,6 +2,7 @@ extends CharacterBody3D
 class_name Player
 
 @export var mapping_context: GUIDEMappingContext
+@export var GhostScene: PackedScene
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
@@ -81,3 +82,11 @@ func respawn_player() -> void:
 	$PlayerCamera.set_camera_active()
 	alive = true
 	show()
+
+func flash_for_ping(caller_id: int) -> void:
+	if name.to_int() != caller_id:
+		var ghost = GhostScene.instantiate()
+		
+		get_tree().get_root().add_child(ghost)
+		
+		ghost.global_position = $MeshInstance3D.global_position
