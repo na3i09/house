@@ -42,6 +42,10 @@ folder_colors={
 3d_physics/layer_1="Physics"
 3d_physics/layer_9="PlayerPhysics"
 
+[netfox]
+
+time/tickrate=60
+
 [physics]
 
 3d/physics_engine="Jolt Physics"
