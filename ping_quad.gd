@@ -4,7 +4,7 @@ extends MeshInstance3D
 
 @export_group("Settings")
 @export var ping_max_range: float = 20.0
-@export var ping_time: float = 2.0
+@export var ping_time: float = 1.0
 
 var leading_edge_tween: Tween
 
