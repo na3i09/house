@@ -13,6 +13,10 @@ size = Vector3(60, 60, 60)
 operation = 2
 size = Vector3(55, 55, 55)
 
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGBox3D" unique_id=1355565713]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0340166, -26.65445, 5.1650233)
+size = Vector3(1.5, 3, 1.5)
+
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=2017222056]
 
 [node name="CSGBakedCollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=412692371]
