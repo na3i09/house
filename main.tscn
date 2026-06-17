@@ -70,9 +70,6 @@ alignment = 1
 _spawnable_scenes = PackedStringArray("uid://cnv06ugmt1xiu")
 spawn_path = NodePath("..")
 
-[node name="WorldLight" type="DirectionalLight3D" parent="." unique_id=311411883]
-transform = Transform3D(1, 0, 0, 0, 0.7634467, 0.64587086, 0, -0.64587086, 0.7634467, 0, 19.133778, 27.970188)
-
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1237720176]
 transform = Transform3D(1, 0, 0, 0, 0.6795822, 0.73359936, 0, -0.73359936, 0.6795822, 0, 9.134973, 11.695151)
 current = true
