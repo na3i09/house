@@ -59,12 +59,12 @@ func _del_player(id):
 		get_node(str(id)).queue_free()
 
 func respawn_player(id):
-	rpc("_respawn_player",id)
+	rpc_id(1,"_respawn_player",id)
 
 @rpc("any_peer","call_local")
 func _respawn_player(id):
 	if multiplayer.is_server():
-		_spawn_player(id)
+		get_node(str(id)).respawn()
 
 func _on_line_edit_text_submitted(new_text: String) -> void:
 	peer.create_client(new_text,PORT)

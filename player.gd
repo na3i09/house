@@ -65,6 +65,16 @@ func die() -> void:
 func kill_player() -> void:
 	if multiplayer.get_unique_id() == name.to_int():
 		print(name + " you are dead")
+		$"../".show_respawn_button()
 	
 	alive = false
 	hide()
+
+func respawn() -> void:
+	rpc("respawn_player")
+
+@rpc("authority","call_local")
+func respawn_player() -> void:
+	$PlayerCamera.set_camera_active()
+	alive = true
+	show()
