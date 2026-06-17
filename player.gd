@@ -56,7 +56,7 @@ func _rollback_tick(delta: float, _tick, _is_fresh):
 		move_and_slide()
 		velocity /= NetworkTime.physics_factor
 	elif is_multiplayer_authority():
-		global_position = Vector3(0,60,0)
+		global_position = Vector3(0,20,0)
 
 func _jump() -> void:
 	velocity.y = JUMP_VELOCITY
