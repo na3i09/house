@@ -22,6 +22,8 @@ func _initialize_multiplayer() -> void:
 	player_input.set_multiplayer_authority(name.to_int())
 	$PlayerCamera.set_multiplayer_authority(name.to_int())
 	$PlayerCamera.set_camera_active()
+	if multiplayer.get_unique_id() != name.to_int():
+		$PlayerCamera/RiflePivot.hide()
 	rollback_synchronizer.process_settings()
 	if player_input.is_multiplayer_authority():
 		GUIDE.enable_mapping_context(mapping_context)
