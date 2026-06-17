@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cjprf6h2vo15j"]
+
+[ext_resource type="Shader" uid="uid://bumcmix3pyuja" path="res://materials/shaders/ping.gdshader" id="1_lflwp"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_lflwp")
+shader_parameter/divisor = 0.2
+shader_parameter/width = 0.02
+shader_parameter/size = 0.2
+shader_parameter/ping_color = Color(0.85616714, 0, 0.031732317, 1)
