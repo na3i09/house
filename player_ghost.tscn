@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://cbqvs7ytvvu20"]
+
+[ext_resource type="Material" uid="uid://dbdrsls0dmivu" path="res://materials/ghost_shader_material.tres" id="1_wugak"]
+
+[sub_resource type="GDScript" id="GDScript_wugak"]
+resource_name = "PlayerGhost"
+script/source = "extends Node3D
+class_name PlayerGhost
+
+@export var fade_time: float = 2.0;
+
+@onready var ghost_mesh: MeshInstance3D = $GhostMesh
+
+
+var fade_tween: Tween
+
+func _ready() -> void:
+	tween_fade()
+
+func tween_fade() -> void:
+	if fade_tween:
+		fade_tween.kill()
+	
+	fade_tween = create_tween()
+	
+	fade_tween.tween_method(set_opacity,1.0,0.0,fade_time)
+	fade_tween.tween_callback(queue_free)
+
+func set_opacity(val: float) -> void:
+	ghost_mesh.set_instance_shader_parameter(\"opacity\",val)
+"
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_h5qa1"]
+
+[node name="PlayerGhost" type="Node3D" unique_id=416502226]
+script = SubResource("GDScript_wugak")
+
+[node name="GhostMesh" type="MeshInstance3D" parent="." unique_id=1175095489]
+mesh = SubResource("CapsuleMesh_h5qa1")
+surface_material_override/0 = ExtResource("1_wugak")
