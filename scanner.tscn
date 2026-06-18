@@ -33,9 +33,12 @@ alpha_curve = SubResource("CurveTexture_52xpv")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7ogy5"]
 blend_mode = 1
+depth_draw_mode = 2
 shading_mode = 0
+diffuse_mode = 3
+disable_fog = true
 vertex_color_use_as_albedo = true
-albedo_color = Color(14.139331, 14.139331, 14.139331, 1)
+albedo_color = Color(80.24026, 80.24026, 80.24026, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_tn0fg"]
 material = SubResource("StandardMaterial3D_7ogy5")
