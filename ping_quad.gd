@@ -15,7 +15,8 @@ func _ready() -> void:
 
 func attempt_ping() -> void:
 	if is_multiplayer_authority():
-		fire_ping()
+		$"../Scanner".fire_scan()
+		#fire_ping()
 
 func fire_ping() -> void:
 	get_tree().call_group("Players","flash_for_ping",owner.name.to_int())
