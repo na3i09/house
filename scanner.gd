@@ -41,6 +41,8 @@ func _physics_process(_delta: float) -> void:
 				_cast_beam()
 				
 				y_angle += scan_angle_delta
+				if y_angle >= scan_angle_vert/2:
+					break
 		else:
 			y_angle = -scan_angle_vert/2
 			x_angle += scan_angle_delta
