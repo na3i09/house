@@ -20,7 +20,7 @@ var y_angle: float = 0
 
 
 func _ready() -> void:
-	process_mode = Node.PROCESS_MODE_DISABLED
+	set_physics_process(false)
 
 func fire_scan() -> void:
 	if instant:
@@ -29,7 +29,7 @@ func fire_scan() -> void:
 		_begin_scan()
 
 func _begin_scan() -> void:
-	process_mode = Node.PROCESS_MODE_INHERIT
+	set_physics_process(true)
 	gpu_particles_3d.restart()
 	x_angle = -scan_angle_horiz/2
 	y_angle = -scan_angle_vert/2
@@ -48,7 +48,7 @@ func _physics_process(_delta: float) -> void:
 		_finish_loop()
 
 func _finish_loop() -> void:
-	process_mode = Node.PROCESS_MODE_DISABLED
+	set_physics_process(false)
 
 func _scan_loop() -> void:
 	gpu_particles_3d.restart()
