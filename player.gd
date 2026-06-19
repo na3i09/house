@@ -9,6 +9,8 @@ const JUMP_VELOCITY = 4.5
 
 @onready var player_input: Node = $PlayerInput
 @onready var rollback_synchronizer: RollbackSynchronizer = $RollbackSynchronizer
+@onready var tick_interpolator: TickInterpolator = $TickInterpolator
+
 
 @onready var player_hud: CanvasLayer = $PlayerHud
 
@@ -30,6 +32,7 @@ func _initialize_multiplayer() -> void:
 		add_to_group("Enemies")
 		$PlayerCamera/RiflePivot.hide()
 	rollback_synchronizer.process_settings()
+	tick_interpolator.process_settings()
 	if player_input.is_multiplayer_authority():
 		GUIDE.enable_mapping_context(mapping_context)
 
