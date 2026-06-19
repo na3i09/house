@@ -10,16 +10,12 @@ class_name Temperature
 
 @onready var player: Player = owner if owner is Player else null
 
-@onready var last_position: Vector3 = global_position
-
 func _rollback_tick(delta: float, _tick, _is_fresh):
 	if is_multiplayer_authority():
-		if last_position.distance_to(global_position) < 0.5:
+		if player.velocity.length() < 0.1:
 			temperature -= stationary_drain_rate * delta
 		else:
 			temperature -= moving_drain_rate * delta
-		
-		last_position = global_position
 		
 		if temperature < 10.0:
 			if player:
