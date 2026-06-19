@@ -11,6 +11,9 @@ class_name Scanner
 
 @export var instant: bool = false
 
+## Change direction of scan from bottom to top to right to left
+@export var switch_scan_direction: bool = false
+
 @export var scan_speed: int = 5
 
 @onready var gpu_particles_3d: GPUParticles3D = $GPUParticles3D
@@ -80,7 +83,7 @@ func _scan(ray_start: Vector3, ray_end: Vector3) -> Dictionary:
 	return result
 
 func _cast_beam() -> void:
-	var end_point: Vector3 = _calc_ray_end(x_angle,y_angle)
+	var end_point: Vector3 = _calc_ray_end(y_angle,x_angle) if switch_scan_direction else _calc_ray_end(x_angle,y_angle)
 	
 	var result: Dictionary = _scan(global_position,end_point)
 	
