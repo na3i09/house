@@ -7,14 +7,11 @@
 [ext_resource type="Script" uid="uid://csotq3amhia5r" path="res://player_camera.gd" id="3_i3pqv"]
 [ext_resource type="Resource" uid="uid://7chyphxfdx2n" path="res://input/player_jump.tres" id="4_1jxqw"]
 [ext_resource type="Resource" uid="uid://rirkrrk4604g" path="res://input/player_camera.tres" id="4_hqtel"]
-[ext_resource type="Material" uid="uid://cjprf6h2vo15j" path="res://materials/ping_shader_material.tres" id="6_ivps1"]
 [ext_resource type="Script" uid="uid://ukvahbhmmcid" path="res://player_input.gd" id="7_1jxqw"]
-[ext_resource type="Script" uid="uid://d2fxmt80bq1la" path="res://ping_quad.gd" id="7_urp6f"]
-[ext_resource type="Resource" uid="uid://bgg7h0i032vcn" path="res://input/player_ping.tres" id="8_bwjto"]
+[ext_resource type="PackedScene" uid="uid://cjio45uml05j2" path="res://tracker.tscn" id="7_urp6f"]
 [ext_resource type="Script" uid="uid://d350u8evihs1u" path="res://addons/netfox/rollback/rollback-synchronizer.gd" id="8_dw050"]
 [ext_resource type="Script" uid="uid://dour8fehaaugp" path="res://addons/netfox/tick-interpolator.gd" id="9_b26j0"]
 [ext_resource type="Script" uid="uid://dfextq23gkqj5" path="res://components/health_manager.gd" id="10_n7ghd"]
-[ext_resource type="PackedScene" uid="uid://nljxsekqseek" path="res://scanner.tscn" id="10_u1c27"]
 [ext_resource type="PackedScene" uid="uid://cnk5imma5mmyj" path="res://rifle.tscn" id="12_ivps1"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_sh265"]
@@ -23,11 +20,6 @@
 albedo_color = Color(4.428029e-06, 0.7265492, 0.93890876, 1)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4flbx"]
-
-[sub_resource type="QuadMesh" id="QuadMesh_nvl01"]
-material = ExtResource("6_ivps1")
-flip_faces = true
-size = Vector2(2, 2)
 
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=856101085 groups=["Players"]]
 collision_layer = 257
@@ -54,13 +46,8 @@ camera_action = ExtResource("4_hqtel")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.36669618, -0.5)
 player = NodePath("../../..")
 
-[node name="PingQuad" type="MeshInstance3D" parent="PlayerCamera" unique_id=794713480]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.98955595)
-mesh = SubResource("QuadMesh_nvl01")
-script = ExtResource("7_urp6f")
-ping_action = ExtResource("8_bwjto")
-
-[node name="Scanner" parent="PlayerCamera" unique_id=1205682577 instance=ExtResource("10_u1c27")]
+[node name="Tracker" parent="PlayerCamera" unique_id=1413151424 node_paths=PackedStringArray("player") instance=ExtResource("7_urp6f")]
+player = NodePath("../..")
 
 [node name="PlayerInput" type="Node" parent="." unique_id=1747372638]
 script = ExtResource("7_1jxqw")

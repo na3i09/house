@@ -1,7 +1,5 @@
 extends MeshInstance3D
 
-@export var ping_action: GUIDEAction
-
 @export_group("Settings")
 @export var ping_max_range: float = 20.0
 @export var ping_time: float = 1.0
@@ -10,16 +8,9 @@ var leading_edge_tween: Tween
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	ping_action.triggered.connect(attempt_ping)
 	hide()
 
-func attempt_ping() -> void:
-	if is_multiplayer_authority():
-		$"../Scanner".fire_scan()
-		#fire_ping()
-
 func fire_ping() -> void:
-	get_tree().call_group("Enemies","flash_for_ping")
 	set_max_dist(0.0)
 	set_min_dist(0.0)
 	set_opacity(0.2)

@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://cjio45uml05j2"]
+
+[ext_resource type="Material" uid="uid://cjprf6h2vo15j" path="res://materials/ping_shader_material.tres" id="1_usr2q"]
+[ext_resource type="Script" uid="uid://b5yejr2d7hnlu" path="res://tracker.gd" id="1_vftbd"]
+[ext_resource type="Script" uid="uid://d2fxmt80bq1la" path="res://ping_quad.gd" id="2_vftbd"]
+[ext_resource type="Resource" uid="uid://bgg7h0i032vcn" path="res://input/player_ping.tres" id="3_8gwdq"]
+[ext_resource type="PackedScene" uid="uid://nljxsekqseek" path="res://scanner.tscn" id="4_0fjnu"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_nvl01"]
+material = ExtResource("1_usr2q")
+flip_faces = true
+size = Vector2(2, 2)
+
+[node name="Tracker" type="Node3D" unique_id=1413151424]
+script = ExtResource("1_vftbd")
+action = ExtResource("3_8gwdq")
+
+[node name="PingQuad" type="MeshInstance3D" parent="." unique_id=1830733067]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.98955595)
+mesh = SubResource("QuadMesh_nvl01")
+script = ExtResource("2_vftbd")
+
+[node name="Scanner" parent="." unique_id=1205682577 instance=ExtResource("4_0fjnu")]
