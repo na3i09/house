@@ -85,10 +85,9 @@ func respawn_player() -> void:
 	alive = true
 	show()
 
-func flash_for_ping(caller_id: int) -> void:
-	if name.to_int() != caller_id:
-		var ghost = GhostScene.instantiate()
-		
-		get_tree().get_root().add_child(ghost)
-		
-		ghost.global_position = $MeshInstance3D.global_position
+func flash_for_ping() -> void:
+	var ghost = GhostScene.instantiate()
+	
+	get_tree().get_root().add_child(ghost)
+	
+	ghost.global_position = $MeshInstance3D.global_position
