@@ -22,6 +22,8 @@ func _initialize_multiplayer() -> void:
 	set_multiplayer_authority(1)
 	player_input.set_multiplayer_authority(name.to_int())
 	$PlayerCamera.set_multiplayer_authority(name.to_int())
+	if multiplayer.get_unique_id() != name.to_int():
+		add_to_group("Enemies")
 	$PlayerCamera.set_camera_active()
 	$PlayerCamera/PingQuad.set_multiplayer_authority(name.to_int())
 	if multiplayer.get_unique_id() != name.to_int():

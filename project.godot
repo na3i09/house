@@ -41,6 +41,7 @@ folder_colors={
 [global_group]
 
 Players=""
+Enemies="Group for players other than the current client"
 
 [layer_names]
 
