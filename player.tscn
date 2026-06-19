@@ -20,8 +20,6 @@
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_sh265"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bwjto"]
-render_priority = 1
-transparency = 1
 albedo_color = Color(4.428029e-06, 0.7265492, 0.93890876, 1)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4flbx"]
