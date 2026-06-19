@@ -11,6 +11,19 @@ render_priority = 1
 transparency = 1
 albedo_color = Color(0.5251013, 0.5251013, 0.5251013, 1)
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_4dhkl"]
+radius = 0.05
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4dhkl"]
+blend_mode = 1
+shading_mode = 0
+albedo_color = Color(14.139331, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_7tkr0"]
+material = SubResource("StandardMaterial3D_4dhkl")
+radius = 0.05
+height = 0.1
+
 [node name="Rifle" type="Node3D" unique_id=2020046742]
 script = ExtResource("1_j33d7")
 fire_action = ExtResource("2_jao7y")
@@ -21,3 +34,13 @@ metadata/_custom_type_script = "uid://daf6uabdxsfwq"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.3)
 mesh = SubResource("BoxMesh_j33d7")
 surface_material_override/0 = SubResource("StandardMaterial3D_jao7y")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="MeshInstance3D" unique_id=873370830]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+shape = SubResource("SphereShape3D_4dhkl")
+spring_length = 10.0
+
+[node name="Marker3D" type="Marker3D" parent="MeshInstance3D/SpringArm3D" unique_id=566577367]
+
+[node name="LaserDot" type="MeshInstance3D" parent="MeshInstance3D/SpringArm3D/Marker3D" unique_id=454711311]
+mesh = SubResource("SphereMesh_7tkr0")
