@@ -10,6 +10,8 @@ const JUMP_VELOCITY = 4.5
 @onready var player_input: Node = $PlayerInput
 @onready var rollback_synchronizer: RollbackSynchronizer = $RollbackSynchronizer
 
+@onready var player_hud: CanvasLayer = $PlayerHud
+
 var alive: bool = true
 
 var cam_rotation: Vector3 = Vector3.FORWARD
@@ -24,6 +26,7 @@ func _initialize_multiplayer() -> void:
 	$PlayerCamera.set_multiplayer_authority(name.to_int())
 	$PlayerCamera.set_camera_active()
 	if multiplayer.get_unique_id() != name.to_int():
+		player_hud.queue_free()
 		add_to_group("Enemies")
 		$PlayerCamera/RiflePivot.hide()
 	rollback_synchronizer.process_settings()

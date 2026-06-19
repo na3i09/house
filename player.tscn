@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://dfextq23gkqj5" path="res://components/health_manager.gd" id="10_n7ghd"]
 [ext_resource type="PackedScene" uid="uid://cnk5imma5mmyj" path="res://rifle.tscn" id="12_ivps1"]
 [ext_resource type="Script" uid="uid://bvbifwmaxecdg" path="res://components/temperature.gd" id="15_606se"]
+[ext_resource type="PackedScene" uid="uid://b8wkfmasnxgfb" path="res://player_hud.tscn" id="15_u1c27"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_sh265"]
 
@@ -76,5 +77,7 @@ script = ExtResource("10_n7ghd")
 
 [node name="Temperature" type="Node3D" parent="." unique_id=78473785]
 script = ExtResource("15_606se")
-stationary_drain_rate = 9.0
 metadata/_custom_type_script = "uid://bvbifwmaxecdg"
+
+[node name="PlayerHud" parent="." unique_id=1278874362 node_paths=PackedStringArray("temperature") instance=ExtResource("15_u1c27")]
+temperature = NodePath("../Temperature")
