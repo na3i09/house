@@ -5,7 +5,6 @@
 [sub_resource type="GDScript" id="GDScript_wugak"]
 resource_name = "PlayerGhost"
 script/source = "extends Node3D
-class_name PlayerGhost
 
 @export var fade_time: float = 2.0;
 
