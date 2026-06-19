@@ -13,7 +13,7 @@ func _can_peer_use(peer_id: int) -> bool:
 	return peer_id == player_peer_id
 
 func _can_fire() -> bool:
-	return true
+	return multiplayer.get_unique_id() == player_peer_id
 
 func _on_fire():
 	if multiplayer.get_unique_id() == player_peer_id:
