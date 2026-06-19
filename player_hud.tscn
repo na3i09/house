@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://b8wkfmasnxgfb"]
+
+[sub_resource type="GDScript" id="GDScript_4dhkl"]
+script/source = "extends CanvasLayer
+
+
+@export var temperature: Temperature
+
+@onready var progress_bar: ProgressBar = $ProgressBar
+
+func _ready() -> void:
+	progress_bar.max_value = temperature.max_temperature
+	progress_bar.value = temperature.max_temperature
+
+func _process(delta: float) -> void:
+	progress_bar.value = lerpf(progress_bar.value,temperature.temperature,0.5*delta)
+"
+
+[node name="PlayerHud" type="CanvasLayer" unique_id=1278874362]
+script = SubResource("GDScript_4dhkl")
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1872511128]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -27.0
+offset_right = 317.0
+grow_vertical = 0
