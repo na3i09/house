@@ -5,6 +5,10 @@ class_name Tracker
 
 @export var action: GUIDEAction
 
+@export_group("Settings")
+@export var enable_scan: bool = true
+@export var enable_ping: bool = false
+
 @onready var ping_quad: MeshInstance3D = $PingQuad
 @onready var scanner: Scanner = $Scanner
 
@@ -14,7 +18,9 @@ func _ready() -> void:
 
 func _fire_tracker() -> void:
 	if is_multiplayer_authority():
-		scanner.fire_scan()
-		ping_quad.fire_ping()
+		if enable_scan:
+			scanner.fire_scan()
+		if enable_ping:
+			ping_quad.fire_ping()
 		get_tree().call_group("Enemies","flash_for_ping")
 		player.flash_own_ping.rpc()
