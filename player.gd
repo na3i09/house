@@ -91,3 +91,7 @@ func flash_for_ping() -> void:
 	get_tree().get_root().add_child(ghost)
 	
 	ghost.global_position = $MeshInstance3D.global_position
+
+@rpc("any_peer","call_remote")
+func flash_own_ping() -> void:
+	flash_for_ping()
