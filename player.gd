@@ -16,8 +16,6 @@ const JUMP_VELOCITY = 4.5
 
 var alive: bool = true
 
-var cam_rotation: Vector3 = Vector3.FORWARD
-
 func _ready() -> void:
 	_initialize_multiplayer.call_deferred()
 
@@ -48,12 +46,11 @@ func _rollback_tick(delta: float, _tick, _is_fresh):
 			_jump()
 			player_input.is_jumping = false
 		
-		cam_rotation = $PlayerCamera.rotation
 		$NonPlayerRiflePivot.transform = $PlayerCamera.transform
 		# Get the input direction and handle the movement/deceleration.
 		# As good practice, you should replace UI actions with custom gameplay actions.
 		var direction := (transform.basis * Vector3(player_input.input_dir.x, 0, player_input.input_dir.y)).normalized()
-		direction = direction.rotated(Vector3.UP,cam_rotation.y + rotation.y)
+		direction = direction.rotated(Vector3.UP,$PlayerCamera.rotation.y + rotation.y)
 		if direction:
 			velocity.x = direction.x * SPEED
 			velocity.z = direction.z * SPEED

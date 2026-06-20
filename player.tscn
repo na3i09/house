@@ -65,7 +65,7 @@ metadata/_custom_type_script = "uid://cpiuf65vuu0oa"
 script = ExtResource("8_dw050")
 root = NodePath("..")
 enable_prediction = true
-state_properties = Array[String]([":global_transform", "HealthManager:health", ":cam_rotation", "Temperature:temperature", "NonPlayerRiflePivot:transform"])
+state_properties = Array[String]([":global_transform", "HealthManager:health", "Temperature:temperature", "NonPlayerRiflePivot:transform"])
 input_properties = Array[String](["PlayerInput:input_dir", "PlayerInput:is_jumping", "PlayerCamera:rotation"])
 enable_input_broadcast = false
 metadata/_custom_type_script = "uid://d350u8evihs1u"
@@ -73,7 +73,7 @@ metadata/_custom_type_script = "uid://d350u8evihs1u"
 [node name="TickInterpolator" type="Node" parent="." unique_id=796364604 node_paths=PackedStringArray("root")]
 script = ExtResource("9_b26j0")
 root = NodePath("..")
-properties = Array[String]([":global_transform", ":cam_rotation", "NonPlayerRiflePivot:transform"])
+properties = Array[String]([":global_transform", "NonPlayerRiflePivot:transform"])
 metadata/_custom_type_script = "uid://dour8fehaaugp"
 
 [node name="HealthManager" type="Node" parent="." unique_id=145100033]
