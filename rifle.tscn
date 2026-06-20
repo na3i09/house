@@ -2,14 +2,10 @@
 
 [ext_resource type="Script" uid="uid://c36nu8qad14us" path="res://rifle.gd" id="1_j33d7"]
 [ext_resource type="Resource" uid="uid://ce4cakmfii2rl" path="res://input/player_shoot.tres" id="2_jao7y"]
+[ext_resource type="Material" uid="uid://s1an374ts173" path="res://materials/rifle_material.tres" id="3_0lxr5"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_j33d7"]
 size = Vector3(0.1, 0.1, 0.6)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jao7y"]
-render_priority = 1
-transparency = 1
-albedo_color = Color(0.5251013, 0.5251013, 0.5251013, 1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4dhkl"]
 radius = 0.05
@@ -33,7 +29,7 @@ metadata/_custom_type_script = "uid://daf6uabdxsfwq"
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=326877001]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.3)
 mesh = SubResource("BoxMesh_j33d7")
-surface_material_override/0 = SubResource("StandardMaterial3D_jao7y")
+surface_material_override/0 = ExtResource("3_0lxr5")
 
 [node name="SpringArm3D" type="SpringArm3D" parent="MeshInstance3D" unique_id=873370830]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
