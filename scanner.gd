@@ -68,7 +68,7 @@ func _scan_loop() -> void:
 		
 		x_angle += scan_angle_delta
 
-func _calc_ray_end(horiz_angle,vert_angle) -> Vector3:
+func _calc_ray_end(horiz_angle: float,vert_angle: float) -> Vector3:
 	var end_point: Vector3 = global_transform * (basis.z.rotated(
 				Vector3.UP,vert_angle + randf_range(-scan_angle_variation,scan_angle_variation)).rotated(
 					Vector3.RIGHT,horiz_angle + randf_range(-scan_angle_variation,scan_angle_variation)).normalized() * -scan_distance)
