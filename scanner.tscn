@@ -17,8 +17,7 @@ colors = PackedColorArray(1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1)
 gradient = SubResource("Gradient_2ars4")
 
 [sub_resource type="Gradient" id="Gradient_fh7ms"]
-offsets = PackedFloat32Array(0, 0.37704918, 1)
-colors = PackedColorArray(1, 1, 1, 1, 0.3854925, 0.38549247, 0.38549247, 1, 0, 0, 0, 1)
+colors = PackedColorArray(18.892157, 18.892157, 18.892157, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_03ydg"]
 gradient = SubResource("Gradient_fh7ms")
@@ -38,7 +37,6 @@ shading_mode = 0
 diffuse_mode = 3
 disable_fog = true
 vertex_color_use_as_albedo = true
-albedo_color = Color(80.24026, 80.24026, 80.24026, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_tn0fg"]
 material = SubResource("StandardMaterial3D_7ogy5")
