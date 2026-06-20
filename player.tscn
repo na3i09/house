@@ -5,6 +5,7 @@
 [ext_resource type="Resource" uid="uid://cduoxipskxtuo" path="res://input/player_movement.tres" id="3_2hs0m"]
 [ext_resource type="PackedScene" uid="uid://cbqvs7ytvvu20" path="res://player_ghost.tscn" id="3_606se"]
 [ext_resource type="Script" uid="uid://csotq3amhia5r" path="res://player_camera.gd" id="3_i3pqv"]
+[ext_resource type="Resource" uid="uid://cva3ffhdo0pdn" path="res://input/debug_mapping.tres" id="3_op7ga"]
 [ext_resource type="Resource" uid="uid://7chyphxfdx2n" path="res://input/player_jump.tres" id="4_1jxqw"]
 [ext_resource type="Resource" uid="uid://rirkrrk4604g" path="res://input/player_camera.tres" id="4_hqtel"]
 [ext_resource type="Script" uid="uid://ukvahbhmmcid" path="res://player_input.gd" id="7_1jxqw"]
@@ -32,6 +33,7 @@ collision_layer = 257
 collision_mask = 257
 script = ExtResource("1_4flbx")
 mapping_context = ExtResource("2_onrkg")
+debug_context = ExtResource("3_op7ga")
 GhostScene = ExtResource("3_606se")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1080898210]

@@ -2,6 +2,7 @@ extends CharacterBody3D
 class_name Player
 
 @export var mapping_context: GUIDEMappingContext
+@export var debug_context: GUIDEMappingContext
 @export var GhostScene: PackedScene
 
 const SPEED = 5.0
@@ -35,6 +36,7 @@ func _initialize_multiplayer() -> void:
 	tick_interpolator.process_settings()
 	if player_input.is_multiplayer_authority():
 		GUIDE.enable_mapping_context(mapping_context)
+		GUIDE.enable_mapping_context(debug_context)
 
 func _rollback_tick(delta: float, _tick, _is_fresh):
 	if is_multiplayer_authority() and alive:
