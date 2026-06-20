@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://cnk5imma5mmyj" path="res://rifle.tscn" id="12_ivps1"]
 [ext_resource type="Script" uid="uid://bvbifwmaxecdg" path="res://components/temperature.gd" id="15_606se"]
 [ext_resource type="PackedScene" uid="uid://b8wkfmasnxgfb" path="res://player_hud.tscn" id="15_u1c27"]
+[ext_resource type="Material" uid="uid://s1an374ts173" path="res://materials/rifle_material.tres" id="16_u1c27"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_sh265"]
 
@@ -22,6 +23,9 @@
 albedo_color = Color(4.428029e-06, 0.7265492, 0.93890876, 1)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4flbx"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_j33d7"]
+size = Vector3(0.1, 0.1, 0.6)
 
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=856101085 groups=["Players"]]
 collision_layer = 257
@@ -61,7 +65,7 @@ metadata/_custom_type_script = "uid://cpiuf65vuu0oa"
 script = ExtResource("8_dw050")
 root = NodePath("..")
 enable_prediction = true
-state_properties = Array[String]([":global_transform", "HealthManager:health", ":cam_rotation", "Temperature:temperature"])
+state_properties = Array[String]([":global_transform", "HealthManager:health", ":cam_rotation", "Temperature:temperature", "NonPlayerRiflePivot:transform"])
 input_properties = Array[String](["PlayerInput:input_dir", "PlayerInput:is_jumping", "PlayerCamera:rotation"])
 enable_input_broadcast = false
 metadata/_custom_type_script = "uid://d350u8evihs1u"
@@ -69,7 +73,7 @@ metadata/_custom_type_script = "uid://d350u8evihs1u"
 [node name="TickInterpolator" type="Node" parent="." unique_id=796364604 node_paths=PackedStringArray("root")]
 script = ExtResource("9_b26j0")
 root = NodePath("..")
-properties = Array[String]([":global_transform", ":cam_rotation"])
+properties = Array[String]([":global_transform", ":cam_rotation", "NonPlayerRiflePivot:transform"])
 metadata/_custom_type_script = "uid://dour8fehaaugp"
 
 [node name="HealthManager" type="Node" parent="." unique_id=145100033]
@@ -81,3 +85,12 @@ metadata/_custom_type_script = "uid://bvbifwmaxecdg"
 
 [node name="PlayerHud" parent="." unique_id=1278874362 node_paths=PackedStringArray("temperature") instance=ExtResource("15_u1c27")]
 temperature = NodePath("../Temperature")
+
+[node name="NonPlayerRiflePivot" type="Node3D" parent="." unique_id=2146452606]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36669618, 0)
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NonPlayerRiflePivot" unique_id=1045125693]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.367, -0.8)
+mesh = SubResource("BoxMesh_j33d7")
+surface_material_override/0 = ExtResource("16_u1c27")

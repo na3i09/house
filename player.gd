@@ -31,6 +31,7 @@ func _initialize_multiplayer() -> void:
 		player_hud.queue_free()
 		add_to_group("Enemies")
 		$PlayerCamera/RiflePivot.hide()
+		$NonPlayerRiflePivot.show()
 	rollback_synchronizer.process_settings()
 	tick_interpolator.process_settings()
 	if player_input.is_multiplayer_authority():
@@ -48,6 +49,7 @@ func _rollback_tick(delta: float, _tick, _is_fresh):
 			player_input.is_jumping = false
 		
 		cam_rotation = $PlayerCamera.rotation
+		$NonPlayerRiflePivot.transform = $PlayerCamera.transform
 		# Get the input direction and handle the movement/deceleration.
 		# As good practice, you should replace UI actions with custom gameplay actions.
 		var direction := (transform.basis * Vector3(player_input.input_dir.x, 0, player_input.input_dir.y)).normalized()
