@@ -6,8 +6,12 @@ class_name Scanner
 @export_range(0.0,30.0,0.01,"radians_as_degrees") var scan_angle_variation: float = deg_to_rad(1.0)
 
 
-@export_range(0.0,180.0,0.1,"radians_as_degrees") var scan_angle_vert: float = deg_to_rad(90.0)
-@export_range(0.0,180.0,0.1,"radians_as_degrees") var scan_angle_horiz: float = deg_to_rad(90.0)
+@export_range(0.0,180.0,0.1,"radians_as_degrees") var scan_angle_vert: float = deg_to_rad(90.0):
+	set(value):
+		scan_angle_vert = clamp(value,deg_to_rad(0.0),deg_to_rad(180.0))
+@export_range(0.0,180.0,0.1,"radians_as_degrees") var scan_angle_horiz: float = deg_to_rad(90.0):
+	set(value):
+		scan_angle_horiz = clamp(value,deg_to_rad(0.0),deg_to_rad(180.0))
 
 @export var instant: bool = false
 
