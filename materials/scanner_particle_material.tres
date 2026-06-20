@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://doed5a0mlevi4"]
+
+[resource]
+blend_mode = 1
+depth_draw_mode = 2
+shading_mode = 0
+diffuse_mode = 3
+disable_fog = true
+vertex_color_use_as_albedo = true
+disable_receive_shadows = true

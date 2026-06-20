@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://nljxsekqseek"]
 
 [ext_resource type="Script" uid="uid://c8w410iscuglx" path="res://scanner.gd" id="1_52xpv"]
+[ext_resource type="Material" uid="uid://doed5a0mlevi4" path="res://materials/scanner_particle_material.tres" id="2_52xpv"]
 
 [sub_resource type="Curve" id="Curve_2ars4"]
 _data = [Vector2(0, 0.9101124), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -29,14 +30,6 @@ gravity = Vector3(0, 0, 0)
 color_ramp = SubResource("GradientTexture1D_03ydg")
 color_initial_ramp = SubResource("GradientTexture1D_52xpv")
 alpha_curve = SubResource("CurveTexture_52xpv")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7ogy5"]
-blend_mode = 1
-depth_draw_mode = 2
-shading_mode = 0
-diffuse_mode = 3
-disable_fog = true
-vertex_color_use_as_albedo = true
 
 [sub_resource type="SphereMesh" id="SphereMesh_tn0fg"]
 material = SubResource("StandardMaterial3D_7ogy5")
