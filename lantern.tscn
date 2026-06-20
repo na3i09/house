@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://b3jsniupbiutk"]
 
+[ext_resource type="Script" uid="uid://dr8q41d5utsnm" path="res://components/heating_area.gd" id="1_kxgpu"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4dhkl"]
 transparency = 1
 albedo_color = Color(0.67481464, 0.67481464, 0.6748146, 0.2)
@@ -19,6 +21,9 @@ emission_energy_multiplier = 4.0
 material = SubResource("StandardMaterial3D_auuku")
 radius = 0.05
 height = 0.1
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_4dhkl"]
+radius = 2.0
 
 [node name="Lantern" type="Node3D" unique_id=553251624]
 
@@ -48,3 +53,12 @@ material = SubResource("StandardMaterial3D_oh2o0")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="LaternBody" unique_id=1563198037]
 mesh = SubResource("SphereMesh_4dhkl")
+
+[node name="HeatingArea" type="Area3D" parent="LaternBody" unique_id=815082667]
+collision_layer = 4
+collision_mask = 256
+script = ExtResource("1_kxgpu")
+metadata/_custom_type_script = "uid://dr8q41d5utsnm"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LaternBody/HeatingArea" unique_id=1081329806]
+shape = SubResource("SphereShape3D_4dhkl")
