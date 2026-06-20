@@ -1,40 +1,8 @@
 [gd_scene format=3 uid="uid://nljxsekqseek"]
 
 [ext_resource type="Script" uid="uid://c8w410iscuglx" path="res://scanner.gd" id="1_52xpv"]
-[ext_resource type="Material" uid="uid://doed5a0mlevi4" path="res://materials/scanner_particle_material.tres" id="2_52xpv"]
-
-[sub_resource type="Curve" id="Curve_2ars4"]
-_data = [Vector2(0, 0.9101124), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_52xpv"]
-curve = SubResource("Curve_2ars4")
-
-[sub_resource type="Gradient" id="Gradient_2ars4"]
-offsets = PackedFloat32Array(0, 0.47540984, 1)
-colors = PackedColorArray(1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_52xpv"]
-gradient = SubResource("Gradient_2ars4")
-
-[sub_resource type="Gradient" id="Gradient_fh7ms"]
-colors = PackedColorArray(18.892157, 18.892157, 18.892157, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_03ydg"]
-gradient = SubResource("Gradient_fh7ms")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2ars4"]
-lifetime_randomness = 0.3
-direction = Vector3(0, 0, 0)
-gravity = Vector3(0, 0, 0)
-color_ramp = SubResource("GradientTexture1D_03ydg")
-color_initial_ramp = SubResource("GradientTexture1D_52xpv")
-alpha_curve = SubResource("CurveTexture_52xpv")
-
-[sub_resource type="SphereMesh" id="SphereMesh_tn0fg"]
-material = ExtResource("2_52xpv")
-radius = 0.04
-height = 0.08
+[ext_resource type="Material" uid="uid://lb3i85cxpejy" path="res://materials/scann_particle_process_material.tres" id="2_fh7ms"]
+[ext_resource type="SphereMesh" uid="uid://dop07ipsun11m" path="res://assets/scanner_particle_mesh.tres" id="3_fh7ms"]
 
 [node name="Scanner" type="Node3D" unique_id=1205682577]
 script = ExtResource("1_52xpv")
@@ -49,5 +17,5 @@ scan_speed = 10
 emitting = false
 amount = 900
 lifetime = 2.0
-process_material = SubResource("ParticleProcessMaterial_2ars4")
-draw_pass_1 = SubResource("SphereMesh_tn0fg")
+process_material = ExtResource("2_fh7ms")
+draw_pass_1 = ExtResource("3_fh7ms")
