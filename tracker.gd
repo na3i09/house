@@ -6,6 +6,7 @@ class_name Tracker
 @export var action: GUIDEAction
 
 @export_group("Settings")
+@export var continuous_scan: bool = false
 @export var enable_scan: bool = true
 @export var enable_ping: bool = false
 
@@ -14,7 +15,10 @@ class_name Tracker
 
 func _ready() -> void:
 	set_multiplayer_authority(player.name.to_int())
-	action.triggered.connect(_fire_tracker)
+	if continuous_scan:
+		action.triggered.connect(_fire_beam)
+	else:
+		action.just_triggered.connect(_fire_tracker)
 
 func _fire_tracker() -> void:
 	if is_multiplayer_authority():
@@ -24,3 +28,7 @@ func _fire_tracker() -> void:
 			ping_quad.fire_ping()
 		get_tree().call_group("Enemies","flash_for_ping")
 		player.flash_own_ping.rpc()
+
+func _fire_beam() -> void:
+	if is_multiplayer_authority():
+		scanner.cast_random_beam()

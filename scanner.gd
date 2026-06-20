@@ -41,7 +41,7 @@ func _physics_process(_delta: float) -> void:
 	if x_angle < scan_angle_horiz/2:
 		if y_angle < scan_angle_vert/2:
 			for i in range(scan_speed):
-				_cast_beam()
+				_cast_beam(x_angle,y_angle)
 				
 				y_angle += scan_angle_delta
 				if y_angle >= scan_angle_vert/2:
@@ -62,7 +62,7 @@ func _scan_loop() -> void:
 		y_angle = -scan_angle_vert/2
 		while y_angle < scan_angle_vert/2:
 			
-			_cast_beam()
+			_cast_beam(x_angle,y_angle)
 			
 			y_angle += scan_angle_delta
 		
@@ -82,8 +82,12 @@ func _scan(ray_start: Vector3, ray_end: Vector3) -> Dictionary:
 	
 	return result
 
-func _cast_beam() -> void:
-	var end_point: Vector3 = _calc_ray_end(y_angle,x_angle) if switch_scan_direction else _calc_ray_end(x_angle,y_angle)
+func cast_random_beam() -> void:
+	_cast_beam(randf_range(-scan_angle_horiz/2,scan_angle_horiz/2),
+	randf_range(-scan_angle_vert/2,scan_angle_vert/2))
+
+func _cast_beam(horiz_angle: float,vert_angle: float) -> void:
+	var end_point: Vector3 = _calc_ray_end(vert_angle,horiz_angle) if switch_scan_direction else _calc_ray_end(horiz_angle,vert_angle)
 	
 	var result: Dictionary = _scan(global_position,end_point)
 	
