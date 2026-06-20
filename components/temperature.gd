@@ -6,7 +6,9 @@ class_name Temperature
 @export var stationary_drain_rate: float = 1.0
 @export var moving_drain_rate: float = 0.3
 
-@onready var temperature: float = max_temperature
+@onready var temperature: float = max_temperature:
+	set(value):
+		temperature = clamp(value,0.0,max_temperature)
 
 @onready var player: Player = owner if owner is Player else null
 
