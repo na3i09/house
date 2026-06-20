@@ -10,6 +10,7 @@ const JUMP_VELOCITY = 4.5
 @onready var player_input: Node = $PlayerInput
 @onready var rollback_synchronizer: RollbackSynchronizer = $RollbackSynchronizer
 @onready var tick_interpolator: TickInterpolator = $TickInterpolator
+@onready var temperature: Temperature = $Temperature
 
 
 @onready var player_hud: CanvasLayer = $PlayerHud

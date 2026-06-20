@@ -12,8 +12,18 @@ class_name Temperature
 
 @onready var player: Player = owner if owner is Player else null
 
+@onready var temp_monitoring_area: Area3D = $TempMonitoringArea
+
+
 func _rollback_tick(delta: float, _tick, _is_fresh):
 	if is_multiplayer_authority():
+		if temp_monitoring_area.has_overlapping_areas():
+			for area in temp_monitoring_area.get_overlapping_areas():
+				if area is HeatingArea:
+					temperature += area.heat_level * delta
+			return
+		
+		
 		if player.velocity.length() < 0.1:
 			temperature -= stationary_drain_rate * delta
 		else:

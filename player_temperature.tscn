@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://cc4bqapgtcetq"]
+
+[ext_resource type="Script" uid="uid://bvbifwmaxecdg" path="res://components/temperature.gd" id="1_bwkn7"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4dhkl"]
+
+[node name="Temperature" type="Node3D" unique_id=351895532]
+script = ExtResource("1_bwkn7")
+metadata/_custom_type_script = "uid://bvbifwmaxecdg"
+
+[node name="TempMonitoringArea" type="Area3D" parent="." unique_id=1924088782]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TempMonitoringArea" unique_id=998706946]
+shape = SubResource("CapsuleShape3D_4dhkl")
