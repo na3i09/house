@@ -16,7 +16,7 @@ void vertex() {
 
 void fragment() {
 	float player_dist = distance(world_coords,player_position);
-	float dist_ratio = player_dist / max_range;
+	float dist_ratio = clamp(player_dist / max_range,0.0,0.9);
 	
 	ALBEDO = texture(color_gradient,vec2(dist_ratio,0.5)).rgb;
 	//ALBEDO = COLOR.rgb;
