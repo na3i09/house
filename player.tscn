@@ -16,7 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://cnk5imma5mmyj" path="res://rifle.tscn" id="12_ivps1"]
 [ext_resource type="PackedScene" uid="uid://cc4bqapgtcetq" path="res://player_temperature.tscn" id="14_u1c27"]
 [ext_resource type="PackedScene" uid="uid://b8wkfmasnxgfb" path="res://player_hud.tscn" id="15_u1c27"]
-[ext_resource type="Material" uid="uid://s1an374ts173" path="res://materials/rifle_material.tres" id="16_u1c27"]
+[ext_resource type="PackedScene" uid="uid://c3ohvwfm2sxg3" path="res://assets/rifle_model.tscn" id="17_op7ga"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_sh265"]
 
@@ -24,9 +24,6 @@
 albedo_color = Color(4.428029e-06, 0.7265492, 0.93890876, 1)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4flbx"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_j33d7"]
-size = Vector3(0.1, 0.1, 0.6)
 
 [sub_resource type="GDScript" id="GDScript_op7ga"]
 resource_name = "PlayerLocationUpdater"
@@ -100,10 +97,8 @@ temperature = NodePath("../Temperature")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36669618, 0)
 visible = false
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="NonPlayerRiflePivot" unique_id=1045125693]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.367, -0.8)
-mesh = SubResource("BoxMesh_j33d7")
-surface_material_override/0 = ExtResource("16_u1c27")
+[node name="RifleModelPivot" parent="NonPlayerRiflePivot" unique_id=1093384643 instance=ExtResource("17_op7ga")]
+transform = Transform3D(0.994459, 0, 0.105125226, 0, 1, 0, -0.105125226, 0, 0.994459, 0.341, -0.36669618, -0.5)
 
 [node name="PlayerLocationUpdater" type="Node3D" parent="." unique_id=1293533525]
 script = SubResource("GDScript_op7ga")
