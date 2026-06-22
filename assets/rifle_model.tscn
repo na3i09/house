@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://c3ohvwfm2sxg3"]
+
+[ext_resource type="Material" uid="uid://s1an374ts173" path="res://materials/rifle_material.tres" id="1_d4jhk"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_j33d7"]
+size = Vector3(0.1, 0.13, 0.6)
+
+[sub_resource type="PrismMesh" id="PrismMesh_7tkr0"]
+left_to_right = -0.1
+size = Vector3(0.2, 0.5, 0.08)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_4dhkl"]
+top_radius = 0.03
+bottom_radius = 0.03
+height = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0lxr5"]
+render_priority = 1
+transparency = 1
+albedo_color = Color(0.5251013, 0.5251013, 0.5251013, 1)
+metallic = 0.7
+roughness = 0.5
+
+[node name="RiflePivot" type="Node3D" unique_id=1093384643]
+transform = Transform3D(0.994459, 0, 0.105125226, 0, 1, 0, -0.105125226, 0, 0.994459, 0, 0, 0)
+
+[node name="RifleBody" type="MeshInstance3D" parent="." unique_id=1856727659]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.3)
+mesh = SubResource("BoxMesh_j33d7")
+surface_material_override/0 = ExtResource("1_d4jhk")
+
+[node name="RifleStock" type="MeshInstance3D" parent="RifleBody" unique_id=2125952725]
+transform = Transform3D(1.9106855e-15, -4.371139e-08, 1, -1, -4.371139e-08, 0, 4.371139e-08, -1, -4.371139e-08, 0, -0.065, 0.34)
+mesh = SubResource("PrismMesh_7tkr0")
+surface_material_override/0 = ExtResource("1_d4jhk")
+
+[node name="RifleBarrel" type="MeshInstance3D" parent="RifleBody" unique_id=256513298]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -2.9802322e-08, 0.010000002, -0.50358397)
+mesh = SubResource("CylinderMesh_4dhkl")
+surface_material_override/0 = SubResource("StandardMaterial3D_0lxr5")
