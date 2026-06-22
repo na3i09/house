@@ -1,6 +1,6 @@
 [gd_resource type="SphereMesh" format=3 uid="uid://dop07ipsun11m"]
 
-[ext_resource type="Material" uid="uid://doed5a0mlevi4" path="res://materials/scanner_particle_material.tres" id="1_k4knf"]
+[ext_resource type="Material" uid="uid://cyno6rvf86fft" path="res://materials/scanner_particle_player_aware_shader_material.tres" id="1_k4knf"]
 
 [resource]
 material = ExtResource("1_k4knf")

@@ -26,6 +26,7 @@ func _initialize_multiplayer() -> void:
 	set_multiplayer_authority(1)
 	player_input.set_multiplayer_authority(name.to_int())
 	$PlayerCamera.set_multiplayer_authority(name.to_int())
+	$PlayerLocationUpdater.set_multiplayer_authority(name.to_int())
 	$PlayerCamera.set_camera_active()
 	if multiplayer.get_unique_id() != name.to_int():
 		player_hud.queue_free()

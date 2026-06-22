@@ -28,6 +28,16 @@ albedo_color = Color(4.428029e-06, 0.7265492, 0.93890876, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_j33d7"]
 size = Vector3(0.1, 0.1, 0.6)
 
+[sub_resource type="GDScript" id="GDScript_op7ga"]
+resource_name = "PlayerLocationUpdater"
+script/source = "extends Node3D
+
+
+func _rollback_tick(_delta: float, _tick, _is_fresh):
+	if is_multiplayer_authority():
+		RenderingServer.global_shader_parameter_set(\"player_position\",global_position)
+"
+
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=856101085 groups=["Players"]]
 collision_layer = 257
 collision_mask = 257
@@ -94,3 +104,6 @@ visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.367, -0.8)
 mesh = SubResource("BoxMesh_j33d7")
 surface_material_override/0 = ExtResource("16_u1c27")
+
+[node name="PlayerLocationUpdater" type="Node3D" parent="." unique_id=1293533525]
+script = SubResource("GDScript_op7ga")

@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cyno6rvf86fft"]
+
+[ext_resource type="Shader" uid="uid://cp88e8pcydsje" path="res://materials/shaders/scanner_particle_shader.gdshader" id="1_i8vqa"]
+
+[sub_resource type="Gradient" id="Gradient_3anvr"]
+offsets = PackedFloat32Array(0, 0.515873, 1)
+colors = PackedColorArray(1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_e4q25"]
+gradient = SubResource("Gradient_3anvr")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_i8vqa")
+shader_parameter/color_gradient = SubResource("GradientTexture1D_e4q25")
+shader_parameter/max_range = 25.0
