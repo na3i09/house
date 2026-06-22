@@ -5,7 +5,7 @@
 [ext_resource type="Material" uid="uid://s1an374ts173" path="res://materials/rifle_material.tres" id="3_0lxr5"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_j33d7"]
-size = Vector3(0.1, 0.1, 0.6)
+size = Vector3(0.1, 0.13, 0.6)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4dhkl"]
 radius = 0.05
@@ -20,6 +20,22 @@ material = SubResource("StandardMaterial3D_4dhkl")
 radius = 0.05
 height = 0.1
 
+[sub_resource type="PrismMesh" id="PrismMesh_7tkr0"]
+left_to_right = -0.1
+size = Vector3(0.2, 0.5, 0.08)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_4dhkl"]
+top_radius = 0.03
+bottom_radius = 0.03
+height = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0lxr5"]
+render_priority = 1
+transparency = 1
+albedo_color = Color(0.5251013, 0.5251013, 0.5251013, 1)
+metallic = 0.7
+roughness = 0.5
+
 [node name="Rifle" type="Node3D" unique_id=2020046742]
 script = ExtResource("1_j33d7")
 fire_action = ExtResource("2_jao7y")
@@ -28,15 +44,34 @@ metadata/_custom_type_script = "uid://daf6uabdxsfwq"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=326877001]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.3)
+visible = false
 mesh = SubResource("BoxMesh_j33d7")
 surface_material_override/0 = ExtResource("3_0lxr5")
 
-[node name="SpringArm3D" type="SpringArm3D" parent="MeshInstance3D" unique_id=873370830]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+[node name="SpringArm3D" type="SpringArm3D" parent="." unique_id=873370830]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, -0.3)
 shape = SubResource("SphereShape3D_4dhkl")
 spring_length = 10.0
 
-[node name="Marker3D" type="Marker3D" parent="MeshInstance3D/SpringArm3D" unique_id=566577367]
+[node name="Marker3D" type="Marker3D" parent="SpringArm3D" unique_id=566577367]
 
-[node name="LaserDot" type="MeshInstance3D" parent="MeshInstance3D/SpringArm3D/Marker3D" unique_id=454711311]
+[node name="LaserDot" type="MeshInstance3D" parent="SpringArm3D/Marker3D" unique_id=454711311]
 mesh = SubResource("SphereMesh_7tkr0")
+
+[node name="Pivot" type="Node3D" parent="." unique_id=2093523035]
+transform = Transform3D(0.994459, 0, 0.105125226, 0, 1, 0, -0.105125226, 0, 0.994459, 0.34106773, 0, 0)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Pivot" unique_id=1684128928]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.3)
+mesh = SubResource("BoxMesh_j33d7")
+surface_material_override/0 = ExtResource("3_0lxr5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pivot/MeshInstance3D2" unique_id=219747752]
+transform = Transform3D(1.9106855e-15, -4.371139e-08, 1, -1, -4.371139e-08, 0, 4.371139e-08, -1, -4.371139e-08, 0, -0.065, 0.34)
+mesh = SubResource("PrismMesh_7tkr0")
+surface_material_override/0 = ExtResource("3_0lxr5")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Pivot/MeshInstance3D2" unique_id=256947550]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -2.9802322e-08, 0.010000002, -0.50358397)
+mesh = SubResource("CylinderMesh_4dhkl")
+surface_material_override/0 = SubResource("StandardMaterial3D_0lxr5")
