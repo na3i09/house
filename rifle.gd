@@ -13,11 +13,16 @@ func _can_peer_use(peer_id: int) -> bool:
 	return peer_id == player_peer_id
 
 func _can_fire() -> bool:
-	return multiplayer.get_unique_id() == player_peer_id
+	if $Timer.is_stopped():
+		return multiplayer.get_unique_id() == player_peer_id
+	else:
+		return false
 
 func _on_fire():
 	if multiplayer.get_unique_id() == player_peer_id:
 		print("bang")
+		$AnimationPlayer.play("fire")
+		$Timer.start()
 
 func _on_hit(result: Dictionary) -> void:
 	if result["collider"] is Player:
