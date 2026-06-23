@@ -6,6 +6,13 @@ class_name Rifle
 @export var player: Player
 @onready var player_peer_id: int = player.name.to_int()
 
+@export_group("Settings")
+@export_range(0.1,10.0,0.1) var fire_rate: float = 1.5:
+	set(value):
+		fire_rate = clampf(value,0.1,10.0)
+		firing_cycle_time = 1.0/fire_rate
+@onready var firing_cycle_time: float = 1.0/fire_rate
+
 func _ready() -> void:
 	fire_action.just_triggered.connect(fire)
 
@@ -22,7 +29,7 @@ func _on_fire():
 	if multiplayer.get_unique_id() == player_peer_id:
 		print("bang")
 		$AnimationPlayer.play("fire")
-		$Timer.start()
+		$Timer.start(firing_cycle_time)
 
 func _on_hit(result: Dictionary) -> void:
 	if result["collider"] is Player:
