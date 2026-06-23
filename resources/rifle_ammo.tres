@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WeaponDefinition" format=3 uid="uid://dw8oqk4cxaah1"]
+
+[ext_resource type="Script" uid="uid://6ekdggm1q23a" path="res://components/weapon_def.gd" id="1_dg2lk"]
+
+[resource]
+script = ExtResource("1_dg2lk")
+ammo_type = &"Rifle"
+max_ammo = 12
+magazine_size = 3
+default_ammo = 6
+metadata/_custom_type_script = "uid://6ekdggm1q23a"

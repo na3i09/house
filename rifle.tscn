@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c36nu8qad14us" path="res://rifle.gd" id="1_j33d7"]
 [ext_resource type="Resource" uid="uid://ce4cakmfii2rl" path="res://input/player_shoot.tres" id="2_jao7y"]
+[ext_resource type="Resource" uid="uid://dw8oqk4cxaah1" path="res://resources/rifle_ammo.tres" id="3_0koic"]
 [ext_resource type="Material" uid="uid://s1an374ts173" path="res://materials/rifle_material.tres" id="3_0lxr5"]
 [ext_resource type="PackedScene" uid="uid://c3ohvwfm2sxg3" path="res://assets/rifle_model.tscn" id="4_amdq0"]
 
@@ -103,6 +104,7 @@ _data = {
 [node name="Rifle" type="Node3D" unique_id=2020046742]
 script = ExtResource("1_j33d7")
 fire_action = ExtResource("2_jao7y")
+ammo_definition = ExtResource("3_0koic")
 collision_mask = 4294902017
 metadata/_custom_type_script = "uid://daf6uabdxsfwq"
 

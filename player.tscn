@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://cc4bqapgtcetq" path="res://player_temperature.tscn" id="14_u1c27"]
 [ext_resource type="PackedScene" uid="uid://b8wkfmasnxgfb" path="res://player_hud.tscn" id="15_u1c27"]
 [ext_resource type="PackedScene" uid="uid://c3ohvwfm2sxg3" path="res://assets/rifle_model.tscn" id="17_op7ga"]
+[ext_resource type="Script" uid="uid://6jfd1fqrxvcg" path="res://components/ammo_manager.gd" id="18_q13i1"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_sh265"]
 
@@ -74,7 +75,7 @@ metadata/_custom_type_script = "uid://cpiuf65vuu0oa"
 script = ExtResource("8_dw050")
 root = NodePath("..")
 enable_prediction = true
-state_properties = Array[String]([":global_transform", "HealthManager:health", "Temperature:temperature", "NonPlayerRiflePivot:transform"])
+state_properties = Array[String]([":global_transform", "HealthManager:health", "Temperature:temperature", "NonPlayerRiflePivot:transform", "AmmoManager:ammo_list"])
 input_properties = Array[String](["PlayerInput:input_dir", "PlayerInput:is_jumping", "PlayerCamera:rotation"])
 enable_input_broadcast = false
 metadata/_custom_type_script = "uid://d350u8evihs1u"
@@ -102,3 +103,8 @@ transform = Transform3D(0.994459, 0, 0.105125226, 0, 1, 0, -0.105125226, 0, 0.99
 
 [node name="PlayerLocationUpdater" type="Node3D" parent="." unique_id=1293533525]
 script = SubResource("GDScript_op7ga")
+
+[node name="AmmoManager" type="Node" parent="." unique_id=948160493 node_paths=PackedStringArray("weapon_list")]
+script = ExtResource("18_q13i1")
+weapon_list = [NodePath("../PlayerCamera/RiflePivot/Rifle")]
+metadata/_custom_type_script = "uid://6jfd1fqrxvcg"

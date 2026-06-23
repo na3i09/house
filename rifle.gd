@@ -6,6 +6,11 @@ class_name Rifle
 @export var player: Player
 @onready var player_peer_id: int = player.name.to_int()
 
+@export var ammo_definition: WeaponDefinition
+
+var get_ammo: Callable
+var consume_ammo: Callable
+
 @export_group("Settings")
 @export_range(0.1,10.0,0.1) var fire_rate: float = 1.5:
 	set(value):
@@ -21,13 +26,17 @@ func _can_peer_use(peer_id: int) -> bool:
 
 func _can_fire() -> bool:
 	if $Timer.is_stopped():
-		return multiplayer.get_unique_id() == player_peer_id
+		if get_ammo.call() > 0:
+			return multiplayer.get_unique_id() == player_peer_id
+		else:
+			return false
 	else:
 		return false
 
 func _on_fire():
 	if multiplayer.get_unique_id() == player_peer_id:
 		print("bang")
+		consume_ammo.call(1)
 		$AnimationPlayer.play("fire")
 		$Timer.start(firing_cycle_time)
 
