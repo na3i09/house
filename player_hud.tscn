@@ -5,8 +5,11 @@ script/source = "extends CanvasLayer
 
 
 @export var temperature: Temperature
+@export var ammo_manager: AmmoManager
+
 
 @onready var progress_bar: ProgressBar = $ProgressBar
+@onready var label: Label = $Label
 
 func _ready() -> void:
 	progress_bar.max_value = temperature.max_temperature
@@ -14,6 +17,8 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	progress_bar.value = lerpf(progress_bar.value,temperature.temperature,0.5*delta)
+	if ammo_manager.ammo_list.size() >= 1:
+		label.text = str(ammo_manager.ammo_list[0])
 "
 
 [node name="PlayerHud" type="CanvasLayer" unique_id=1278874362]
@@ -26,3 +31,17 @@ anchor_bottom = 1.0
 offset_top = -27.0
 offset_right = 317.0
 grow_vertical = 0
+
+[node name="Label" type="Label" parent="." unique_id=1348851213]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -79.0
+offset_top = -56.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "00"
+horizontal_alignment = 1
+vertical_alignment = 1

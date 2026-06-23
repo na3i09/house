@@ -91,8 +91,9 @@ script = ExtResource("10_n7ghd")
 
 [node name="Temperature" parent="." unique_id=351895532 instance=ExtResource("14_u1c27")]
 
-[node name="PlayerHud" parent="." unique_id=1278874362 node_paths=PackedStringArray("temperature") instance=ExtResource("15_u1c27")]
+[node name="PlayerHud" parent="." unique_id=1278874362 node_paths=PackedStringArray("temperature", "ammo_manager") instance=ExtResource("15_u1c27")]
 temperature = NodePath("../Temperature")
+ammo_manager = NodePath("../AmmoManager")
 
 [node name="NonPlayerRiflePivot" type="Node3D" parent="." unique_id=2146452606]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36669618, 0)
