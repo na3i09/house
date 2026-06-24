@@ -19,11 +19,20 @@ func _ready() -> void:
 func quit_game() -> void:
 	get_tree().quit()
 
-func _on_host_button_pressed() -> void:
-	peer.create_server(PORT)
+## Start a server instance and spawn as host
+func create_host(port: int) -> void:
+	peer.create_server(port)
 	multiplayer.multiplayer_peer = peer
 	multiplayer.peer_connected.connect(player_spawner.spawn_player)
 	player_spawner.spawn_player()
+
+## Create a client instance and connect to server
+func create_client(address: String, port: int) -> void:
+	peer.create_client(address,port)
+	multiplayer.multiplayer_peer = peer
+
+func _on_host_button_pressed() -> void:
+	create_host(PORT)
 	
 	$MainMenu.hide()
 
@@ -59,8 +68,7 @@ func _respawn_player(id):
 		get_node(str(id)).respawn()
 
 func _on_line_edit_text_submitted(new_text: String) -> void:
-	peer.create_client(new_text,PORT)
-	multiplayer.multiplayer_peer = peer
+	create_client(new_text,PORT)
 	
 	$MainMenu.hide()
 
