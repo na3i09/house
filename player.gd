@@ -42,6 +42,7 @@ func _initialize_multiplayer() -> void:
 func _rollback_tick(delta: float, _tick, _is_fresh):
 	if is_multiplayer_authority() and alive:
 		# Add the gravity.
+		_force_update_is_on_floor()
 		if not is_on_floor():
 			velocity += get_gravity() * delta
 		
@@ -67,6 +68,12 @@ func _rollback_tick(delta: float, _tick, _is_fresh):
 		velocity /= NetworkTime.physics_factor
 	elif is_multiplayer_authority():
 		global_position = Vector3(0,20,0)
+
+func _force_update_is_on_floor() -> void:
+	var old_velocity: Vector3 = velocity
+	velocity = Vector3.ZERO
+	move_and_slide()
+	velocity = old_velocity
 
 func _jump() -> void:
 	velocity.y = JUMP_VELOCITY
