@@ -47,6 +47,7 @@ Enemies="Group for players other than the current client"
 [layer_names]
 
 3d_physics/layer_1="Physics"
+3d_physics/layer_3="Temperature"
 3d_physics/layer_9="PlayerPhysics"
 
 [netfox]
