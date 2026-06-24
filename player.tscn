@@ -36,6 +36,8 @@ func _rollback_tick(_delta: float, _tick, _is_fresh):
 		RenderingServer.global_shader_parameter_set(\"player_position\",global_position)
 "
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4dhkl"]
+
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=856101085 groups=["Players"]]
 collision_layer = 257
 collision_mask = 257
@@ -105,7 +107,16 @@ transform = Transform3D(0.994459, 0, 0.105125226, 0, 1, 0, -0.105125226, 0, 0.99
 [node name="PlayerLocationUpdater" type="Node3D" parent="." unique_id=1293533525]
 script = SubResource("GDScript_op7ga")
 
-[node name="AmmoManager" type="Node" parent="." unique_id=948160493 node_paths=PackedStringArray("weapon_list")]
+[node name="AmmoManager" type="Node" parent="." unique_id=11037480 node_paths=PackedStringArray("weapon_list", "detection_area")]
 script = ExtResource("18_q13i1")
 weapon_list = [NodePath("../PlayerCamera/RiflePivot/Rifle")]
+detection_area = NodePath("../AmmoArea")
 metadata/_custom_type_script = "uid://6jfd1fqrxvcg"
+
+[node name="AmmoArea" type="Area3D" parent="." unique_id=1731995624]
+collision_layer = 0
+collision_mask = 8
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AmmoArea" unique_id=1761646850]
+shape = SubResource("CapsuleShape3D_4dhkl")

@@ -3,9 +3,13 @@ class_name AmmoManager
 
 @export var weapon_list: Array[Node]
 
+@export var detection_area: Area3D
+
 var ammo_list: Array[int]
 
 func _ready() -> void:
+	if is_multiplayer_authority():
+		detection_area.area_entered.connect(_on_detection_area_entered)
 	ammo_list.resize(weapon_list.size())
 	for i in range(weapon_list.size()):
 		if weapon_list[i].has_node_and_resource(":ammo_definition"):
@@ -33,3 +37,8 @@ func attempt_consume_ammo(value: int, index: int) -> bool:
 @rpc("any_peer","reliable","call_local")
 func _update_ammo_value(new_value: int,index: int) -> void:
 	ammo_list[index] = new_value
+
+func _on_detection_area_entered(area: Area3D) -> void:
+	var area_owner: Node3D = area.owner
+	
+	ammo_list[area_owner.weapon_index] += area_owner.amount
