@@ -56,7 +56,8 @@ mesh = SubResource("SphereMesh_4dhkl")
 
 [node name="HeatingArea" type="Area3D" parent="LaternBody" unique_id=815082667]
 collision_layer = 4
-collision_mask = 256
+collision_mask = 0
+monitoring = false
 script = ExtResource("1_kxgpu")
 metadata/_custom_type_script = "uid://dr8q41d5utsnm"
 
