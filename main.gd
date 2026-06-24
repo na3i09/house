@@ -11,10 +11,13 @@ var peer = ENetMultiplayerPeer.new()
 
 @onready var player_spawner: PlayerSpawner = $PlayerSpawner
 
+@onready var main_menu: CanvasLayer = $MainMenu
 
 func _ready() -> void:
 	GUIDE.enable_mapping_context(menu_mapping)
 	exit_action.triggered.connect(quit_game)
+	main_menu.host_connect = create_host
+	main_menu.client_connect = create_client
 
 func quit_game() -> void:
 	get_tree().quit()
@@ -30,18 +33,6 @@ func create_host(port: int) -> void:
 func create_client(address: String, port: int) -> void:
 	peer.create_client(address,port)
 	multiplayer.multiplayer_peer = peer
-
-func _on_host_button_pressed() -> void:
-	create_host(PORT)
-	
-	$MainMenu.hide()
-
-func _on_client_button_pressed() -> void:
-	show_ip_address_input()
-
-func show_ip_address_input() -> void:
-	$MainMenu/LineEdit.visible = true
-	$MainMenu/LineEdit.grab_focus()
 
 func show_respawn_button() -> void:
 	Input.set_mouse_mode.call_deferred(Input.MOUSE_MODE_CONFINED) #TODO: fix NO GRAB error that occurs if calling while window is unfocued
@@ -66,11 +57,6 @@ func respawn_player(id):
 func _respawn_player(id):
 	if multiplayer.is_server():
 		get_node(str(id)).respawn()
-
-func _on_line_edit_text_submitted(new_text: String) -> void:
-	create_client(new_text,PORT)
-	
-	$MainMenu.hide()
 
 func _on_respawn_pressed() -> void:
 	$RespawnMenu.hide()

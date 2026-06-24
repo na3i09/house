@@ -6,6 +6,7 @@
 [ext_resource type="Resource" uid="uid://bifumi31kn7" path="res://input/menu_mapping.tres" id="3_lquwl"]
 [ext_resource type="Resource" uid="uid://d2516cp1tbkju" path="res://input/exit_action.tres" id="4_7mycd"]
 [ext_resource type="Script" uid="uid://4h4li347tbjm" path="res://player_spawner.gd" id="6_7mycd"]
+[ext_resource type="Script" uid="uid://wrkhfs4n5j0s" path="res://main_menu.gd" id="6_272bh"]
 
 [node name="Main" type="Node3D" unique_id=1886403943]
 script = ExtResource("1_h2yge")
@@ -19,6 +20,7 @@ exit_action = ExtResource("4_7mycd")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.430535, 0)
 
 [node name="MainMenu" type="CanvasLayer" parent="." unique_id=1874915617]
+script = ExtResource("6_272bh")
 
 [node name="HostButton" type="Button" parent="MainMenu" unique_id=384761435]
 anchors_preset = 4
@@ -90,7 +92,7 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Respawn"
 
-[connection signal="pressed" from="MainMenu/HostButton" to="." method="_on_host_button_pressed"]
-[connection signal="pressed" from="MainMenu/ClientButton" to="." method="_on_client_button_pressed"]
-[connection signal="text_submitted" from="MainMenu/LineEdit" to="." method="_on_line_edit_text_submitted"]
+[connection signal="pressed" from="MainMenu/HostButton" to="MainMenu" method="_on_host_button_pressed"]
+[connection signal="pressed" from="MainMenu/ClientButton" to="MainMenu" method="_on_client_button_pressed"]
+[connection signal="text_submitted" from="MainMenu/LineEdit" to="MainMenu" method="_on_line_edit_text_submitted"]
 [connection signal="pressed" from="RespawnMenu/Respawn" to="." method="_on_respawn_pressed"]
