@@ -2,6 +2,8 @@ extends CanvasLayer
 
 const PORT: int = 1027
 
+@onready var line_edit: LineEdit = $LineEdit
+
 var host_connect: Callable
 var client_connect: Callable
 
@@ -16,8 +18,8 @@ func _on_client_button_pressed() -> void:
 
 
 func show_ip_address_input() -> void:
-	$LineEdit.show()
-	$LineEdit.grab_focus()
+	line_edit.show()
+	line_edit.grab_focus()
 
 
 func _on_line_edit_text_submitted(new_text: String) -> void:
