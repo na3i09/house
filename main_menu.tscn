@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://ddl7s4jngiudv"]
+
+[ext_resource type="Script" uid="uid://wrkhfs4n5j0s" path="res://main_menu.gd" id="1_06t4h"]
+
+[node name="MainMenu" type="CanvasLayer" unique_id=1038055183]
+script = ExtResource("1_06t4h")
+
+[node name="HostButton" type="Button" parent="." unique_id=493781758]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -128.5
+offset_right = 325.0
+offset_bottom = 128.5
+grow_vertical = 2
+text = "Host"
+metadata/_edit_use_anchors_ = true
+
+[node name="ClientButton" type="Button" parent="." unique_id=240606888]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -321.0
+offset_top = -128.0
+offset_bottom = 128.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "Client
+"
+metadata/_edit_use_anchors_ = true
+
+[node name="LineEdit" type="LineEdit" parent="." unique_id=1602989927]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -15.5
+offset_right = 80.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "127.0.0.1"
+alignment = 1
+
+[connection signal="pressed" from="HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="ClientButton" to="." method="_on_client_button_pressed"]
+[connection signal="text_submitted" from="LineEdit" to="." method="_on_line_edit_text_submitted"]
