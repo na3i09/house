@@ -42,3 +42,4 @@ func _on_detection_area_entered(area: Area3D) -> void:
 	var area_owner: Node3D = area.owner
 	
 	ammo_list[area_owner.weapon_index] += area_owner.amount
+	area_owner.pickup_ammo()

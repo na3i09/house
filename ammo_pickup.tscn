@@ -1,11 +1,42 @@
 [gd_scene format=3 uid="uid://tqs8ytugpcni"]
 
+[ext_resource type="Script" uid="uid://3lbngqcexe0l" path="res://addons/netfox/state-synchronizer.gd" id="1_fs8dk"]
+
 [sub_resource type="GDScript" id="GDScript_bwkn7"]
 resource_name = "AmmoPickup"
 script/source = "extends Node3D
+## Scene for ammo pickup box
 
 @export var weapon_index: int = 0
 @export var amount: int = 5
+@export var cooldown: float = 15.0
+
+@onready var respawn_timer: Timer = $RespawnTimer
+@onready var collision_shape_3d: CollisionShape3D = $CSGBox3D/Area3D/CollisionShape3D
+@onready var state_synchronizer: StateSynchronizer = $StateSynchronizer
+
+
+func _ready() -> void:
+	if is_multiplayer_authority():
+		respawn_timer.timeout.connect(_on_respawn_timer_timeout)
+	
+	state_synchronizer.process_settings()
+
+## Sets the ammo box as collected and starts the cooldown timer for respawning
+func pickup_ammo() -> void:
+	if is_multiplayer_authority():
+		_toggle_visibility(false)
+		respawn_timer.start(cooldown)
+
+
+func _toggle_visibility(_visible: bool) -> void:
+	visible = _visible
+	collision_shape_3d.set_deferred(\"disabled\",not _visible)
+
+
+func _on_respawn_timer_timeout() -> void:
+	if is_multiplayer_authority():
+		_toggle_visibility(true)
 "
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4dhkl"]
@@ -29,3 +60,12 @@ monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CSGBox3D/Area3D" unique_id=239707678]
 shape = SubResource("BoxShape3D_4dhkl")
+
+[node name="RespawnTimer" type="Timer" parent="." unique_id=1058051666]
+one_shot = true
+
+[node name="StateSynchronizer" type="Node" parent="." unique_id=995768360 node_paths=PackedStringArray("root")]
+script = ExtResource("1_fs8dk")
+root = NodePath("..")
+properties = Array[String]([":visible", "CSGBox3D/Area3D/CollisionShape3D:disabled"])
+metadata/_custom_type_script = "uid://3lbngqcexe0l"
