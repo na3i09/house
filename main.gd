@@ -9,20 +9,12 @@ var peer = ENetMultiplayerPeer.new()
 @export var menu_mapping: GUIDEMappingContext
 @export var exit_action: GUIDEAction
 
+@onready var player_spawner: PlayerSpawner = $PlayerSpawner
+
+
 func _ready() -> void:
 	GUIDE.enable_mapping_context(menu_mapping)
 	exit_action.triggered.connect(quit_game)
-
-func _spawn_player(id: int = 1) -> void:
-	var player = PlayerScene.instantiate()
-	player.name = str(id)
-	
-	_place_player.call_deferred(player,$PlayerSpawnPoint)
-
-func _place_player(player: Node3D, spawn_point: Node3D) -> void:
-	add_child(player)
-	
-	player.global_position = spawn_point.global_position
 
 func quit_game() -> void:
 	get_tree().quit()
@@ -30,8 +22,8 @@ func quit_game() -> void:
 func _on_host_button_pressed() -> void:
 	peer.create_server(PORT)
 	multiplayer.multiplayer_peer = peer
-	multiplayer.peer_connected.connect(_spawn_player)
-	_spawn_player()
+	multiplayer.peer_connected.connect(player_spawner.spawn_player)
+	player_spawner.spawn_player()
 	
 	$MainMenu.hide()
 

@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cnv06ugmt1xiu" path="res://player.tscn" id="2_h2yge"]
 [ext_resource type="Resource" uid="uid://bifumi31kn7" path="res://input/menu_mapping.tres" id="3_lquwl"]
 [ext_resource type="Resource" uid="uid://d2516cp1tbkju" path="res://input/exit_action.tres" id="4_7mycd"]
+[ext_resource type="Script" uid="uid://4h4li347tbjm" path="res://player_spawner.gd" id="6_7mycd"]
 
 [node name="Main" type="Node3D" unique_id=1886403943]
 script = ExtResource("1_h2yge")
@@ -61,9 +62,12 @@ grow_vertical = 2
 text = "127.0.0.1"
 alignment = 1
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=119053612]
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="." unique_id=382467329 node_paths=PackedStringArray("player_spawn_point")]
 _spawnable_scenes = PackedStringArray("uid://cnv06ugmt1xiu")
 spawn_path = NodePath("..")
+script = ExtResource("6_7mycd")
+player_spawn_point = NodePath("../PlayerSpawnPoint")
+metadata/_custom_type_script = "uid://4h4li347tbjm"
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1237720176]
 transform = Transform3D(1, 0, 0, 0, 0.6795822, 0.73359936, 0, -0.73359936, 0.6795822, 0, 9.134973, 11.695151)
