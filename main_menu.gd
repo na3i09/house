@@ -21,6 +21,19 @@ func show_ip_address_input() -> void:
 
 
 func _on_line_edit_text_submitted(new_text: String) -> void:
-	client_connect.call(new_text,PORT)
+	var address: String = new_text
+	var port: int = PORT
+	
+	if new_text.find(":") != -1:
+		var ip_split: PackedStringArray = new_text.split(":")
+		
+		if ip_split.size() != 2:
+			push_error("Invalid client ip address")
+			return
+		
+		address = ip_split[0]
+		port = ip_split[1].to_int()
+	
+	client_connect.call(address,port)
 	
 	hide()
