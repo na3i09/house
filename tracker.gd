@@ -67,6 +67,6 @@ func _on_beam_adjust_trigger() -> void:
 	print(Vector2(scanner.scan_angle_horiz,scanner.scan_angle_vert))
 
 func _on_beam_mode_cycle() -> void:
-	scan_mode = (scan_mode + 1) % 3
+	scan_mode = (scan_mode + 1) % 3 as ScanMode
 	_set_beam_mode(scan_mode)
 	print(scan_mode)
