@@ -102,6 +102,9 @@ func respawn() -> void:
 
 @rpc("authority","call_local")
 func respawn_player() -> void:
+	var respawn_point: SpawnPoint = SpawnPoint.pick_random_spawn_point(get_tree())
+	if respawn_point:
+		global_position = respawn_point.global_position
 	player_camera.set_camera_active()
 	temperature.reset()
 	alive = true

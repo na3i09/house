@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cnv06ugmt1xiu" path="res://player.tscn" id="2_h2yge"]
 [ext_resource type="Resource" uid="uid://bifumi31kn7" path="res://input/menu_mapping.tres" id="3_lquwl"]
 [ext_resource type="Resource" uid="uid://d2516cp1tbkju" path="res://input/exit_action.tres" id="4_7mycd"]
+[ext_resource type="Script" uid="uid://dbmta0ian1tdg" path="res://components/spawn_point.gd" id="5_kek77"]
 [ext_resource type="Script" uid="uid://4h4li347tbjm" path="res://player_spawner.gd" id="6_7mycd"]
 [ext_resource type="PackedScene" uid="uid://ddl7s4jngiudv" path="res://main_menu.tscn" id="6_272bh"]
 [ext_resource type="Script" uid="uid://dwgl0dilh0v3w" path="res://respawn_menu.gd" id="8_5vw27"]
@@ -14,6 +15,21 @@ script = ExtResource("1_h2yge")
 PlayerScene = ExtResource("2_h2yge")
 menu_mapping = ExtResource("3_lquwl")
 exit_action = ExtResource("4_7mycd")
+
+[node name="SpawnPoint" type="Marker3D" parent="." unique_id=687370644]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.430535, 0)
+script = ExtResource("5_kek77")
+metadata/_custom_type_script = "uid://dbmta0ian1tdg"
+
+[node name="SpawnPoint2" type="Marker3D" parent="." unique_id=743737511]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.482086, 8.430535, 13.653117)
+script = ExtResource("5_kek77")
+metadata/_custom_type_script = "uid://dbmta0ian1tdg"
+
+[node name="SpawnPoint3" type="Marker3D" parent="." unique_id=1112644598]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.7184486, 5.1855297, -17.776379)
+script = ExtResource("5_kek77")
+metadata/_custom_type_script = "uid://dbmta0ian1tdg"
 
 [node name="Level" parent="." unique_id=1280929139 instance=ExtResource("1_0xm2m")]
 
@@ -26,7 +42,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.430535, 0)
 _spawnable_scenes = PackedStringArray("uid://cnv06ugmt1xiu")
 spawn_path = NodePath("..")
 script = ExtResource("6_7mycd")
-player_spawn_point = NodePath("../PlayerSpawnPoint")
+player_spawn_point = NodePath("../SpawnPoint")
 metadata/_custom_type_script = "uid://4h4li347tbjm"
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1237720176]

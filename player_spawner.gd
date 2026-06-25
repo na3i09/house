@@ -2,7 +2,7 @@ extends MultiplayerSpawner
 class_name PlayerSpawner
 ## Node for handling spawning of players both on the host and on clients
 
-## Location for players to be spawned into the world
+## Default location for players to be spawned into the world
 @export var player_spawn_point: Node3D
 
 ## [PackedScene] storing the player, assigned from the first scene in the auto spawn list
@@ -18,7 +18,11 @@ func spawn_player(id: int = 1) -> void:
 	var player := PlayerScene.instantiate() as Player
 	player.name = str(id)
 	
-	_place_player.call_deferred(player,player_spawn_point)
+	var spawn_point: SpawnPoint = SpawnPoint.pick_random_spawn_point(get_tree())
+	if not spawn_point:
+		spawn_point = player_spawn_point
+	
+	_place_player.call_deferred(player,spawn_point)
 
 # place player at location of player spawn point
 func _place_player(player: Node3D, spawn_point: Node3D) -> void:
