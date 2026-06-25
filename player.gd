@@ -8,10 +8,11 @@ class_name Player
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
-@onready var player_input: Node = $PlayerInput
+@onready var player_input: PlayerInput = $PlayerInput
 @onready var rollback_synchronizer: RollbackSynchronizer = $RollbackSynchronizer
 @onready var tick_interpolator: TickInterpolator = $TickInterpolator
 @onready var temperature: Temperature = $Temperature
+@onready var player_camera: Camera3D = $PlayerCamera
 
 
 @onready var player_hud: CanvasLayer = $PlayerHud
@@ -25,9 +26,9 @@ func _initialize_multiplayer() -> void:
 	await get_tree().process_frame
 	set_multiplayer_authority(1)
 	player_input.set_multiplayer_authority(name.to_int())
-	$PlayerCamera.set_multiplayer_authority(name.to_int())
+	player_camera.set_multiplayer_authority(name.to_int())
 	$PlayerLocationUpdater.set_multiplayer_authority(name.to_int())
-	$PlayerCamera.set_camera_active()
+	player_camera.set_camera_active()
 	if multiplayer.get_unique_id() != name.to_int():
 		player_hud.queue_free()
 		add_to_group("Enemies")
@@ -51,11 +52,11 @@ func _rollback_tick(delta: float, _tick, _is_fresh):
 			_jump()
 			player_input.is_jumping = false
 		
-		$NonPlayerRiflePivot.transform = $PlayerCamera.transform
+		$NonPlayerRiflePivot.transform = player_camera.transform
 		# Get the input direction and handle the movement/deceleration.
 		# As good practice, you should replace UI actions with custom gameplay actions.
 		var direction := (transform.basis * Vector3(player_input.input_dir.x, 0, player_input.input_dir.y)).normalized()
-		direction = direction.rotated(Vector3.UP,$PlayerCamera.rotation.y + rotation.y)
+		direction = direction.rotated(Vector3.UP,player_camera.rotation.y + rotation.y)
 		if direction:
 			velocity.x = direction.x * SPEED
 			velocity.z = direction.z * SPEED
@@ -95,7 +96,7 @@ func respawn() -> void:
 
 @rpc("authority","call_local")
 func respawn_player() -> void:
-	$PlayerCamera.set_camera_active()
+	player_camera.set_camera_active()
 	alive = true
 	show()
 
