@@ -97,6 +97,7 @@ func respawn() -> void:
 @rpc("authority","call_local")
 func respawn_player() -> void:
 	player_camera.set_camera_active()
+	temperature.reset()
 	alive = true
 	show()
 

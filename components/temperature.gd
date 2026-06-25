@@ -38,6 +38,10 @@ func _rollback_tick(delta: float, _tick, _is_fresh):
 			if player:
 				player.die()
 
+func reset() -> void:
+	temperature = max_temperature
+	old_temp = max_temperature
+
 func _check_very_cold(current_temp: float) -> void:
 	if current_temp < very_cold_limit and old_temp > very_cold_limit:
 		if player:
