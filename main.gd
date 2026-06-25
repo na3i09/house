@@ -29,12 +29,15 @@ func create_host(port: int) -> void:
 	multiplayer.multiplayer_peer = peer
 	multiplayer.peer_connected.connect(player_spawner.spawn_player)
 	player_spawner.spawn_player()
-	respawn_menu.respawn = respawn_player.bind(multiplayer.get_unique_id())
+	_bind_respawn_action()
 
 ## Create a client instance and connect to server
 func create_client(address: String, port: int) -> void:
 	peer.create_client(address,port)
 	multiplayer.multiplayer_peer = peer
+	_bind_respawn_action()
+
+func _bind_respawn_action() -> void:
 	respawn_menu.respawn = respawn_player.bind(multiplayer.get_unique_id())
 
 func show_respawn_button() -> void:
