@@ -14,7 +14,7 @@ enum ScanMode {
 @export_group("Settings")
 @export var enable_scan: bool = true
 @export var enable_ping: bool = false
-@export_enum("Sweep","Instant","Continuous") var scan_mode: int
+@export var scan_mode: ScanMode = ScanMode.SWEEP
 
 @export_group("Debug")
 @export var debug_beam_adjust: GUIDEAction
