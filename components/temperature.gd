@@ -16,7 +16,7 @@ class_name Temperature
 
 
 func _rollback_tick(delta: float, _tick, _is_fresh):
-	if is_multiplayer_authority():
+	if is_multiplayer_authority() and player.alive:
 		if temp_monitoring_area.has_overlapping_areas():
 			for area in temp_monitoring_area.get_overlapping_areas():
 				if area is HeatingArea:
