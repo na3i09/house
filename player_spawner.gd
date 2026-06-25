@@ -9,8 +9,7 @@ class_name PlayerSpawner
 var PlayerScene: PackedScene
 
 func _ready() -> void:
-	if get_spawnable_scene_count() < 1:
-		push_error("No player scene set")
+	assert(get_spawnable_scene_count() >= 1, "No player scene set")
 	
 	PlayerScene = load(get_spawnable_scene(0))
 
