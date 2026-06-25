@@ -2,7 +2,7 @@ extends Node3D
 
 const PORT: int = 1027
 
-var peer = ENetMultiplayerPeer.new()
+var peer := ENetMultiplayerPeer.new()
 
 @export var PlayerScene: PackedScene
 
