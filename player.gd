@@ -42,6 +42,11 @@ func _initialize_multiplayer() -> void:
 
 func _rollback_tick(delta: float, _tick, _is_fresh):
 	if is_multiplayer_authority() and alive:
+		var speed: float = SPEED
+		
+		if temperature.temperature < temperature.very_cold_limit:
+			speed *= 0.6
+		
 		# Add the gravity.
 		_force_update_is_on_floor()
 		if not is_on_floor():
@@ -58,11 +63,11 @@ func _rollback_tick(delta: float, _tick, _is_fresh):
 		var direction := (transform.basis * Vector3(player_input.input_dir.x, 0, player_input.input_dir.y)).normalized()
 		direction = direction.rotated(Vector3.UP,player_camera.rotation.y + rotation.y)
 		if direction:
-			velocity.x = direction.x * SPEED
-			velocity.z = direction.z * SPEED
+			velocity.x = direction.x * speed
+			velocity.z = direction.z * speed
 		else:
-			velocity.x = move_toward(velocity.x, 0, SPEED)
-			velocity.z = move_toward(velocity.z, 0, SPEED)
+			velocity.x = move_toward(velocity.x, 0, speed)
+			velocity.z = move_toward(velocity.z, 0, speed)
 
 		velocity *= NetworkTime.physics_factor
 		move_and_slide()
