@@ -1,7 +1,7 @@
 extends Node3D
 class_name Scanner
 
-@export var scan_distance: float = 15.0
+@export_range(0.0,150.0,0.1,"or_greater","suffix:m") var scan_distance: float = 15.0
 @export_range(0.0,30.0,0.01,"radians_as_degrees") var scan_angle_delta: float = deg_to_rad(1.0)
 @export_range(0.0,30.0,0.01,"radians_as_degrees") var scan_angle_variation: float = deg_to_rad(1.0)
 
