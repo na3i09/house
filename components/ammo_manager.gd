@@ -17,7 +17,6 @@ func _ready() -> void:
 			
 			weapon_list[i].get_ammo = get_current_ammo.bind(i)
 			weapon_list[i].consume_ammo = attempt_consume_ammo.bind(i)
-			print("success")
 
 
 func get_current_ammo(index: int) -> int:
