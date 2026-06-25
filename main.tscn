@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://d2516cp1tbkju" path="res://input/exit_action.tres" id="4_7mycd"]
 [ext_resource type="Script" uid="uid://4h4li347tbjm" path="res://player_spawner.gd" id="6_7mycd"]
 [ext_resource type="PackedScene" uid="uid://ddl7s4jngiudv" path="res://main_menu.tscn" id="6_272bh"]
+[ext_resource type="Script" uid="uid://dwgl0dilh0v3w" path="res://respawn_menu.gd" id="8_5vw27"]
 
 [node name="Main" type="Node3D" unique_id=1886403943]
 script = ExtResource("1_h2yge")
@@ -34,6 +35,7 @@ current = true
 
 [node name="RespawnMenu" type="CanvasLayer" parent="." unique_id=490160215]
 visible = false
+script = ExtResource("8_5vw27")
 
 [node name="Respawn" type="Button" parent="RespawnMenu" unique_id=200570768]
 anchors_preset = 8
@@ -49,4 +51,4 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Respawn"
 
-[connection signal="pressed" from="RespawnMenu/Respawn" to="." method="_on_respawn_pressed"]
+[connection signal="pressed" from="RespawnMenu/Respawn" to="RespawnMenu" method="_on_respawn_pressed"]

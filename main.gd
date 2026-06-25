@@ -12,6 +12,7 @@ var peer = ENetMultiplayerPeer.new()
 @onready var player_spawner: PlayerSpawner = $PlayerSpawner
 
 @onready var main_menu: CanvasLayer = $MainMenu
+@onready var respawn_menu: CanvasLayer = $RespawnMenu
 
 func _ready() -> void:
 	GUIDE.enable_mapping_context(menu_mapping)
@@ -28,15 +29,17 @@ func create_host(port: int) -> void:
 	multiplayer.multiplayer_peer = peer
 	multiplayer.peer_connected.connect(player_spawner.spawn_player)
 	player_spawner.spawn_player()
+	respawn_menu.respawn = respawn_player.bind(multiplayer.get_unique_id())
 
 ## Create a client instance and connect to server
 func create_client(address: String, port: int) -> void:
 	peer.create_client(address,port)
 	multiplayer.multiplayer_peer = peer
+	respawn_menu.respawn = respawn_player.bind(multiplayer.get_unique_id())
 
 func show_respawn_button() -> void:
 	Input.set_mouse_mode.call_deferred(Input.MOUSE_MODE_CONFINED) #TODO: fix NO GRAB error that occurs if calling while window is unfocued
-	$RespawnMenu.show()
+	respawn_menu.show()
 
 func exit_game(id):
 	multiplayer.peer_disconnected.connect(del_player)
@@ -57,7 +60,3 @@ func respawn_player(id):
 func _respawn_player(id):
 	if multiplayer.is_server():
 		get_node(str(id)).respawn()
-
-func _on_respawn_pressed() -> void:
-	$RespawnMenu.hide()
-	respawn_player(multiplayer.get_unique_id())
