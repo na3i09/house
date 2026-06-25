@@ -5,20 +5,29 @@ script/source = "extends CanvasLayer
 
 
 @export var temperature: Temperature
-@export var ammo_manager: AmmoManager
-
 
 @onready var progress_bar: ProgressBar = $ProgressBar
-@onready var label: Label = $Label
+@onready var ammo_counter: Label = $AmmoCounter
 
 func _ready() -> void:
 	progress_bar.max_value = temperature.max_temperature
 	progress_bar.value = temperature.max_temperature
 
+
 func _process(delta: float) -> void:
-	progress_bar.value = lerpf(progress_bar.value,temperature.temperature,0.5*delta)
-	if ammo_manager.ammo_list.size() >= 1:
-		label.text = str(ammo_manager.ammo_list[0])
+	progress_bar.value = lerpf(progress_bar.value,temperature.temperature,0.8*delta)
+"
+
+[sub_resource type="GDScript" id="GDScript_5sskr"]
+resource_name = "AmmoCounter"
+script/source = "extends Label
+
+
+var get_ammo: Callable
+
+func _process(_delta: float) -> void:
+	if get_ammo.is_valid():
+		text = str(get_ammo.call())
 "
 
 [node name="PlayerHud" type="CanvasLayer" unique_id=1278874362]
@@ -32,7 +41,7 @@ offset_top = -27.0
 offset_right = 317.0
 grow_vertical = 0
 
-[node name="Label" type="Label" parent="." unique_id=1348851213]
+[node name="AmmoCounter" type="Label" parent="." unique_id=1348851213]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -45,3 +54,4 @@ grow_vertical = 0
 text = "00"
 horizontal_alignment = 1
 vertical_alignment = 1
+script = SubResource("GDScript_5sskr")

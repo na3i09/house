@@ -29,6 +29,7 @@ func _initialize_multiplayer() -> void:
 	player_camera.set_multiplayer_authority(name.to_int())
 	$PlayerLocationUpdater.set_multiplayer_authority(name.to_int())
 	player_camera.set_camera_active()
+	player_hud.ammo_counter.get_ammo = $PlayerCamera/RiflePivot/Rifle.get_ammo
 	if multiplayer.get_unique_id() != name.to_int():
 		player_hud.queue_free()
 		add_to_group("Enemies")
