@@ -19,6 +19,7 @@ class_name Scanner
 @export var switch_scan_direction: bool = false
 
 @export var scan_speed: int = 5
+@export_range(1,3,1) var continuous_scan_multiplier: int = 1
 
 @onready var gpu_particles_3d: GPUParticles3D = $GPUParticles3D
 
@@ -87,8 +88,9 @@ func _scan(ray_start: Vector3, ray_end: Vector3) -> Dictionary:
 	return result
 
 func cast_random_beam() -> void:
-	_cast_beam(randf_range(-scan_angle_horiz/2,scan_angle_horiz/2),
-	randf_range(-scan_angle_vert/2,scan_angle_vert/2))
+	for i in range(continuous_scan_multiplier):
+		_cast_beam(randf_range(-scan_angle_horiz/2,scan_angle_horiz/2),
+				randf_range(-scan_angle_vert/2,scan_angle_vert/2))
 
 func _cast_beam(horiz_angle: float,vert_angle: float) -> void:
 	var end_point: Vector3 = _calc_ray_end(vert_angle,horiz_angle) if switch_scan_direction else _calc_ray_end(horiz_angle,vert_angle)
