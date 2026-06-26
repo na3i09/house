@@ -7,10 +7,6 @@ class_name Rifle
 @export var player: Player
 @onready var player_peer_id: int = player.name.to_int()
 
-@export var ammo_type: AmmoType
-
-@export var magazine_size: int = 4
-
 var get_ammo: Callable
 var consume_ammo: Callable
 var reload_ammo: Callable
@@ -22,6 +18,9 @@ func get_current_ammo() -> int:
 	return current_ammo
 
 @export_group("Settings")
+@export var ammo_type: AmmoType
+
+@export var magazine_size: int = 4
 @export_range(0.1,10.0,0.1) var fire_rate: float = 1.5:
 	set(value):
 		fire_rate = clampf(value,0.1,10.0)
