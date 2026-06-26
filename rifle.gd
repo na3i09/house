@@ -6,10 +6,19 @@ class_name Rifle
 @export var player: Player
 @onready var player_peer_id: int = player.name.to_int()
 
-@export var ammo_definition: WeaponDefinition
+@export var ammo_type: AmmoType
+
+@export var magazine_size: int = 4
 
 var get_ammo: Callable
 var consume_ammo: Callable
+var reload_ammo: Callable
+
+var current_ammo: int = 0:
+	get = get_current_ammo
+
+func get_current_ammo() -> int:
+	return current_ammo
 
 @export_group("Settings")
 @export_range(0.1,10.0,0.1) var fire_rate: float = 1.5:
@@ -26,7 +35,7 @@ func _can_peer_use(peer_id: int) -> bool:
 
 func _can_fire() -> bool:
 	if $Timer.is_stopped():
-		if get_ammo.call() > 0:
+		if get_current_ammo.call() > 0:
 			return multiplayer.get_unique_id() == player_peer_id
 		else:
 			return false
@@ -36,7 +45,11 @@ func _can_fire() -> bool:
 func _on_fire():
 	if multiplayer.get_unique_id() == player_peer_id:
 		print("bang")
-		consume_ammo.call(1)
+		#consume_ammo.call(1)
+		if current_ammo > 0:
+			current_ammo -= 1
+		else:
+			reload()
 		$AnimationPlayer.play("fire")
 		$Timer.start(firing_cycle_time)
 
@@ -49,6 +62,8 @@ func _on_hit(result: Dictionary) -> void:
 			print("hit " + hit_target.name)
 
 func fire() -> bool:
+	if current_ammo == 0 and get_ammo.call() > 0:
+		reload()
 	if not can_fire():
 		return false
 	
@@ -60,3 +75,6 @@ func reproduce_fire() -> void:
 	_apply_data(_get_data())
 	_after_fire()
 	pass
+
+func reload() -> void:
+	current_ammo = reload_ammo.call(magazine_size)

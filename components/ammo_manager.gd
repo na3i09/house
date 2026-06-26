@@ -12,16 +12,20 @@ func _ready() -> void:
 		detection_area.area_entered.connect(_on_detection_area_entered)
 	ammo_list.resize(weapon_list.size())
 	for i in range(weapon_list.size()):
-		if weapon_list[i].has_node_and_resource(":ammo_definition"):
-			ammo_list[i] = weapon_list[i].ammo_definition.default_ammo
+		if weapon_list[i].has_node_and_resource(":ammo_type"):
+			ammo_list[i] = weapon_list[i].ammo_type.default_ammo
 			
 			weapon_list[i].get_ammo = get_current_ammo.bind(i)
 			weapon_list[i].consume_ammo = attempt_consume_ammo.bind(i)
+			weapon_list[i].reload_ammo = reload_ammo.bind(i)
 
 
 func get_current_ammo(index: int) -> int:
 	return ammo_list[index]
 
+func set_current_ammo(value: int, index: int) -> void:
+	if is_multiplayer_authority():
+		ammo_list[index] = value
 
 func attempt_consume_ammo(value: int, index: int) -> bool:
 	var current_ammo: int = ammo_list[index]
@@ -32,6 +36,12 @@ func attempt_consume_ammo(value: int, index: int) -> bool:
 		return true
 	else:
 		return false
+
+## Remove ammo from pool, either full requested value, or all ammo remainging in pool
+func reload_ammo(value: int, index: int) -> int:
+	var remaining_ammo: int = mini(value,ammo_list[index])
+	attempt_consume_ammo(remaining_ammo,index)
+	return remaining_ammo
 
 @rpc("any_peer","reliable","call_local")
 func _update_ammo_value(new_value: int,index: int) -> void:
