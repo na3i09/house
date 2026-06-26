@@ -16,6 +16,21 @@ grow_vertical = 2
 text = "Host"
 metadata/_edit_use_anchors_ = true
 
+[node name="HostPort" type="LineEdit" parent="HostButton" unique_id=870008702]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = 22.5
+offset_right = 80.0
+offset_bottom = 53.5
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
 [node name="ClientButton" type="Button" parent="." unique_id=240606888]
 anchors_preset = 6
 anchor_left = 1.0
@@ -47,22 +62,6 @@ grow_vertical = 2
 text = "127.0.0.1"
 alignment = 1
 
-[node name="HostPort" type="LineEdit" parent="." unique_id=870008702]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -80.0
-offset_top = -15.5
-offset_right = 80.0
-offset_bottom = 15.5
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
 [connection signal="pressed" from="HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="ClientButton" to="." method="_on_client_button_pressed"]
 [connection signal="text_submitted" from="LineEdit" to="." method="_on_line_edit_text_submitted"]
-[connection signal="text_submitted" from="HostPort" to="." method="_on_host_port_text_submitted"]
