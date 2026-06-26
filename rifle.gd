@@ -14,7 +14,7 @@ var get_ammo: Callable
 var consume_ammo: Callable
 var reload_ammo: Callable
 
-var current_ammo: int = 0:
+var current_ammo: int = 4:
 	get = get_current_ammo
 
 func get_current_ammo() -> int:
@@ -34,7 +34,7 @@ func _can_peer_use(peer_id: int) -> bool:
 	return peer_id == player_peer_id
 
 func _can_fire() -> bool:
-	if $Timer.is_stopped():
+	if $Timer.is_stopped() and $ReloadTimer.is_stopped():
 		if get_current_ammo.call() > 0:
 			return multiplayer.get_unique_id() == player_peer_id
 		else:
@@ -46,12 +46,12 @@ func _on_fire():
 	if multiplayer.get_unique_id() == player_peer_id:
 		print("bang")
 		#consume_ammo.call(1)
-		if current_ammo > 0:
-			current_ammo -= 1
-		else:
-			reload()
 		$AnimationPlayer.play("fire")
 		$Timer.start(firing_cycle_time)
+		if current_ammo > 0:
+			current_ammo -= 1
+		if current_ammo == 0:
+			reload.call_deferred()
 
 func _on_hit(result: Dictionary) -> void:
 	if result["collider"] is Player:
@@ -62,8 +62,6 @@ func _on_hit(result: Dictionary) -> void:
 			print("hit " + hit_target.name)
 
 func fire() -> bool:
-	if current_ammo == 0 and get_ammo.call() > 0:
-		reload()
 	if not can_fire():
 		return false
 	
@@ -77,4 +75,7 @@ func reproduce_fire() -> void:
 	pass
 
 func reload() -> void:
+	await $Timer.timeout
+	$AnimationPlayer.play("reload")
+	$ReloadTimer.start()
 	current_ammo = reload_ammo.call(magazine_size)
