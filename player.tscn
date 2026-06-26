@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://b8wkfmasnxgfb" path="res://player_hud.tscn" id="15_u1c27"]
 [ext_resource type="PackedScene" uid="uid://c3ohvwfm2sxg3" path="res://assets/rifle_model.tscn" id="17_op7ga"]
 [ext_resource type="Script" uid="uid://6jfd1fqrxvcg" path="res://components/ammo_manager.gd" id="18_q13i1"]
+[ext_resource type="Script" uid="uid://3lbngqcexe0l" path="res://addons/netfox/state-synchronizer.gd" id="19_pylmc"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_sh265"]
 
@@ -77,7 +78,7 @@ metadata/_custom_type_script = "uid://cpiuf65vuu0oa"
 script = ExtResource("8_dw050")
 root = NodePath("..")
 enable_prediction = true
-state_properties = Array[String]([":global_transform", "HealthManager:health", "Temperature:temperature", "NonPlayerRiflePivot:transform", "AmmoManager:ammo_list"])
+state_properties = Array[String]([":global_transform", "HealthManager:health", "Temperature:temperature", "NonPlayerRiflePivot:transform"])
 input_properties = Array[String](["PlayerInput:input_dir", "PlayerInput:is_jumping", "PlayerCamera:rotation"])
 enable_input_broadcast = false
 metadata/_custom_type_script = "uid://d350u8evihs1u"
@@ -111,6 +112,12 @@ script = ExtResource("18_q13i1")
 weapon_list = [NodePath("../PlayerCamera/RiflePivot/Rifle")]
 detection_area = NodePath("../AmmoArea")
 metadata/_custom_type_script = "uid://6jfd1fqrxvcg"
+
+[node name="StateSynchronizer" type="Node" parent="AmmoManager" unique_id=1613856876 node_paths=PackedStringArray("root")]
+script = ExtResource("19_pylmc")
+root = NodePath("..")
+properties = Array[String]([":ammo_list"])
+metadata/_custom_type_script = "uid://3lbngqcexe0l"
 
 [node name="AmmoArea" type="Area3D" parent="." unique_id=1731995624]
 collision_layer = 0

@@ -13,6 +13,7 @@ const JUMP_VELOCITY = 4.5
 @onready var tick_interpolator: TickInterpolator = $TickInterpolator
 @onready var temperature: Temperature = $Temperature
 @onready var player_camera: Camera3D = $PlayerCamera
+@onready var ammo_state_synchronizer: StateSynchronizer = $AmmoManager/StateSynchronizer
 
 
 @onready var player_hud: CanvasLayer = $PlayerHud
@@ -37,9 +38,15 @@ func _initialize_multiplayer() -> void:
 		$NonPlayerRiflePivot.show()
 	rollback_synchronizer.process_settings()
 	tick_interpolator.process_settings()
+	_set_ammo_sync_visibility(ammo_state_synchronizer)
 	if player_input.is_multiplayer_authority():
 		GUIDE.enable_mapping_context(mapping_context)
 		GUIDE.enable_mapping_context(debug_context)
+
+func _set_ammo_sync_visibility(synchronizer: StateSynchronizer) -> void:
+	synchronizer.visibility_filter.default_visibility = false
+	synchronizer.visibility_filter.set_visibility_for(name.to_int(),true)
+	synchronizer.process_settings()
 
 func _rollback_tick(delta: float, _tick, _is_fresh):
 	if is_multiplayer_authority() and alive:
