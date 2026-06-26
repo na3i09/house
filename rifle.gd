@@ -11,11 +11,15 @@ var get_ammo: Callable
 var consume_ammo: Callable
 var reload_ammo: Callable
 
-var current_ammo: int = 4:
-	get = get_current_ammo
+var current_ammo: int = 0:
+	get = get_current_ammo,
+	set = set_current_ammo
 
 func get_current_ammo() -> int:
 	return current_ammo
+
+func set_current_ammo(value) -> void:
+	current_ammo = clampi(value,0,magazine_size)
 
 @export_group("Settings")
 @export var ammo_type: AmmoType
@@ -36,7 +40,7 @@ func _can_peer_use(peer_id: int) -> bool:
 
 func _can_fire() -> bool:
 	if $Timer.is_stopped() and $ReloadTimer.is_stopped():
-		if get_current_ammo.call() > 0:
+		if get_current_ammo() > 0:
 			return multiplayer.get_unique_id() == player_peer_id
 		else:
 			return false
@@ -46,12 +50,11 @@ func _can_fire() -> bool:
 func _on_fire():
 	if multiplayer.get_unique_id() == player_peer_id:
 		print("bang")
-		#consume_ammo.call(1)
+		consume_ammo.call(1)
 		$AnimationPlayer.play("fire")
 		$Timer.start(firing_cycle_time)
-		if current_ammo > 0:
-			current_ammo -= 1
-		if current_ammo == 0:
+		current_ammo -= 1
+		if current_ammo == 0 and get_ammo.call() != 0:
 			auto_reload.call_deferred()
 
 func _on_hit(result: Dictionary) -> void:
@@ -70,7 +73,7 @@ func fire() -> bool:
 	return true
 
 func player_reload() -> void:
-	if multiplayer.get_unique_id() == player_peer_id:
+	if $Timer.is_stopped() and multiplayer.get_unique_id() == player_peer_id:
 		reload()
 
 @rpc("any_peer","reliable","call_local")
@@ -80,10 +83,10 @@ func reproduce_fire() -> void:
 	pass
 
 func auto_reload() -> void:
-	await $Timer.timeout
+	await $Timer.timeout #TODO: remove await since it can cause race conditions
 	reload()
 
 func reload() -> void:
 	$AnimationPlayer.play("reload")
 	$ReloadTimer.start()
-	current_ammo += reload_ammo.call(magazine_size - current_ammo)
+	current_ammo = reload_ammo.call(magazine_size)
