@@ -2,6 +2,7 @@ extends NetworkWeaponHitscan3D
 class_name Rifle
 
 @export var fire_action: GUIDEAction
+@export var reload_action: GUIDEAction
 
 @export var player: Player
 @onready var player_peer_id: int = player.name.to_int()
@@ -29,6 +30,7 @@ func get_current_ammo() -> int:
 
 func _ready() -> void:
 	fire_action.just_triggered.connect(fire)
+	reload_action.just_triggered.connect(player_reload)
 
 func _can_peer_use(peer_id: int) -> bool:
 	return peer_id == player_peer_id
@@ -51,7 +53,7 @@ func _on_fire():
 		if current_ammo > 0:
 			current_ammo -= 1
 		if current_ammo == 0:
-			reload.call_deferred()
+			auto_reload.call_deferred()
 
 func _on_hit(result: Dictionary) -> void:
 	if result["collider"] is Player:
@@ -68,14 +70,21 @@ func fire() -> bool:
 	reproduce_fire.rpc()
 	return true
 
+func player_reload() -> void:
+	if multiplayer.get_unique_id() == player_peer_id:
+		reload()
+
 @rpc("any_peer","reliable","call_local")
 func reproduce_fire() -> void:
 	_apply_data(_get_data())
 	_after_fire()
 	pass
 
-func reload() -> void:
+func auto_reload() -> void:
 	await $Timer.timeout
+	reload()
+
+func reload() -> void:
 	$AnimationPlayer.play("reload")
 	$ReloadTimer.start()
-	current_ammo = reload_ammo.call(magazine_size)
+	current_ammo += reload_ammo.call(magazine_size - current_ammo)
