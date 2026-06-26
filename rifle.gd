@@ -43,6 +43,20 @@ func _on_fire():
 func _on_hit(result: Dictionary) -> void:
 	if result["collider"] is Player:
 		var hit_target: Player = result["collider"]
-		hit_target.die()
+		if multiplayer.is_server():
+			hit_target.die()
 		if multiplayer.get_unique_id() == player_peer_id:
 			print("hit " + hit_target.name)
+
+func fire() -> bool:
+	if not can_fire():
+		return false
+	
+	reproduce_fire.rpc()
+	return true
+
+@rpc("any_peer","reliable","call_local")
+func reproduce_fire() -> void:
+	_apply_data(_get_data())
+	_after_fire()
+	pass
