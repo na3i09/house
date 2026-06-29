@@ -18,15 +18,16 @@ func _ready() -> void:
 		for inst in instance_array:
 			var inst_scene = place_dict[index].instantiate() as Node3D
 			add_child(inst_scene)
-			var inst_location: Vector3 = to_global(map_to_local(inst))
-			inst_location.y += vertical_offset
-			inst_scene.global_position = inst_location
-			print(inst_scene.global_position)
+			_place_item_on_map(inst_scene,inst)
 	
 	for location in location_place_dict:
 		var inst_scene = location_place_dict[location].instantiate() as Node3D
 		add_child(inst_scene)
-		var inst_location: Vector3 = to_global(map_to_local(location))
-		inst_location.y += vertical_offset
-		inst_scene.global_position = inst_location
-		print(inst_scene.global_position)
+		_place_item_on_map(inst_scene,location)
+
+
+func _place_item_on_map(item: Node3D, location: Vector3i) -> void:
+	var inst_location: Vector3 = to_global(map_to_local(location))
+	inst_location.y += vertical_offset
+	item.global_position = inst_location
+	print(item.global_position)
