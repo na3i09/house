@@ -3,6 +3,7 @@
 [ext_resource type="MeshLibrary" uid="uid://cxnn4si4lghoa" path="res://assets/csg_grid_library.tres" id="1_a54ce"]
 [ext_resource type="Script" uid="uid://ja7r3oe7cvbv" path="res://levels/grid_map_placer.gd" id="2_a01ak"]
 [ext_resource type="PackedScene" uid="uid://b1nm3mwbitohx" path="res://assets/lantern_and_ammo.tscn" id="3_a01ak"]
+[ext_resource type="PackedScene" uid="uid://b3jsniupbiutk" path="res://lantern.tscn" id="4_d3smr"]
 
 [sub_resource type="Environment" id="Environment_a54ce"]
 background_mode = 1
@@ -26,6 +27,9 @@ place_dict = Dictionary[int, PackedScene]({
 3: ExtResource("3_a01ak")
 })
 verticle_offset = -4.5
+location_place_dict = Dictionary[Vector3i, PackedScene]({
+Vector3i(0, 0, 0): ExtResource("4_d3smr")
+})
 metadata/_custom_type_script = "uid://ja7r3oe7cvbv"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1418479648]
