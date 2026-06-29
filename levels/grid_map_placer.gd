@@ -15,12 +15,12 @@ class_name GridMapPlacer
 func _ready() -> void:
 	for index in place_dict:
 		var instance_array: Array[Vector3i] = get_used_cells_by_item(index)
-		for inst in instance_array:
+		for inst: Vector3i in instance_array:
 			var inst_scene = place_dict[index].instantiate() as Node3D
 			add_child(inst_scene)
 			_place_item_on_map(inst_scene,inst)
 	
-	for location in location_place_dict:
+	for location: Vector3i in location_place_dict:
 		var inst_scene = location_place_dict[location].instantiate() as Node3D
 		add_child(inst_scene)
 		_place_item_on_map(inst_scene,location)
