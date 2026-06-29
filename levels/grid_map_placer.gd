@@ -1,10 +1,14 @@
 extends GridMap
 class_name GridMapPlacer
+## [GridMap] with support for placing packed scenes into locations on the grid map
 
+## [Dictionary] for scenes to be places onto all cells with matching grid map items
 @export var place_dict: Dictionary[int,PackedScene]
 
+## [Dictionary] for scenes to be placed only on specified grid cell locations
 @export var location_place_dict: Dictionary[Vector3i,PackedScene]
 
+## Verticle offset for placing scenes onto grid map
 @export var verticle_offset: float = 0.0
 
 
