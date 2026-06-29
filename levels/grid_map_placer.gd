@@ -16,14 +16,17 @@ func _ready() -> void:
 	for index in place_dict:
 		var instance_array: Array[Vector3i] = get_used_cells_by_item(index)
 		for inst: Vector3i in instance_array:
-			var inst_scene = place_dict[index].instantiate() as Node3D
-			add_child(inst_scene)
-			_place_item_on_map(inst_scene,inst)
+			_instance_item_on_cell(place_dict[index],inst)
 	
 	for location: Vector3i in location_place_dict:
-		var inst_scene = location_place_dict[location].instantiate() as Node3D
-		add_child(inst_scene)
-		_place_item_on_map(inst_scene,location)
+		_instance_item_on_cell(location_place_dict[location],location)
+
+
+func _instance_item_on_cell(scene: PackedScene, location: Vector3i) -> void:
+	var inst_scene := scene.instantiate() as Node3D
+	assert(inst_scene, "Scene to be instantiated was not derived from Node3D")
+	add_child(inst_scene)
+	_place_item_on_map(inst_scene,location)
 
 
 func _place_item_on_map(item: Node3D, location: Vector3i) -> void:
