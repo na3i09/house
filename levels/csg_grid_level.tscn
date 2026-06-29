@@ -26,10 +26,10 @@ script = ExtResource("2_a01ak")
 place_dict = Dictionary[int, PackedScene]({
 3: ExtResource("3_a01ak")
 })
-verticle_offset = -4.5
 location_place_dict = Dictionary[Vector3i, PackedScene]({
 Vector3i(0, 0, 0): ExtResource("4_d3smr")
 })
+verticle_offset = -4.5
 metadata/_custom_type_script = "uid://ja7r3oe7cvbv"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1418479648]

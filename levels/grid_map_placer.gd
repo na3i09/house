@@ -2,9 +2,11 @@ extends GridMap
 class_name GridMapPlacer
 
 @export var place_dict: Dictionary[int,PackedScene]
-@export var verticle_offset: float = 0.0
 
 @export var location_place_dict: Dictionary[Vector3i,PackedScene]
+
+@export var verticle_offset: float = 0.0
+
 
 func _ready() -> void:
 	for index in place_dict:
