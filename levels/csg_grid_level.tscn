@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://cdd2ol8k03jww"]
+
+[ext_resource type="MeshLibrary" uid="uid://cxnn4si4lghoa" path="res://assets/csg_grid_library.tres" id="1_a54ce"]
+[ext_resource type="Script" uid="uid://ja7r3oe7cvbv" path="res://levels/grid_map_placer.gd" id="2_a01ak"]
+[ext_resource type="PackedScene" uid="uid://b1nm3mwbitohx" path="res://assets/lantern_and_ammo.tscn" id="3_a01ak"]
+
+[sub_resource type="Environment" id="Environment_a54ce"]
+background_mode = 1
+background_color = Color(0.12955844, 0.12955847, 0.12955844, 1)
+fog_enabled = true
+fog_light_color = Color(0, 0, 0, 1)
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.2
+volumetric_fog_albedo = Color(0, 0, 0, 1)
+
+[node name="CSGGridLevel" type="Node3D" unique_id=1347959890]
+
+[node name="GridMapPlacer" type="GridMap" parent="." unique_id=225335982]
+mesh_library = ExtResource("1_a54ce")
+cell_size = Vector3(10, 10, 10)
+data = {
+"cells": PackedInt32Array(65535, 65533, 1, 0, 65533, 1, 65535, 2, 655361, 0, 2, 655361, 65533, 65535, 1048577, 65533, 0, 1048577, 2, 0, 1441794, 2, 65535, 1441793, 65533, 2, 1048579, 2, 2, 655363, 2, 65533, 1441795, 65533, 65533, 3, 1, 2, 655361, 65534, 2, 655361, 65533, 1, 1048577, 65533, 65534, 1048577, 65534, 65533, 1, 1, 65533, 1, 2, 65534, 1441793, 2, 1, 1441793, 65534, 1, 1441792, 65535, 0, 1441792, 65535, 65535, 1441792, 65535, 65534, 1441792, 65534, 65534, 1441792, 65534, 65535, 1441792, 65534, 0, 1441792, 65535, 1, 1441792, 0, 1, 1441792, 1, 1, 1441792, 1, 0, 1441792, 1, 65535, 1441792, 0, 65535, 1441792, 0, 65534, 1441792, 1, 65534, 1441792, 0, 0, 1441792)
+}
+script = ExtResource("2_a01ak")
+place_dict = Dictionary[int, PackedScene]({
+3: ExtResource("3_a01ak")
+})
+verticle_offset = -4.5
+metadata/_custom_type_script = "uid://ja7r3oe7cvbv"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1418479648]
+environment = SubResource("Environment_a54ce")

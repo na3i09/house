@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://mrqmpmjf40j1"]
 
-[ext_resource type="PackedScene" uid="uid://b87k85bwe5um6" path="res://level.tscn" id="1_0xm2m"]
 [ext_resource type="Script" uid="uid://da8wwp1qhkc0r" path="res://main.gd" id="1_h2yge"]
 [ext_resource type="PackedScene" uid="uid://cnv06ugmt1xiu" path="res://player.tscn" id="2_h2yge"]
 [ext_resource type="Resource" uid="uid://bifumi31kn7" path="res://input/menu_mapping.tres" id="3_lquwl"]
@@ -9,6 +8,7 @@
 [ext_resource type="Script" uid="uid://4h4li347tbjm" path="res://player_spawner.gd" id="6_7mycd"]
 [ext_resource type="PackedScene" uid="uid://ddl7s4jngiudv" path="res://main_menu.tscn" id="6_272bh"]
 [ext_resource type="Script" uid="uid://dwgl0dilh0v3w" path="res://respawn_menu.gd" id="8_5vw27"]
+[ext_resource type="PackedScene" uid="uid://cdd2ol8k03jww" path="res://levels/csg_grid_level.tscn" id="9_kek77"]
 
 [node name="Main" type="Node3D" unique_id=1886403943]
 script = ExtResource("1_h2yge")
@@ -17,24 +17,22 @@ menu_mapping = ExtResource("3_lquwl")
 exit_action = ExtResource("4_7mycd")
 
 [node name="SpawnPoint" type="Marker3D" parent="." unique_id=687370644]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.430535, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.8470316, 0)
 script = ExtResource("5_kek77")
 metadata/_custom_type_script = "uid://dbmta0ian1tdg"
 
 [node name="SpawnPoint2" type="Marker3D" parent="." unique_id=743737511]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.482086, 8.430535, 13.653117)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.482086, 7.8470316, 13.653117)
 script = ExtResource("5_kek77")
 metadata/_custom_type_script = "uid://dbmta0ian1tdg"
 
 [node name="SpawnPoint3" type="Marker3D" parent="." unique_id=1112644598]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.7184486, 5.1855297, -17.776379)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.7184486, 4.602026, -17.776379)
 script = ExtResource("5_kek77")
 metadata/_custom_type_script = "uid://dbmta0ian1tdg"
 
-[node name="Level" parent="." unique_id=1280929139 instance=ExtResource("1_0xm2m")]
-
 [node name="PlayerSpawnPoint" type="Marker3D" parent="." unique_id=300567180]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.430535, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.8470316, 0)
 
 [node name="MainMenu" parent="." unique_id=1038055183 instance=ExtResource("6_272bh")]
 
@@ -46,7 +44,7 @@ player_spawn_point = NodePath("../SpawnPoint")
 metadata/_custom_type_script = "uid://4h4li347tbjm"
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1237720176]
-transform = Transform3D(1, 0, 0, 0, 0.6795822, 0.73359936, 0, -0.73359936, 0.6795822, 0, 9.134973, 11.695151)
+transform = Transform3D(1, 0, 0, 0, 0.67958224, 0.7335994, 0, -0.7335994, 0.67958224, 0, 8.037082, 11.695151)
 current = true
 
 [node name="RespawnMenu" type="CanvasLayer" parent="." unique_id=490160215]
@@ -66,5 +64,8 @@ offset_bottom = 70.25
 grow_horizontal = 2
 grow_vertical = 2
 text = "Respawn"
+
+[node name="CSGGridLevel" parent="." unique_id=1347959890 instance=ExtResource("9_kek77")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
 [connection signal="pressed" from="RespawnMenu/Respawn" to="RespawnMenu" method="_on_respawn_pressed"]
