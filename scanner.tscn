@@ -6,7 +6,7 @@
 
 [node name="Scanner" type="Node3D" unique_id=1205682577]
 script = ExtResource("1_52xpv")
-scan_distance = 40.0
+scan_distance = 100.0
 scan_angle_delta = 0.05235987755982989
 scan_angle_variation = 0.10471975511965978
 scan_angle_vert = 1.0471975511965976
