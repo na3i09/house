@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://b1nm3mwbitohx"]
+
+[ext_resource type="PackedScene" uid="uid://b3jsniupbiutk" path="res://lantern.tscn" id="1_np1vf"]
+[ext_resource type="PackedScene" uid="uid://tqs8ytugpcni" path="res://ammo_pickup.tscn" id="2_qjeva"]
+
+[node name="LanternAndAmmo" type="Node3D" unique_id=431546378]
+
+[node name="Node3D" type="Node3D" parent="." unique_id=1719083492]
+
+[node name="Lantern" parent="Node3D" unique_id=553251624 instance=ExtResource("1_np1vf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4690824, 0, 0)
+
+[node name="AmmoPickup" parent="Node3D" unique_id=845045652 instance=ExtResource("2_qjeva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2845263, 0, 1.8463364)
