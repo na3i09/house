@@ -28,7 +28,7 @@ var get_magazine_ammo: Callable
 
 func _process(_delta: float) -> void:
 	if get_ammo.is_valid() and get_magazine_ammo.is_valid():
-		text = str(get_magazine_ammo.call()) + \"/\" + str(get_ammo.call())
+		text = str(get_magazine_ammo.call()) + \"/\" + str(get_ammo.call() - get_magazine_ammo.call())
 "
 
 [node name="PlayerHud" type="CanvasLayer" unique_id=1278874362]
