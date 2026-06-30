@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://wgn56dovjkpr" path="res://components/random_item_selection.gd" id="4_0ofsi"]
 [ext_resource type="PackedScene" uid="uid://b3jsniupbiutk" path="res://lantern.tscn" id="4_d3smr"]
 [ext_resource type="Resource" uid="uid://c7koavrvrx7vl" path="res://resources/lanterns_or_ammo.tres" id="5_3u1nf"]
+[ext_resource type="PackedScene" uid="uid://tqs8ytugpcni" path="res://ammo_pickup.tscn" id="7_3u1nf"]
 
 [sub_resource type="Environment" id="Environment_a54ce"]
 background_mode = 1
@@ -35,6 +36,7 @@ location_place_dict = Dictionary[Vector3i, PackedScene]({
 Vector3i(0, 0, 0): ExtResource("4_d3smr")
 })
 vertical_offset = -4.5
+possible_items = Array[PackedScene]([ExtResource("7_3u1nf"), ExtResource("4_d3smr"), ExtResource("3_a01ak")])
 metadata/_custom_type_script = "uid://ja7r3oe7cvbv"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1418479648]

@@ -9,6 +9,8 @@ var peer := ENetMultiplayerPeer.new()
 @export var menu_mapping: GUIDEMappingContext
 @export var exit_action: GUIDEAction
 
+@export var MapScene: PackedScene
+
 @onready var player_spawner: PlayerSpawner = $PlayerSpawner
 
 @onready var main_menu: CanvasLayer = $MainMenu
@@ -30,6 +32,8 @@ func create_host(port: int) -> void:
 	multiplayer.peer_connected.connect(player_spawner.spawn_player)
 	player_spawner.spawn_player()
 	_bind_respawn_action()
+	var level = MapScene.instantiate()
+	add_child(level,true)
 
 ## Create a client instance and connect to server
 func create_client(address: String, port: int) -> void:
