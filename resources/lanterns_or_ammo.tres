@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="RandomItemSelection" format=3 uid="uid://c7koavrvrx7vl"]
+
+[ext_resource type="PackedScene" uid="uid://b3jsniupbiutk" path="res://lantern.tscn" id="1_76whw"]
+[ext_resource type="Script" uid="uid://wgn56dovjkpr" path="res://components/random_item_selection.gd" id="1_jgmpm"]
+[ext_resource type="PackedScene" uid="uid://tqs8ytugpcni" path="res://ammo_pickup.tscn" id="2_del8b"]
+
+[resource]
+script = ExtResource("1_jgmpm")
+options = Array[PackedScene]([ExtResource("1_76whw"), ExtResource("2_del8b")])
+chance = 0.4
+metadata/_custom_type_script = "uid://wgn56dovjkpr"
