@@ -53,7 +53,7 @@ Enemies="Group for players other than the current client"
 
 [netfox]
 
-time/tickrate=60
+time/tickrate=30
 
 [physics]
 
