@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://b3jsniupbiutk" path="res://lantern.tscn" id="4_d3smr"]
 [ext_resource type="Resource" uid="uid://c7koavrvrx7vl" path="res://resources/lanterns_or_ammo.tres" id="5_3u1nf"]
 [ext_resource type="PackedScene" uid="uid://tqs8ytugpcni" path="res://ammo_pickup.tscn" id="7_3u1nf"]
+[ext_resource type="PackedScene" uid="uid://dqvarinahvjmf" path="res://assets/spawnpoint_offset.tscn" id="7_xudc0"]
 
 [sub_resource type="Environment" id="Environment_a54ce"]
 background_mode = 1
@@ -33,14 +34,15 @@ random_place_dict = Dictionary[int, ExtResource("4_0ofsi")]({
 0: ExtResource("5_3u1nf")
 })
 location_place_dict = Dictionary[Vector3i, PackedScene]({
-Vector3i(0, 0, 0): ExtResource("4_d3smr")
+Vector3i(0, 0, 0): ExtResource("4_d3smr"),
+Vector3i(1, 0, 0): ExtResource("7_xudc0")
 })
 vertical_offset = -4.5
-possible_items = Array[PackedScene]([ExtResource("7_3u1nf"), ExtResource("4_d3smr"), ExtResource("3_a01ak")])
+possible_items = Array[PackedScene]([ExtResource("7_3u1nf"), ExtResource("4_d3smr"), ExtResource("3_a01ak"), ExtResource("7_xudc0")])
 metadata/_custom_type_script = "uid://ja7r3oe7cvbv"
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="GridMapPlacer" unique_id=900896758]
-_spawnable_scenes = PackedStringArray("uid://b3jsniupbiutk", "uid://tqs8ytugpcni", "uid://b1nm3mwbitohx")
+_spawnable_scenes = PackedStringArray("uid://b3jsniupbiutk", "uid://tqs8ytugpcni", "uid://b1nm3mwbitohx", "uid://dqvarinahvjmf")
 spawn_path = NodePath("..")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1418479648]

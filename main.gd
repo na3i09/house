@@ -30,10 +30,10 @@ func create_host(port: int) -> void:
 	peer.create_server(port)
 	multiplayer.multiplayer_peer = peer
 	multiplayer.peer_connected.connect(player_spawner.spawn_player)
-	player_spawner.spawn_player()
-	_bind_respawn_action()
 	var level = MapScene.instantiate()
 	add_child(level,true)
+	player_spawner.spawn_player()
+	_bind_respawn_action()
 
 ## Create a client instance and connect to server
 func create_client(address: String, port: int) -> void:

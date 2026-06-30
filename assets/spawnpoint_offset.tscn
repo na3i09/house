@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dqvarinahvjmf"]
+
+[ext_resource type="Script" uid="uid://dbmta0ian1tdg" path="res://components/spawn_point.gd" id="1_4765r"]
+
+[node name="SpawnpointOffset" type="Node3D" unique_id=589987880]
+
+[node name="SpawnPoint" type="Marker3D" parent="." unique_id=1433422362]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+script = ExtResource("1_4765r")
+metadata/_custom_type_script = "uid://dbmta0ian1tdg"
