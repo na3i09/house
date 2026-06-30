@@ -35,12 +35,12 @@ func _ready() -> void:
 func _instance_item_on_cell(scene: PackedScene, location: Vector3i) -> void:
 	var inst_scene := scene.instantiate() as Node3D
 	assert(inst_scene, "Scene to be instantiated was not derived from Node3D")
-	add_child(inst_scene)
 	_place_item_on_map(inst_scene,location)
+	add_child(inst_scene,true)
+
 
 
 func _place_item_on_map(item: Node3D, location: Vector3i) -> void:
-	var inst_location: Vector3 = to_global(map_to_local(location))
+	var inst_location: Vector3 = map_to_local(location)
 	inst_location.y += vertical_offset
-	item.global_position = inst_location
-	print(item.global_position)
+	item.position = inst_location
