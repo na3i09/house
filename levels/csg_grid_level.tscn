@@ -39,5 +39,11 @@ vertical_offset = -4.5
 possible_items = Array[PackedScene]([ExtResource("7_3u1nf"), ExtResource("4_d3smr"), ExtResource("3_a01ak")])
 metadata/_custom_type_script = "uid://ja7r3oe7cvbv"
 
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="GridMapPlacer" unique_id=900896758]
+_spawnable_scenes = PackedStringArray("uid://b3jsniupbiutk", "uid://tqs8ytugpcni", "uid://b1nm3mwbitohx")
+spawn_path = NodePath("..")
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1418479648]
 environment = SubResource("Environment_a54ce")
+
+[connection signal="spawned" from="GridMapPlacer/MultiplayerSpawner" to="GridMapPlacer" method="_apply_item_configuration"]

@@ -34,11 +34,13 @@ func _ready() -> void:
 			_instance_item_on_cell(location_place_dict[location],location)
 		
 		print(_serialize_items())
-	else:
-		request_map_configuration.rpc_id(1)
 
 
 func _instance_item_on_cell(scene: PackedScene, location: Vector3i) -> void:
+	assert(scene.can_instantiate())
+	if find_child(str(location) + "*"):
+		push_warning("Item overlap")
+		return
 	var inst_scene := scene.instantiate() as Node3D
 	assert(inst_scene, "Scene to be instantiated was not derived from Node3D")
 	_place_item_on_map(inst_scene,location)
@@ -52,11 +54,28 @@ func _serialize_items() -> Dictionary:
 	var children: Array[Node] = get_children()
 	
 	for child: Node in children:
-		var name_split: PackedStringArray = child.name.split("_")
-		var location: Vector3i = _string_to_vector3i(name_split[0])
-		
-		serialized_dict.get_or_add(location,[]).append(name_split[1].to_int())
+		if child.name.begins_with("("):
+			var name_split: PackedStringArray = child.name.split("_")
+			var location: Vector3i = _string_to_vector3i(name_split[0])
+			
+			serialized_dict.get_or_add(location,[]).append(name_split[1].to_int())
 	return serialized_dict
+
+
+func _apply_item_configurations() -> void:
+	var children: Array[Node] = get_children()
+	
+	for child: Node in children:
+		_apply_item_configuration(child)
+
+
+func _apply_item_configuration(node: Node) -> void:
+	if node.name.begins_with("("):
+		var name_split: PackedStringArray = node.name.split("_")
+		var location: Vector3i = _string_to_vector3i(name_split[0])
+		_place_item_on_map(node,location)
+	else:
+		push_error("Spawned node with invalid name for item configuration: " + node.name)
 
 
 func _string_to_vector3i(string: String) -> Vector3i:
