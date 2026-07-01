@@ -18,7 +18,7 @@ func spawn_player(id: int = 1) -> void:
 	var player := PlayerScene.instantiate() as Player
 	player.name = str(id)
 	
-	var spawn_point: SpawnPoint = SpawnPoint.pick_random_spawn_point(get_tree())
+	var spawn_point: Node3D = SpawnPoint.pick_random_spawn_point(get_tree())
 	if not spawn_point:
 		spawn_point = player_spawn_point
 	
