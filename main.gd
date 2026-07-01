@@ -15,6 +15,7 @@ var peer := ENetMultiplayerPeer.new()
 
 @onready var main_menu: CanvasLayer = $MainMenu
 @onready var respawn_menu: CanvasLayer = $RespawnMenu
+@onready var lobby_menu: CanvasLayer = $Lobby
 
 func _ready() -> void:
 	GUIDE.enable_mapping_context(menu_mapping)
@@ -31,29 +32,43 @@ func quit_game() -> void:
 func create_host(port: int) -> void:
 	peer.create_server(port)
 	multiplayer.multiplayer_peer = peer
-	multiplayer.peer_connected.connect(player_spawner.spawn_player)
-	var level = MapScene.instantiate()
-	add_child(level,true)
-	player_spawner.spawn_player()
-	_bind_respawn_action()
+	_initialize_host()
+	_initialize_host_and_client()
 
 ## Create a client instance and connect to server
 func create_client(address: String, port: int) -> void:
 	peer.create_client(address,port)
 	multiplayer.multiplayer_peer = peer
-	_bind_respawn_action()
+	_initialize_host_and_client()
 
-func create_simulated_host() -> void:
-	multiplayer.peer_connected.connect(player_spawner.spawn_player)
+func _initialize_host_and_client() -> void:
+	_bind_respawn_action()
+	lobby_menu.show()
+
+func _initialize_host() -> void:
 	var level = MapScene.instantiate()
 	add_child(level,true)
-	player_spawner.spawn_player()
-	_bind_respawn_action()
+	lobby_menu.start_button.start_match = start_match
+
+func create_simulated_host() -> void:
+	_initialize_host()
 	main_menu.hide()
+	_initialize_host_and_client()
 
 func create_simulated_client() -> void:
-	_bind_respawn_action()
 	main_menu.hide()
+	_initialize_host_and_client()
+
+func start_match() -> void:
+	hide_lobby.rpc()
+	_spawn_players_for_match_start()
+
+func _spawn_players_for_match_start() -> void:
+	var player_ids: PackedInt32Array = multiplayer.get_peers()
+	player_ids.append(multiplayer.get_unique_id())
+	
+	for id in player_ids:
+		player_spawner.spawn_player(id)
 
 func _bind_respawn_action() -> void:
 	respawn_menu.respawn = respawn_player.bind(multiplayer.get_unique_id())
@@ -81,3 +96,7 @@ func respawn_player(id):
 func _respawn_player(id):
 	if multiplayer.is_server():
 		get_node(str(id)).respawn()
+
+@rpc("authority","call_local")
+func hide_lobby() -> void:
+	lobby_menu.hide()
