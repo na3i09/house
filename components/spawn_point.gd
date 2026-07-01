@@ -8,6 +8,9 @@ const GROUP_NAME: StringName = &"SpawnPoints"
 static func pick_random_spawn_point(active_tree: SceneTree) -> SpawnPoint:
 	var all_points: Array = active_tree.get_nodes_in_group(GROUP_NAME)
 	
+	if all_points.is_empty():
+		return null
+	
 	return all_points.get(randi_range(0,all_points.size() - 1))
 
 func _ready() -> void:
