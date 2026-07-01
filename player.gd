@@ -50,39 +50,44 @@ func _set_ammo_sync_visibility(synchronizer: StateSynchronizer) -> void:
 	synchronizer.process_settings()
 
 func _rollback_tick(delta: float, _tick, _is_fresh):
-	if is_multiplayer_authority() and alive:
-		var speed: float = SPEED
-		
-		if temperature.temperature < temperature.very_cold_limit:
-			speed *= 0.6
-		
-		# Add the gravity.
-		_force_update_is_on_floor()
-		if not is_on_floor():
-			velocity += get_gravity() * delta
-		
-		# Handle jump.
-		if player_input.is_jumping:
-			_jump()
-			player_input.is_jumping = false
-		
-		$NonPlayerRiflePivot.transform = player_camera.transform
-		# Get the input direction and handle the movement/deceleration.
-		# As good practice, you should replace UI actions with custom gameplay actions.
-		var direction := (transform.basis * Vector3(player_input.input_dir.x, 0, player_input.input_dir.y)).normalized()
-		direction = direction.rotated(Vector3.UP,player_camera.rotation.y + rotation.y)
-		if direction:
-			velocity.x = direction.x * speed
-			velocity.z = direction.z * speed
-		else:
-			velocity.x = move_toward(velocity.x, 0, speed)
-			velocity.z = move_toward(velocity.z, 0, speed)
+	if is_multiplayer_authority() or rollback_synchronizer.is_predicting():
+		if rollback_synchronizer.is_predicting() and is_zero_approx(player_input.confidence):
+			rollback_synchronizer.ignore_prediction(self)
+			return
+		if alive:
+			var speed: float = SPEED
+			
+			if temperature.temperature < temperature.very_cold_limit:
+				speed *= 0.6
+			
+			# Add the gravity.
+			_force_update_is_on_floor()
+			if not is_on_floor():
+				velocity += get_gravity() * delta
+			
+			# Handle jump.
+			if player_input.is_jumping:
+				_jump()
+				player_input.is_jumping = false
+			
+			if is_multiplayer_authority():
+				$NonPlayerRiflePivot.transform = player_camera.transform
+			# Get the input direction and handle the movement/deceleration.
+			# As good practice, you should replace UI actions with custom gameplay actions.
+			var direction := (transform.basis * Vector3(player_input.input_dir.x, 0, player_input.input_dir.y)).normalized()
+			direction = direction.rotated(Vector3.UP,player_camera.rotation.y + rotation.y) * player_input.confidence
+			if direction:
+				velocity.x = direction.x * speed
+				velocity.z = direction.z * speed
+			else:
+				velocity.x = move_toward(velocity.x, 0, speed)
+				velocity.z = move_toward(velocity.z, 0, speed)
 
-		velocity *= NetworkTime.physics_factor
-		move_and_slide()
-		velocity /= NetworkTime.physics_factor
-	elif is_multiplayer_authority():
-		global_position = Vector3(0,20,0)
+			velocity *= NetworkTime.physics_factor
+			move_and_slide()
+			velocity /= NetworkTime.physics_factor
+		else:
+			global_position = Vector3(0,20,0)
 
 func _force_update_is_on_floor() -> void:
 	var old_velocity: Vector3 = velocity

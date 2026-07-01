@@ -67,10 +67,11 @@ player = NodePath("../../..")
 [node name="Tracker" parent="PlayerCamera" unique_id=1413151424 node_paths=PackedStringArray("player") instance=ExtResource("7_urp6f")]
 player = NodePath("../..")
 
-[node name="PlayerInput" type="Node" parent="." unique_id=1747372638]
+[node name="PlayerInput" type="Node" parent="." unique_id=1747372638 node_paths=PackedStringArray("_rollback_synchronizer")]
 script = ExtResource("7_1jxqw")
 movement_action = ExtResource("3_2hs0m")
 jump_action = ExtResource("4_1jxqw")
+_rollback_synchronizer = NodePath("../RollbackSynchronizer")
 metadata/_custom_type_script = "uid://cpiuf65vuu0oa"
 
 [node name="RollbackSynchronizer" type="Node" parent="." unique_id=807505259 node_paths=PackedStringArray("root")]
