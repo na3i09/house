@@ -21,6 +21,8 @@ func _ready() -> void:
 	exit_action.triggered.connect(quit_game)
 	main_menu.host_connect = create_host
 	main_menu.client_connect = create_client
+	NetworkSimulator.server_created.connect(create_simulated_host)
+	NetworkSimulator.client_connected.connect(create_simulated_client)
 
 func quit_game() -> void:
 	get_tree().quit()
@@ -40,6 +42,18 @@ func create_client(address: String, port: int) -> void:
 	peer.create_client(address,port)
 	multiplayer.multiplayer_peer = peer
 	_bind_respawn_action()
+
+func create_simulated_host() -> void:
+	multiplayer.peer_connected.connect(player_spawner.spawn_player)
+	var level = MapScene.instantiate()
+	add_child(level,true)
+	player_spawner.spawn_player()
+	_bind_respawn_action()
+	main_menu.hide()
+
+func create_simulated_client() -> void:
+	_bind_respawn_action()
+	main_menu.hide()
 
 func _bind_respawn_action() -> void:
 	respawn_menu.respawn = respawn_player.bind(multiplayer.get_unique_id())
