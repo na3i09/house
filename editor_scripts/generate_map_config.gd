@@ -6,12 +6,18 @@ class_name GenerateMapConfig
 func _run() -> void:
 	var scene_root: Node = EditorInterface.get_edited_scene_root()
 	
-	var map_placers := scene_root.find_children("*","GridMapPlacer")
+	var placer: GridMapPlacer
 	
-	if map_placers.is_empty():
-		return
+	if scene_root is GridMapPlacer:
+		placer = scene_root as GridMapPlacer
+	else:
+		var map_placers := scene_root.find_children("*","GridMapPlacer")
+		
+		if map_placers.is_empty():
+			return
+		
+		placer = map_placers[0] as GridMapPlacer
 	
-	var placer := map_placers[0] as GridMapPlacer
 	if not placer:
 		return
 	
