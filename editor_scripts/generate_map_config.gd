@@ -28,6 +28,13 @@ func _run() -> void:
 	ResourceSaver.save(config,scene_path.replace(".tscn",".tres"))
 
 func generate_configuration_resource(_placer: GridMapPlacer) -> GridMapConfiguration:
+	var config_resource: GridMapConfiguration = GridMapConfiguration.new()
+	
+	config_resource.configuration_dict = _generate_configuration_dictionary(_placer)
+	
+	return config_resource
+
+func _generate_configuration_dictionary(_placer: GridMapPlacer) -> Dictionary[Vector3i,Array]:
 	var serialized_dict: Dictionary[Vector3i,Array]
 	
 	var tiles_used: Array[Vector3i] = _placer.get_used_cells()
@@ -43,8 +50,4 @@ func generate_configuration_resource(_placer: GridMapPlacer) -> GridMapConfigura
 	for location: Vector3i in _placer.location_place_dict:
 		serialized_dict[location].append(_placer.possible_items.find(_placer.location_place_dict[location]))
 	
-	var config_resource: GridMapConfiguration = GridMapConfiguration.new()
-	
-	config_resource.configuration_dict = serialized_dict
-	
-	return config_resource
+	return serialized_dict
