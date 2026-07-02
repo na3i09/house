@@ -31,6 +31,25 @@ func _process(_delta: float) -> void:
 		text = str(get_magazine_ammo.call()) + \"/\" + str(get_ammo.call() - get_magazine_ammo.call())
 "
 
+[sub_resource type="GDScript" id="GDScript_7tkr0"]
+script/source = "extends Label
+
+var count: int = 0
+var sum: float = 0.0
+
+func _ready() -> void:
+	# only show debug information in editor builds
+	if not OS.has_feature(\"editor\"):
+		queue_free()
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	sum += delta
+	count += 1
+	#text = str(1.0/(sum/count))
+	text = str(multiplayer.get_unique_id()) + \": \" + str(1.0/delta)
+"
+
 [node name="PlayerHud" type="CanvasLayer" unique_id=1278874362]
 script = SubResource("GDScript_4dhkl")
 
@@ -56,3 +75,8 @@ text = "00"
 horizontal_alignment = 1
 vertical_alignment = 1
 script = SubResource("GDScript_5sskr")
+
+[node name="DebugInfo" type="Label" parent="." unique_id=2004525967]
+offset_right = 99.0
+offset_bottom = 52.0
+script = SubResource("GDScript_7tkr0")
