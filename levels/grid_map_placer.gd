@@ -1,6 +1,9 @@
 extends GridMap
 class_name GridMapPlacer
 ## [GridMap] with support for placing packed scenes into locations on the grid map
+##
+## Replication of grid map item configuration is handled via multiplayer spawner synchronization, 
+## while replication of tile configuration is handled via rpc call.
 
 ## [Dictionary] for scenes to be places onto all cells with matching grid map items
 @export var place_dict: Dictionary[int,PackedScene]
