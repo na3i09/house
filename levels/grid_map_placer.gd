@@ -62,6 +62,24 @@ func _serialize_items() -> Dictionary:
 	return serialized_dict
 
 
+func apply_map_configuration_resource(config: GridMapConfiguration, offset: Vector3i = Vector3i(0,0,0)) -> void:
+	_apply_map_configuration(config.configuration_dict,offset)
+
+
+func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector3i = Vector3i(0,0,0)) -> void:
+	for location: Vector3i in config:
+		var tile_type: int = config[location][0]
+		var tile_orientation: int = config[location][1]
+		var items: Array = config[location].slice(2)
+		
+		var true_location: Vector3i = location + offset
+		
+		set_cell_item(true_location,tile_type,tile_orientation)
+		
+		for item: int in items:
+			_instance_item_on_cell(possible_items[item],true_location)
+
+
 func _apply_item_configurations() -> void:
 	var children: Array[Node] = get_children()
 	
