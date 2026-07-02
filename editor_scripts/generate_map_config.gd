@@ -33,7 +33,7 @@ func generate_configuration_resource(_placer: GridMapPlacer) -> GridMapConfigura
 	var tiles_used: Array[Vector3i] = _placer.get_used_cells()
 	
 	for tile_pos: Vector3i in tiles_used:
-		serialized_dict[tile_pos] = [_placer.get_cell_item(tile_pos)]
+		serialized_dict[tile_pos] = [_placer.get_cell_item(tile_pos),_placer.get_cell_item_orientation(tile_pos)]
 	
 	for index: int in _placer.place_dict:
 		var instance_array: Array[Vector3i] = _placer.get_used_cells_by_item(index)
