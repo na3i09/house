@@ -34,6 +34,8 @@ func _ready() -> void:
 			_instance_item_on_cell(location_place_dict[location],location)
 		
 		print(_serialize_items())
+	else:
+		request_map_configuration.rpc_id(1)
 
 
 func _instance_item_on_cell(scene: PackedScene, location: Vector3i) -> void:
@@ -152,11 +154,9 @@ func _place_item_on_map(item: Node3D, location: Vector3i) -> void:
 
 @rpc("any_peer","reliable","call_remote")
 func request_map_configuration() -> void:
-	_recieve_map_configuration.rpc_id(multiplayer.get_remote_sender_id(),_serialize_items())
+	_recieve_map_configuration.rpc_id(multiplayer.get_remote_sender_id(),generate_tile_configuration_dictionary(self))
 
 
 @rpc("authority","reliable","call_remote")
 func _recieve_map_configuration(configuration: Dictionary[Vector3i,Array]) -> void:
-	for location: Vector3i in configuration:
-		for item in configuration[location]:
-			_instance_item_on_cell(possible_items[item],location)
+	_apply_map_configuration(configuration)
