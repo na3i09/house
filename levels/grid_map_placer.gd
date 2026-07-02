@@ -48,7 +48,41 @@ func _instance_item_on_cell(scene: PackedScene, location: Vector3i) -> void:
 	add_child(inst_scene)
 
 
-func _serialize_items() -> Dictionary:
+static func generate_static_configuration_dictionary(_placer: GridMapPlacer) -> Dictionary[Vector3i,Array]:
+	var serialized_dict: Dictionary[Vector3i,Array] = generate_tile_configuration_dictionary(_placer)
+	
+	for index: int in _placer.place_dict:
+		var instance_array: Array[Vector3i] = _placer.get_used_cells_by_item(index)
+		for inst: Vector3i in instance_array:
+			serialized_dict[inst].append(_placer.possible_items.find(_placer.place_dict[index]))
+	
+	for location: Vector3i in _placer.location_place_dict:
+		serialized_dict[location].append(_placer.possible_items.find(_placer.location_place_dict[location]))
+	
+	return serialized_dict
+
+
+static func generate_tile_configuration_dictionary(_map: GridMap) -> Dictionary[Vector3i,Array]:
+	var dict: Dictionary[Vector3i,Array]
+	
+	var tiles_used: Array[Vector3i] = _map.get_used_cells()
+	
+	for location: Vector3i in tiles_used:
+		dict[location] = [_map.get_cell_item(location),_map.get_cell_item_orientation(location)]
+	
+	return dict
+
+func generate_live_configuration_dictionary() -> Dictionary[Vector3i,Array]:
+	var dict := generate_tile_configuration_dictionary(self)
+	var item_dict := _serialize_items()
+	
+	for location: Vector3i in dict:
+		if item_dict.has(location):
+			dict[location].append_array(item_dict[location])
+	
+	return dict
+
+func _serialize_items() -> Dictionary[Vector3i,Array]:
 	var serialized_dict: Dictionary[Vector3i,Array]
 	
 	var children: Array[Node] = get_children()

@@ -30,24 +30,6 @@ func _run() -> void:
 func generate_configuration_resource(_placer: GridMapPlacer) -> GridMapConfiguration:
 	var config_resource: GridMapConfiguration = GridMapConfiguration.new()
 	
-	config_resource.configuration_dict = _generate_configuration_dictionary(_placer)
+	config_resource.configuration_dict = GridMapPlacer.generate_static_configuration_dictionary(_placer)
 	
 	return config_resource
-
-func _generate_configuration_dictionary(_placer: GridMapPlacer) -> Dictionary[Vector3i,Array]:
-	var serialized_dict: Dictionary[Vector3i,Array]
-	
-	var tiles_used: Array[Vector3i] = _placer.get_used_cells()
-	
-	for tile_pos: Vector3i in tiles_used:
-		serialized_dict[tile_pos] = [_placer.get_cell_item(tile_pos),_placer.get_cell_item_orientation(tile_pos)]
-	
-	for index: int in _placer.place_dict:
-		var instance_array: Array[Vector3i] = _placer.get_used_cells_by_item(index)
-		for inst: Vector3i in instance_array:
-			serialized_dict[inst].append(_placer.possible_items.find(_placer.place_dict[index]))
-	
-	for location: Vector3i in _placer.location_place_dict:
-		serialized_dict[location].append(_placer.possible_items.find(_placer.location_place_dict[location]))
-	
-	return serialized_dict
