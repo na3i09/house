@@ -32,4 +32,11 @@ func generate_configuration_resource(_placer: GridMapPlacer) -> GridMapConfigura
 	
 	config_resource.configuration_dict = GridMapPlacer.generate_static_configuration_dictionary(_placer)
 	
+	var edge_id: int = _placer.mesh_library.find_item_by_name("Edge")
+	if edge_id != -1:
+		var edge_locs := _placer.get_used_cells_by_item(edge_id)
+		for edge in edge_locs:
+			config_resource.edge_locations[edge] = _placer.get_cell_item_orientation(edge)
+			config_resource.configuration_dict.erase(edge)
+	
 	return config_resource
