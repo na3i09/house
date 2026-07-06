@@ -1,3 +1,4 @@
+@tool
 extends GridMap
 class_name GridMapPlacer
 ## [GridMap] with support for placing packed scenes into locations on the grid map
@@ -19,8 +20,17 @@ class_name GridMapPlacer
 
 @export var possible_items: Array[PackedScene]
 
+@export var possible_segments: Array[GridMapConfiguration]
+
+@export_group("Developement Functions","dev")
+@export_tool_button("Generate Map") var dev_map_gen: Callable = _generate
+
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
 	if is_multiplayer_authority():
+		if possible_segments:
+			_generate()
 		for index: int in place_dict:
 			var instance_array: Array[Vector3i] = get_used_cells_by_item(index)
 			for inst: Vector3i in instance_array:
@@ -86,6 +96,35 @@ func generate_live_configuration_dictionary() -> Dictionary[Vector3i,Array]:
 			dict[location].append_array(item_dict[location])
 	
 	return dict
+
+static func generate_map(_placer: GridMap, segments: Array[GridMapConfiguration], _max_instances: int, origin: Vector3i = Vector3i(0,0,0)) -> Dictionary[Vector3i,Array]:
+	var generated_map: Dictionary[Vector3i,Array] = {}
+	
+	var first_segment: GridMapConfiguration = segments.pick_random()
+	generated_map.merge(first_segment.configuration_dict)
+	
+	var segment_edges: Dictionary[Vector3i,int] = first_segment.edge_locations
+	
+	for edge in segment_edges:
+		var new_segment: GridMapConfiguration = segments.pick_random()
+		
+		var connecting_edge: Vector3i = new_segment.edge_locations.keys().pick_random()
+		var edge_basis: Basis = _placer.get_basis_with_orthogonal_index(new_segment.edge_locations[connecting_edge])
+		var edge_direction: Vector3i = Vector3i(edge_basis.z)
+		for loc in new_segment.configuration_dict:
+			var true_loc: Vector3i = loc - connecting_edge + origin# + edge_direction
+			if not generated_map.has(true_loc):
+				var tile_basis: Basis = _placer.get_basis_with_orthogonal_index(new_segment.configuration_dict[loc][1])
+				var new_basis: Basis = edge_basis * tile_basis
+				var new_array: Array = new_segment.configuration_dict[loc].duplicate()
+				#new_array[1] = _placer.get_orthogonal_index_from_basis(new_basis)
+				generated_map[true_loc] = new_array
+	
+	return generated_map
+
+func _generate() -> void:
+	clear()
+	_apply_map_configuration(generate_map(self,possible_segments,4))
 
 func _serialize_items() -> Dictionary[Vector3i,Array]:
 	var serialized_dict: Dictionary[Vector3i,Array]
