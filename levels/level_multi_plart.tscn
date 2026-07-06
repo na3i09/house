@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bhu1ltm26twtf"]
+
+[ext_resource type="PackedScene" uid="uid://bioqelqenfvfk" path="res://levels/grid_map_placer.tscn" id="1_1xplh"]
+[ext_resource type="PackedScene" uid="uid://b1nm3mwbitohx" path="res://assets/lantern_and_ammo.tscn" id="2_nq2nu"]
+[ext_resource type="PackedScene" uid="uid://dqvarinahvjmf" path="res://assets/spawnpoint_offset.tscn" id="3_0mrm3"]
+[ext_resource type="Script" uid="uid://dclwcyoux36im" path="res://components/grid_map_configuration.gd" id="4_dmql2"]
+[ext_resource type="Resource" uid="uid://ceqe5oth7ab2x" path="res://levels/level_elements/large_tunnel_intersection.tres" id="5_dv5gv"]
+[ext_resource type="Resource" uid="uid://ggajq13f4rst" path="res://levels/level_elements/large_tunnel_straight.tres" id="6_g2rai"]
+[ext_resource type="Resource" uid="uid://cu6tmsbse7kca" path="res://levels/level_elements/4_door_room.tres" id="7_5yd76"]
+[ext_resource type="Resource" uid="uid://cesmg3vm5mnb" path="res://levels/level_elements/large_room.tres" id="8_nmoke"]
+
+[sub_resource type="Environment" id="Environment_4dhkl"]
+background_energy_multiplier = 2.0
+ambient_light_color = Color(0.57700837, 0.5770084, 0.57700837, 1)
+ambient_light_energy = 3.0
+
+[node name="Level2" type="Node3D" unique_id=1143211152]
+
+[node name="GridMapPlacer" parent="." unique_id=474646616 instance=ExtResource("1_1xplh")]
+location_place_dict = Dictionary[Vector3i, PackedScene]({
+Vector3i(-1, 0, 0): ExtResource("2_nq2nu"),
+Vector3i(0, 0, 0): ExtResource("3_0mrm3")
+})
+possible_segments = Array[ExtResource("4_dmql2")]([ExtResource("5_dv5gv"), ExtResource("6_g2rai"), ExtResource("7_5yd76"), ExtResource("8_nmoke")])
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1348978915]
+environment = SubResource("Environment_4dhkl")
