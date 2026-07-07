@@ -24,6 +24,8 @@ class_name GridMapPlacer
 
 @export_group("Developement Functions","dev")
 @export_tool_button("Generate Map") var dev_map_gen: Callable = _generate
+@export_tool_button("Save Configuration") var dev_config_save: Callable = _dev_save_config_resource
+@export_placeholder("Scene Name") var dev_config_save_name: String
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -96,6 +98,30 @@ func generate_live_configuration_dictionary() -> Dictionary[Vector3i,Array]:
 			dict[location].append_array(item_dict[location])
 	
 	return dict
+
+func generate_configuration_resource() -> GridMapConfiguration:
+	var config_resource: GridMapConfiguration = GridMapConfiguration.new()
+	
+	config_resource.configuration_dict = GridMapPlacer.generate_static_configuration_dictionary(self)
+	
+	var edge_id: int = mesh_library.find_item_by_name("Edge")
+	if edge_id != -1:
+		var edge_locs := get_used_cells_by_item(edge_id)
+		for edge in edge_locs:
+			config_resource.edge_locations[edge] = get_cell_item_orientation(edge)
+			config_resource.configuration_dict.erase(edge)
+	
+	return config_resource
+
+func _dev_save_config_resource() -> void:
+	var save_name: String
+	if dev_config_save_name:
+		save_name = owner.scene_file_path.get_base_dir() + "/" + dev_config_save_name + ".tres"
+	else:
+		save_name = owner.scene_file_path.replace(".tscn",".tres")
+	
+	var map_config: GridMapConfiguration = generate_configuration_resource()
+	ResourceSaver.save(map_config,save_name)
 
 static func generate_map(_placer: GridMap, segments: Array[GridMapConfiguration], _max_instances: int, origin: Vector3i = Vector3i(0,0,0)) -> Dictionary[Vector3i,Array]:
 	var generated_map: Dictionary[Vector3i,Array] = {}
