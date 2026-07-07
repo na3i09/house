@@ -127,18 +127,10 @@ func generate_live_configuration_dictionary() -> Dictionary[Vector3i,Array]:
 
 
 func generate_configuration_resource() -> GridMapConfiguration:
-	var config_resource: GridMapConfiguration = GridMapConfiguration.new()
-	
-	config_resource.configuration_dict = GridMapPlacer.generate_static_configuration_dictionary(self)
-	
-	var edge_id: int = mesh_library.find_item_by_name("Edge")
-	if edge_id != -1:
-		var edge_locs := get_used_cells_by_item(edge_id)
-		for edge in edge_locs:
-			config_resource.edge_locations[edge] = get_cell_item_orientation(edge)
-			config_resource.configuration_dict.erase(edge)
-	
-	return config_resource
+	return GridMapConfiguration.generate_configuration_resource(
+		GridMapPlacer.generate_static_configuration_dictionary(self),
+		mesh_library.find_item_by_name("Edge")
+		)
 
 
 func apply_map_configuration_resource(config: GridMapConfiguration, offset: Vector3i = Vector3i(0,0,0)) -> void:
