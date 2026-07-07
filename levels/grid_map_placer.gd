@@ -173,7 +173,7 @@ func _serialize_items() -> Dictionary[Vector3i,Array]:
 			var name_split: PackedStringArray = child.name.split("_")
 			var location: Vector3i = _string_to_vector3i(name_split[0])
 			
-			serialized_dict.get_or_add(location,[]).append(name_split[1].to_int())
+			serialized_dict.get_or_add(location,[]).append("_".join(name_split.slice(1)))
 	return serialized_dict
 
 
