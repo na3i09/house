@@ -7,18 +7,27 @@ class_name GridMapPlacer
 ## while replication of tile configuration is handled via rpc call.
 
 ## [Dictionary] for scenes to be places onto all cells with matching grid map items
-@export var place_dict: Dictionary[int,PackedScene]
+@export var place_dict: Dictionary[int,String]
 
 ## [Dictionary] for scenes to be placed randomly with a percentage chance onto matching grid map items
 @export var random_place_dict: Dictionary[int,RandomItemSelection]
 
 ## [Dictionary] for scenes to be placed only on specified grid cell locations
-@export var location_place_dict: Dictionary[Vector3i,PackedScene]
+@export var location_place_dict: Dictionary[Vector3i,String]
 
 ## Vertical offset for placing scenes onto grid map
 @export var vertical_offset: float = 0.0
 
-@export var possible_items: Array[PackedScene]
+@export var possible_item_resource: ItemTable
+
+var _possible_items: Dictionary[StringName,PackedScene]:
+	get:
+		if possible_item_resource:
+			return possible_item_resource.table
+		else:
+			return {}
+	set(value):
+		pass
 
 @export var possible_segments: Array[GridMapConfiguration]
 
@@ -41,7 +50,7 @@ func _ready() -> void:
 		for index: int in random_place_dict:
 			var instance_array: Array[Vector3i] = get_used_cells_by_item(index)
 			for inst: Vector3i in instance_array:
-				var random_scene: PackedScene = random_place_dict[index].pick_item()
+				var random_scene: StringName = random_place_dict[index].pick_item()
 				if random_scene:
 					_instance_item_on_cell(random_scene,inst)
 		
@@ -53,7 +62,8 @@ func _ready() -> void:
 		request_map_configuration.rpc_id(1)
 
 
-func _instance_item_on_cell(scene: PackedScene, location: Vector3i) -> void:
+func _instance_item_on_cell(item_name: String, location: Vector3i) -> void:
+	var scene: PackedScene = _possible_items[item_name]
 	assert(scene.can_instantiate())
 	if find_child(str(location) + "*"):
 		push_warning("Item overlap")
@@ -61,7 +71,7 @@ func _instance_item_on_cell(scene: PackedScene, location: Vector3i) -> void:
 	var inst_scene := scene.instantiate() as Node3D
 	assert(inst_scene, "Scene to be instantiated was not derived from Node3D")
 	_place_item_on_map(inst_scene,location)
-	inst_scene.name = _name_item(scene,location)
+	inst_scene.name = _name_item(item_name,location)
 	add_child(inst_scene)
 
 
@@ -71,11 +81,11 @@ static func generate_static_configuration_dictionary(_placer: GridMapPlacer) -> 
 	for index: int in _placer.place_dict:
 		var instance_array: Array[Vector3i] = _placer.get_used_cells_by_item(index)
 		for inst: Vector3i in instance_array:
-			serialized_dict[inst].append(_placer.possible_items.find(_placer.place_dict[index]))
+			serialized_dict[inst].append(_placer.place_dict[index])
 	
 	for location: Vector3i in _placer.location_place_dict:
 		if serialized_dict.has(location):
-			serialized_dict[location].append(_placer.possible_items.find(_placer.location_place_dict[location]))
+			serialized_dict[location].append(_placer.location_place_dict[location])
 	
 	return serialized_dict
 
@@ -182,7 +192,7 @@ func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector
 		set_cell_item(true_location,tile_type,tile_orientation)
 		
 		for item: int in items:
-			_instance_item_on_cell(possible_items[item],true_location)
+			_instance_item_on_cell(_possible_items.keys()[item],true_location) #TODO: ensure this will actually work from serializing key index position
 
 
 func _apply_item_configurations() -> void:
@@ -209,10 +219,8 @@ func _string_to_vector3i(string: String) -> Vector3i:
 	return location
 
 
-func _name_item(item_scene: PackedScene, location: Vector3i) -> String:
-	var item_index: int = possible_items.find(item_scene)
-	
-	return str(location) + "_" + str(item_index)
+func _name_item(item_name: String, location: Vector3i) -> String:
+	return str(location) + "_" + item_name
 
 
 func _place_item_on_map(item: Node3D, location: Vector3i) -> void:

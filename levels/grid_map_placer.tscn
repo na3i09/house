@@ -2,17 +2,14 @@
 
 [ext_resource type="MeshLibrary" uid="uid://cxnn4si4lghoa" path="res://assets/csg_grid_library.tres" id="1_5f55h"]
 [ext_resource type="Script" uid="uid://ja7r3oe7cvbv" path="res://levels/grid_map_placer.gd" id="1_r41wo"]
-[ext_resource type="PackedScene" uid="uid://tqs8ytugpcni" path="res://ammo_pickup.tscn" id="2_5f55h"]
-[ext_resource type="PackedScene" uid="uid://b3jsniupbiutk" path="res://lantern.tscn" id="3_f3r5s"]
-[ext_resource type="PackedScene" uid="uid://b1nm3mwbitohx" path="res://assets/lantern_and_ammo.tscn" id="4_l8bh6"]
-[ext_resource type="PackedScene" uid="uid://dqvarinahvjmf" path="res://assets/spawnpoint_offset.tscn" id="5_eaitt"]
+[ext_resource type="Resource" uid="uid://42qdh1d2rddq" path="res://resources/possible_items.tres" id="7_f3r5s"]
 
 [node name="GridMapPlacer" type="GridMap" unique_id=474646616]
 mesh_library = ExtResource("1_5f55h")
 cell_size = Vector3(10, 10, 10)
 script = ExtResource("1_r41wo")
 vertical_offset = -4.5
-possible_items = Array[PackedScene]([ExtResource("2_5f55h"), ExtResource("3_f3r5s"), ExtResource("4_l8bh6"), ExtResource("5_eaitt")])
+possible_item_resource = ExtResource("7_f3r5s")
 metadata/_custom_type_script = "uid://ja7r3oe7cvbv"
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=999225953]
