@@ -36,6 +36,59 @@ var _possible_items: Dictionary[StringName,PackedScene]:
 @export_tool_button("Save Configuration") var dev_config_save: Callable = _dev_save_config_resource
 @export_placeholder("Scene Name") var dev_config_save_name: String
 
+
+static func generate_static_configuration_dictionary(_placer: GridMapPlacer) -> Dictionary[Vector3i,Array]:
+	var serialized_dict: Dictionary[Vector3i,Array] = generate_tile_configuration_dictionary(_placer)
+	
+	for index: int in _placer.place_dict:
+		var instance_array: Array[Vector3i] = _placer.get_used_cells_by_item(index)
+		for inst: Vector3i in instance_array:
+			serialized_dict[inst].append(_placer.place_dict[index])
+	
+	for location: Vector3i in _placer.location_place_dict:
+		if serialized_dict.has(location):
+			serialized_dict[location].append(_placer.location_place_dict[location])
+	
+	return serialized_dict
+
+
+static func generate_tile_configuration_dictionary(_map: GridMap) -> Dictionary[Vector3i,Array]:
+	var dict: Dictionary[Vector3i,Array]
+	
+	var tiles_used: Array[Vector3i] = _map.get_used_cells()
+	
+	for location: Vector3i in tiles_used:
+		dict[location] = [_map.get_cell_item(location),_map.get_cell_item_orientation(location)]
+	
+	return dict
+
+
+static func generate_map(_placer: GridMap, segments: Array[GridMapConfiguration], _max_instances: int, origin: Vector3i = Vector3i(0,0,0)) -> Dictionary[Vector3i,Array]:
+	var generated_map: Dictionary[Vector3i,Array] = {}
+	
+	var first_segment: GridMapConfiguration = segments.pick_random()
+	generated_map.merge(first_segment.configuration_dict)
+	
+	var segment_edges: Dictionary[Vector3i,int] = first_segment.edge_locations
+	
+	for edge in segment_edges:
+		var new_segment: GridMapConfiguration = segments.pick_random()
+		
+		var connecting_edge: Vector3i = new_segment.edge_locations.keys().pick_random()
+		var edge_basis: Basis = _placer.get_basis_with_orthogonal_index(new_segment.edge_locations[connecting_edge])
+		var edge_direction: Vector3i = Vector3i(edge_basis.z)
+		for loc in new_segment.configuration_dict:
+			var true_loc: Vector3i = loc - connecting_edge + origin# + edge_direction
+			if not generated_map.has(true_loc):
+				var tile_basis: Basis = _placer.get_basis_with_orthogonal_index(new_segment.configuration_dict[loc][1])
+				var new_basis: Basis = edge_basis * tile_basis
+				var new_array: Array = new_segment.configuration_dict[loc].duplicate()
+				#new_array[1] = _placer.get_orthogonal_index_from_basis(new_basis)
+				generated_map[true_loc] = new_array
+	
+	return generated_map
+
+
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
@@ -75,31 +128,6 @@ func _instance_item_on_cell(item_name: String, location: Vector3i) -> void:
 	add_child(inst_scene)
 
 
-static func generate_static_configuration_dictionary(_placer: GridMapPlacer) -> Dictionary[Vector3i,Array]:
-	var serialized_dict: Dictionary[Vector3i,Array] = generate_tile_configuration_dictionary(_placer)
-	
-	for index: int in _placer.place_dict:
-		var instance_array: Array[Vector3i] = _placer.get_used_cells_by_item(index)
-		for inst: Vector3i in instance_array:
-			serialized_dict[inst].append(_placer.place_dict[index])
-	
-	for location: Vector3i in _placer.location_place_dict:
-		if serialized_dict.has(location):
-			serialized_dict[location].append(_placer.location_place_dict[location])
-	
-	return serialized_dict
-
-
-static func generate_tile_configuration_dictionary(_map: GridMap) -> Dictionary[Vector3i,Array]:
-	var dict: Dictionary[Vector3i,Array]
-	
-	var tiles_used: Array[Vector3i] = _map.get_used_cells()
-	
-	for location: Vector3i in tiles_used:
-		dict[location] = [_map.get_cell_item(location),_map.get_cell_item_orientation(location)]
-	
-	return dict
-
 func generate_live_configuration_dictionary() -> Dictionary[Vector3i,Array]:
 	var dict := generate_tile_configuration_dictionary(self)
 	var item_dict := _serialize_items()
@@ -133,31 +161,6 @@ func _dev_save_config_resource() -> void:
 	
 	var map_config: GridMapConfiguration = generate_configuration_resource()
 	ResourceSaver.save(map_config,save_name)
-
-static func generate_map(_placer: GridMap, segments: Array[GridMapConfiguration], _max_instances: int, origin: Vector3i = Vector3i(0,0,0)) -> Dictionary[Vector3i,Array]:
-	var generated_map: Dictionary[Vector3i,Array] = {}
-	
-	var first_segment: GridMapConfiguration = segments.pick_random()
-	generated_map.merge(first_segment.configuration_dict)
-	
-	var segment_edges: Dictionary[Vector3i,int] = first_segment.edge_locations
-	
-	for edge in segment_edges:
-		var new_segment: GridMapConfiguration = segments.pick_random()
-		
-		var connecting_edge: Vector3i = new_segment.edge_locations.keys().pick_random()
-		var edge_basis: Basis = _placer.get_basis_with_orthogonal_index(new_segment.edge_locations[connecting_edge])
-		var edge_direction: Vector3i = Vector3i(edge_basis.z)
-		for loc in new_segment.configuration_dict:
-			var true_loc: Vector3i = loc - connecting_edge + origin# + edge_direction
-			if not generated_map.has(true_loc):
-				var tile_basis: Basis = _placer.get_basis_with_orthogonal_index(new_segment.configuration_dict[loc][1])
-				var new_basis: Basis = edge_basis * tile_basis
-				var new_array: Array = new_segment.configuration_dict[loc].duplicate()
-				#new_array[1] = _placer.get_orthogonal_index_from_basis(new_basis)
-				generated_map[true_loc] = new_array
-	
-	return generated_map
 
 func _generate() -> void:
 	clear()
