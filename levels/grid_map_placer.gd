@@ -115,19 +115,6 @@ func _ready() -> void:
 		request_map_configuration.rpc_id(1)
 
 
-func _instance_item_on_cell(item_name: String, location: Vector3i) -> void:
-	var scene: PackedScene = _possible_items[item_name]
-	assert(scene.can_instantiate())
-	if find_child(str(location) + "*"):
-		push_warning("Item overlap")
-		return
-	var inst_scene := scene.instantiate() as Node3D
-	assert(inst_scene, "Scene to be instantiated was not derived from Node3D")
-	_place_item_on_map(inst_scene,location)
-	inst_scene.name = _name_item(item_name,location)
-	add_child(inst_scene)
-
-
 func generate_live_configuration_dictionary() -> Dictionary[Vector3i,Array]:
 	var dict := generate_tile_configuration_dictionary(self)
 	var item_dict := _serialize_items()
@@ -137,6 +124,7 @@ func generate_live_configuration_dictionary() -> Dictionary[Vector3i,Array]:
 			dict[location].append_array(item_dict[location])
 	
 	return dict
+
 
 func generate_configuration_resource() -> GridMapConfiguration:
 	var config_resource: GridMapConfiguration = GridMapConfiguration.new()
@@ -152,6 +140,24 @@ func generate_configuration_resource() -> GridMapConfiguration:
 	
 	return config_resource
 
+
+func apply_map_configuration_resource(config: GridMapConfiguration, offset: Vector3i = Vector3i(0,0,0)) -> void:
+	_apply_map_configuration(config.configuration_dict,offset)
+
+
+func _instance_item_on_cell(item_name: String, location: Vector3i) -> void:
+	var scene: PackedScene = _possible_items[item_name]
+	assert(scene.can_instantiate())
+	if find_child(str(location) + "*"):
+		push_warning("Item overlap")
+		return
+	var inst_scene := scene.instantiate() as Node3D
+	assert(inst_scene, "Scene to be instantiated was not derived from Node3D")
+	_place_item_on_map(inst_scene,location)
+	inst_scene.name = _name_item(item_name,location)
+	add_child(inst_scene)
+
+
 func _dev_save_config_resource() -> void:
 	var save_name: String
 	if dev_config_save_name:
@@ -162,9 +168,11 @@ func _dev_save_config_resource() -> void:
 	var map_config: GridMapConfiguration = generate_configuration_resource()
 	ResourceSaver.save(map_config,save_name)
 
+
 func _generate() -> void:
 	clear()
 	_apply_map_configuration(generate_map(self,possible_segments,4))
+
 
 func _serialize_items() -> Dictionary[Vector3i,Array]:
 	var serialized_dict: Dictionary[Vector3i,Array]
@@ -178,10 +186,6 @@ func _serialize_items() -> Dictionary[Vector3i,Array]:
 			
 			serialized_dict.get_or_add(location,[]).append("_".join(name_split.slice(1)))
 	return serialized_dict
-
-
-func apply_map_configuration_resource(config: GridMapConfiguration, offset: Vector3i = Vector3i(0,0,0)) -> void:
-	_apply_map_configuration(config.configuration_dict,offset)
 
 
 func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector3i = Vector3i(0,0,0)) -> void:
