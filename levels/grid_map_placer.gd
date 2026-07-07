@@ -35,6 +35,9 @@ var _possible_items: Dictionary[StringName,PackedScene]:
 @export_tool_button("Generate Map") var dev_map_gen: Callable = _generate
 @export_tool_button("Save Configuration") var dev_config_save: Callable = _dev_save_config_resource
 @export_placeholder("Scene Name") var dev_config_save_name: String
+@export_tool_button("Load Configuration") var dev_config_load: Callable = _dev_load_config_resource
+@export_file("*.tres") var dev_loadable_config: String
+@export_tool_button("Clear Current Configuration") var dev_clear_config: Callable = clear
 
 
 static func generate_static_configuration_dictionary(_placer: GridMapPlacer) -> Dictionary[Vector3i,Array]:
@@ -159,6 +162,12 @@ func _dev_save_config_resource() -> void:
 	
 	var map_config: GridMapConfiguration = generate_configuration_resource()
 	ResourceSaver.save(map_config,save_name)
+
+
+func _dev_load_config_resource() -> void:
+	var config_resource: GridMapConfiguration = load(dev_loadable_config)
+	if config_resource:
+		apply_map_configuration_resource(config_resource)
 
 
 func _generate() -> void:
