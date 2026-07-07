@@ -195,13 +195,6 @@ func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector
 			_instance_item_on_cell(_possible_items.keys()[item],true_location) #TODO: ensure this will actually work from serializing key index position
 
 
-func _apply_item_configurations() -> void:
-	var children: Array[Node] = get_children()
-	
-	for child: Node in children:
-		_apply_item_configuration(child)
-
-
 func _apply_item_configuration(node: Node) -> void:
 	if node.name.begins_with("("):
 		var name_split: PackedStringArray = node.name.split("_")
