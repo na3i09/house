@@ -174,7 +174,7 @@ func _serialize_items() -> Dictionary[Vector3i,Array]:
 	for child: Node in children:
 		if child.name.begins_with("("):
 			var name_split: PackedStringArray = child.name.split("_")
-			var location: Vector3i = _string_to_vector3i(name_split[0])
+			var location: Vector3i = Helpers.string_to_vector3i(name_split[0])
 			
 			serialized_dict.get_or_add(location,[]).append("_".join(name_split.slice(1)))
 	return serialized_dict
@@ -201,18 +201,10 @@ func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector
 func _apply_item_configuration(node: Node) -> void:
 	if node.name.begins_with("("):
 		var name_split: PackedStringArray = node.name.split("_")
-		var location: Vector3i = _string_to_vector3i(name_split[0])
+		var location: Vector3i = Helpers.string_to_vector3i(name_split[0])
 		_place_item_on_map(node,location)
 	else:
 		push_error("Spawned node with invalid name for item configuration: " + node.name)
-
-
-func _string_to_vector3i(string: String) -> Vector3i:
-	var location_string: String = string.remove_chars("()")
-	var location_elements: PackedStringArray = location_string.split(",")
-	var location: Vector3i = Vector3i(location_elements[0].to_int(),location_elements[1].to_int(),location_elements[2].to_int())
-	
-	return location
 
 
 func _name_item(item_name: String, location: Vector3i) -> String:
