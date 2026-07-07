@@ -127,7 +127,7 @@ func generate_configuration_resource() -> GridMapConfiguration:
 func _dev_save_config_resource() -> void:
 	var save_name: String
 	if dev_config_save_name:
-		save_name = owner.scene_file_path.get_base_dir() + "/" + dev_config_save_name + ".tres"
+		save_name = owner.scene_file_path.get_base_dir().path_join(dev_config_save_name + ".tres")
 	else:
 		save_name = owner.scene_file_path.replace(".tscn",".tres")
 	
