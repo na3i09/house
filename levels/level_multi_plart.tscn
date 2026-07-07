@@ -16,7 +16,8 @@ ambient_light_energy = 3.0
 
 [node name="GridMapPlacer" parent="." unique_id=474646616 instance=ExtResource("1_1xplh")]
 location_place_dict = Dictionary[Vector3i, String]({
-Vector3i(0, 0, 0): "spawn_point"
+Vector3i(0, 0, 0): "spawn_point",
+Vector3i(0, 0, 1): "lantern"
 })
 possible_segments = Array[ExtResource("4_dmql2")]([ExtResource("7_5yd76"), ExtResource("8_nmoke"), ExtResource("7_dmql2"), ExtResource("8_dv5gv")])
 
