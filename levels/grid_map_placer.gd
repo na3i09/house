@@ -74,7 +74,8 @@ static func generate_static_configuration_dictionary(_placer: GridMapPlacer) -> 
 			serialized_dict[inst].append(_placer.possible_items.find(_placer.place_dict[index]))
 	
 	for location: Vector3i in _placer.location_place_dict:
-		serialized_dict[location].append(_placer.possible_items.find(_placer.location_place_dict[location]))
+		if serialized_dict.has(location):
+			serialized_dict[location].append(_placer.possible_items.find(_placer.location_place_dict[location]))
 	
 	return serialized_dict
 
