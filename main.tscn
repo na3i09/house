@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cnv06ugmt1xiu" path="res://player.tscn" id="2_h2yge"]
 [ext_resource type="Resource" uid="uid://bifumi31kn7" path="res://input/menu_mapping.tres" id="3_lquwl"]
 [ext_resource type="Resource" uid="uid://d2516cp1tbkju" path="res://input/exit_action.tres" id="4_7mycd"]
-[ext_resource type="PackedScene" uid="uid://cdd2ol8k03jww" path="res://levels/csg_grid_level.tscn" id="5_5vw27"]
+[ext_resource type="PackedScene" uid="uid://bhu1ltm26twtf" path="res://levels/level_multi_plart.tscn" id="5_kek77"]
 [ext_resource type="Script" uid="uid://4h4li347tbjm" path="res://player_spawner.gd" id="6_7mycd"]
 [ext_resource type="PackedScene" uid="uid://ddl7s4jngiudv" path="res://main_menu.tscn" id="6_272bh"]
 [ext_resource type="Script" uid="uid://dwgl0dilh0v3w" path="res://respawn_menu.gd" id="8_5vw27"]
@@ -15,7 +15,7 @@ script = ExtResource("1_h2yge")
 PlayerScene = ExtResource("2_h2yge")
 menu_mapping = ExtResource("3_lquwl")
 exit_action = ExtResource("4_7mycd")
-MapScene = ExtResource("5_5vw27")
+MapScene = ExtResource("5_kek77")
 
 [node name="FallbackSpawnPoint" type="Marker3D" parent="." unique_id=300567180]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
@@ -23,7 +23,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 [node name="MainMenu" parent="." unique_id=1038055183 instance=ExtResource("6_272bh")]
 
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="." unique_id=382467329 node_paths=PackedStringArray("player_spawn_point")]
-_spawnable_scenes = PackedStringArray("uid://cnv06ugmt1xiu", "uid://cdd2ol8k03jww", "uid://b87k85bwe5um6")
+_spawnable_scenes = PackedStringArray("uid://cnv06ugmt1xiu", "uid://cdd2ol8k03jww", "uid://b87k85bwe5um6", "uid://bhu1ltm26twtf")
 spawn_path = NodePath("..")
 script = ExtResource("6_7mycd")
 player_spawn_point = NodePath("../FallbackSpawnPoint")
