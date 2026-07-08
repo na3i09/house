@@ -45,15 +45,11 @@ var _possible_items: Dictionary[StringName,PackedScene]:
 
 static func generate_static_configuration_dictionary(_placer: GridMapPlacer) -> Dictionary[Vector3i,Array]:
 	var serialized_dict: Dictionary[Vector3i,Array] = generate_tile_configuration_dictionary(_placer)
+	var item_dict: Dictionary[Vector3i,Array] = generate_item_configuration_dictionary(_placer)
 	
-	for index: int in _placer.place_dict:
-		var instance_array: Array[Vector3i] = _placer.get_used_cells_by_item(index)
-		for inst: Vector3i in instance_array:
-			serialized_dict[inst].append_array([_placer.place_dict[index],Transform3D.IDENTITY])
-	
-	for location: Vector3i in _placer.location_place_dict:
+	for location: Vector3i in item_dict:
 		if serialized_dict.has(location):
-			serialized_dict[location].append_array([_placer.location_place_dict[location],Transform3D.IDENTITY])
+			serialized_dict[location].append_array(item_dict[location])
 	
 	return serialized_dict
 
@@ -67,6 +63,20 @@ static func generate_tile_configuration_dictionary(_map: GridMap) -> Dictionary[
 		dict[location] = [_map.get_cell_item(location),_map.get_cell_item_orientation(location)]
 	
 	return dict
+
+
+static func generate_item_configuration_dictionary(_placer: GridMapPlacer) -> Dictionary[Vector3i,Array]:
+	var item_dict: Dictionary[Vector3i,Array] = {}
+	
+	for index: int in _placer.place_dict:
+		var instance_array: Array[Vector3i] = _placer.get_used_cells_by_item(index)
+		for inst: Vector3i in instance_array:
+			item_dict.get_or_add(inst,[]).append_array([_placer.place_dict[index],Transform3D.IDENTITY])
+	
+	for location: Vector3i in _placer.location_place_dict:
+		item_dict.get_or_add(location,[]).append_array([_placer.location_place_dict[location],Transform3D.IDENTITY])
+	
+	return item_dict
 
 
 static func generate_map(_placer: GridMap, segments: Array[GridMapConfiguration], _max_instances: int, origin: Vector3i = Vector3i(0,0,0)) -> Dictionary[Vector3i,Array]:
@@ -101,10 +111,11 @@ func _ready() -> void:
 	if is_multiplayer_authority():
 		if possible_segments:
 			_generate()
-		for index: int in place_dict:
-			var instance_array: Array[Vector3i] = get_used_cells_by_item(index)
-			for inst: Vector3i in instance_array:
-				_instance_item_on_cell(place_dict[index],inst)
+		
+		var item_dict := GridMapPlacer.generate_item_configuration_dictionary(self)
+		
+		for location in item_dict:
+			_instance_item_on_cell(item_dict[location][0],location)
 		
 		for index: int in random_place_dict:
 			var instance_array: Array[Vector3i] = get_used_cells_by_item(index)
@@ -112,9 +123,6 @@ func _ready() -> void:
 				var random_scene: StringName = random_place_dict[index].pick_item()
 				if random_scene:
 					_instance_item_on_cell(random_scene,inst)
-		
-		for location: Vector3i in location_place_dict:
-			_instance_item_on_cell(location_place_dict[location],location)
 		
 		print(_serialize_items())
 	else:
