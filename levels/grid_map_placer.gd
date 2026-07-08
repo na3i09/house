@@ -217,12 +217,15 @@ func _name_item(item_name: String, location: Vector3i) -> String:
 
 
 func _place_item_on_map(item: Node3D, location: Vector3i, offset_transform: Transform3D = Transform3D.IDENTITY) -> void:
+	item.transform = _create_local_item_transform(location,offset_transform)
+
+func _create_local_item_transform(location: Vector3i, offset_transform: Transform3D = Transform3D.IDENTITY) -> Transform3D:
 	var inst_location: Vector3 = map_to_local(location)
 	inst_location.y += vertical_offset
 	var item_transform: Transform3D = offset_transform
 	item_transform.origin += inst_location
-	item.transform = item_transform
-
+	
+	return item_transform
 
 @rpc("any_peer","reliable","call_remote")
 func request_map_configuration() -> void:
