@@ -143,7 +143,7 @@ func apply_map_configuration_resource(config: GridMapConfiguration, offset: Vect
 func _instance_item_on_cell(item_name: String, location: Vector3i, orientation: int = 0) -> void:
 	add_child(_instantiate_item_at_cell_position(item_name,location,orientation))
 
-func _instantiate_item_at_cell_position(item_name: String, location: Vector3i, orientation: int, offset_transform: Transform3D = Transform3D.IDENTITY) -> Node:
+func _instantiate_item_at_cell_position(item_name: String, location: Vector3i, orientation: int = 0, offset_transform: Transform3D = Transform3D.IDENTITY) -> Node:
 	var scene: PackedScene = _possible_items[item_name]
 	assert(scene.can_instantiate())
 	if find_child(str(location) + "*"):
