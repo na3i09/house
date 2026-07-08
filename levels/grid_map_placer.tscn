@@ -13,7 +13,4 @@ possible_item_resource = ExtResource("7_f3r5s")
 metadata/_custom_type_script = "uid://ja7r3oe7cvbv"
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=999225953]
-_spawnable_scenes = PackedStringArray("uid://b3jsniupbiutk", "uid://tqs8ytugpcni", "uid://b1nm3mwbitohx", "uid://dqvarinahvjmf")
 spawn_path = NodePath("..")
-
-[connection signal="spawned" from="MultiplayerSpawner" to="." method="_apply_item_configuration"]

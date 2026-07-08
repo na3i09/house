@@ -122,9 +122,16 @@ static func generate_map(_placer: GridMap, segments: Array[GridMapConfiguration]
 	return generated_map
 
 
+var spawner: MultiplayerSpawner
+var is_multiplayer: bool = false
+
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
+	spawner = find_child("MultiplayerSpawner")
+	if spawner:
+		spawner.spawn_function = _spawn_item
+		is_multiplayer = true
 	if is_multiplayer_authority():
 		if possible_segments:
 			_generate()
@@ -177,7 +184,10 @@ func apply_map_configuration_resource(config: GridMapConfiguration, offset: Vect
 
 
 func _instance_item_on_cell(item_name: String, location: Vector3i, orientation: int = 0) -> void:
-	add_child(_instantiate_item_at_cell_position(item_name,location,orientation))
+	if is_multiplayer:
+		spawner.spawn([item_name,location,orientation,Transform3D.IDENTITY])
+	else:
+		add_child(_instantiate_item_at_cell_position(item_name,location,orientation))
 
 func _instantiate_item_at_cell_position(item_name: String, location: Vector3i, orientation: int = 0, offset_transform: Transform3D = Transform3D.IDENTITY) -> Node:
 	var scene: PackedScene = _possible_items[item_name]
@@ -261,14 +271,11 @@ func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector
 		for item: int in items:
 			_instance_item_on_cell(_possible_items.keys()[item],true_location,tile_orientation) #TODO: ensure this will actually work from serializing key index position
 
-
-func _apply_item_configuration(node: Node) -> void:
-	if node.name.begins_with("("):
-		var name_split: PackedStringArray = node.name.split("_")
-		var location: Vector3i = Helpers.string_to_vector3i(name_split[0])
-		_place_item_on_map(node,location)
-	else:
-		push_error("Spawned node with invalid name for item configuration: " + node.name)
+func _spawn_item(args: Array) -> Node:
+	assert(args is Array)
+	assert(args.size() == 4)
+	
+	return _instantiate_item_at_cell_position.callv(args)
 
 
 func _name_item(item_name: String, location: Vector3i, item_transform: Transform3D) -> String:
