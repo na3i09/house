@@ -81,6 +81,19 @@ static func generate_item_configuration_dictionary(_placer: GridMapPlacer) -> Di
 	
 	return item_dict
 
+## Generate [Dictionary] of instances of random items and their transforms from [member random_placer_dict]
+static func generate_random_item_configuration_dictionary(_placer: GridMapPlacer) -> Dictionary[Vector3i,Array]:
+	var item_dict: Dictionary[Vector3i,Array] = {}
+	
+	for index: int in _placer.random_place_dict:
+			var instance_array: Array[Vector3i] = _placer.get_used_cells_by_item(index)
+			for inst: Vector3i in instance_array:
+				var random_scene: StringName = _placer.random_place_dict[index].pick_item()
+				if random_scene:
+					item_dict.get_or_add(inst,[]).append_array([random_scene,Transform3D.IDENTITY])
+	
+	return item_dict
+
 
 ## Generate [Dictionary] representing a randomly assembled map made up of [GridMapConfiguration] segments in [param segments]
 static func generate_map(_placer: GridMap, segments: Array[GridMapConfiguration], _max_instances: int, origin: Vector3i = Vector3i(0,0,0)) -> Dictionary[Vector3i,Array]:
@@ -121,12 +134,10 @@ func _ready() -> void:
 		for location in item_dict:
 			_instance_item_on_cell(item_dict[location][0],location)
 		
-		for index: int in random_place_dict:
-			var instance_array: Array[Vector3i] = get_used_cells_by_item(index)
-			for inst: Vector3i in instance_array:
-				var random_scene: StringName = random_place_dict[index].pick_item()
-				if random_scene:
-					_instance_item_on_cell(random_scene,inst)
+		var random_item_dict := GridMapPlacer.generate_random_item_configuration_dictionary(self)
+		
+		for location in random_item_dict:
+			_instance_item_on_cell(random_item_dict[location][0],location)
 		
 		print(_serialize_items())
 	else:
