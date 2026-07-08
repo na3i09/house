@@ -140,7 +140,10 @@ func apply_map_configuration_resource(config: GridMapConfiguration, offset: Vect
 	_apply_map_configuration(config.configuration_dict,offset)
 
 
-func _instance_item_on_cell(item_name: String, location: Vector3i) -> void:
+func _instance_item_on_cell(item_name: String, location: Vector3i, orientation: int = 0) -> void:
+	add_child(_instantiate_item_at_cell_position(item_name,location,orientation))
+
+func _instantiate_item_at_cell_position(item_name: String, location: Vector3i, orientation: int, offset_transform: Transform3D = Transform3D.IDENTITY) -> Node:
 	var scene: PackedScene = _possible_items[item_name]
 	assert(scene.can_instantiate())
 	if find_child(str(location) + "*"):
@@ -148,10 +151,10 @@ func _instance_item_on_cell(item_name: String, location: Vector3i) -> void:
 		return
 	var inst_scene := scene.instantiate() as Node3D
 	assert(inst_scene, "Scene to be instantiated was not derived from Node3D")
-	_place_item_on_map(inst_scene,location)
+	_place_item_on_map(inst_scene,location,orientation,offset_transform)
 	inst_scene.name = _name_item(item_name,location)
-	add_child(inst_scene)
-
+	
+	return inst_scene
 
 func _dev_save_config_resource() -> void:
 	var save_name: String
@@ -200,7 +203,7 @@ func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector
 		set_cell_item(true_location,tile_type,tile_orientation)
 		
 		for item: int in items:
-			_instance_item_on_cell(_possible_items.keys()[item],true_location) #TODO: ensure this will actually work from serializing key index position
+			_instance_item_on_cell(_possible_items.keys()[item],true_location,tile_orientation) #TODO: ensure this will actually work from serializing key index position
 
 
 func _apply_item_configuration(node: Node) -> void:
@@ -216,13 +219,14 @@ func _name_item(item_name: String, location: Vector3i) -> String:
 	return str(location) + "_" + item_name
 
 
-func _place_item_on_map(item: Node3D, location: Vector3i, offset_transform: Transform3D = Transform3D.IDENTITY) -> void:
-	item.transform = _create_local_item_transform(location,offset_transform)
+func _place_item_on_map(item: Node3D, location: Vector3i, orientation: int = 0, offset_transform: Transform3D = Transform3D.IDENTITY) -> void:
+	item.transform = _create_local_item_transform(location,orientation,offset_transform)
 
-func _create_local_item_transform(location: Vector3i, offset_transform: Transform3D = Transform3D.IDENTITY) -> Transform3D:
+func _create_local_item_transform(location: Vector3i, orientation: int, offset_transform: Transform3D = Transform3D.IDENTITY) -> Transform3D:
 	var inst_location: Vector3 = map_to_local(location)
 	inst_location.y += vertical_offset
 	var item_transform: Transform3D = offset_transform
+	item_transform.basis = get_basis_with_orthogonal_index(orientation) * item_transform.basis
 	item_transform.origin += inst_location
 	
 	return item_transform
