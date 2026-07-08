@@ -189,8 +189,20 @@ func _serialize_items() -> Dictionary[Vector3i,Array]:
 			var location: Vector3i = Helpers.string_to_vector3i(name_split[0])
 			
 			serialized_dict.get_or_add(location,[]).append("_".join(name_split.slice(1)))
+			serialized_dict[location].append_array(_get_grid_location_orientation_and_offset_from_node_transform(child.transform))
 	return serialized_dict
 
+func _get_grid_location_orientation_and_offset_from_node_transform(item_transform: Transform3D) -> Array:
+	var grid_location: Vector3i = local_to_map(item_transform.origin)
+	var grid_center_position: Vector3 = map_to_local(grid_location)
+	var grid_item_orientation: int = get_cell_item_orientation(grid_location)
+	var grid_item_basis: Basis = get_cell_item_basis(grid_location)
+	
+	var offset_transform := item_transform
+	offset_transform.origin = offset_transform.origin - grid_center_position - Vector3(0,vertical_offset,0)
+	offset_transform.basis = grid_item_basis.inverse() * offset_transform.basis
+	
+	return [grid_location,grid_item_orientation,offset_transform]
 
 func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector3i = Vector3i(0,0,0)) -> void:
 	for location: Vector3i in config:
