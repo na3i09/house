@@ -168,7 +168,7 @@ func _instantiate_item_at_cell_position(item_name: String, location: Vector3i, o
 	var inst_scene := scene.instantiate() as Node3D
 	assert(inst_scene, "Scene to be instantiated was not derived from Node3D")
 	_place_item_on_map(inst_scene,location,orientation,offset_transform)
-	inst_scene.name = _name_item(item_name,location)
+	inst_scene.name = _name_item(item_name,location,inst_scene.transform)
 	
 	return inst_scene
 
@@ -210,7 +210,7 @@ func _serialize_items() -> Dictionary[Vector3i,Array]:
 	for child: Node in children:
 		if child.name.begins_with("("):
 			var info_array: Array = _get_grid_location_orientation_and_offset_from_node_transform(child.transform)
-			var name_split: PackedStringArray = child.name.split("_")
+			var name_split: PackedStringArray = child.name.get_slice("=",0).split("_")
 			
 			serialized_dict.get_or_add(info_array[0],[]).append("_".join(name_split.slice(1)))
 			serialized_dict[info_array[0]].append(info_array[2])
@@ -251,8 +251,8 @@ func _apply_item_configuration(node: Node) -> void:
 		push_error("Spawned node with invalid name for item configuration: " + node.name)
 
 
-func _name_item(item_name: String, location: Vector3i) -> String:
-	return str(location) + "_" + item_name
+func _name_item(item_name: String, location: Vector3i, item_transform: Transform3D) -> String:
+	return str(location) + "_" + item_name + "=" + str(hash(item_transform))
 
 
 func _place_item_on_map(item: Node3D, location: Vector3i, orientation: int = 0, offset_transform: Transform3D = Transform3D.IDENTITY) -> void:
