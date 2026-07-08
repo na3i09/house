@@ -38,6 +38,9 @@ var _possible_items: Dictionary[StringName,PackedScene]:
 @export_tool_button("Load Configuration") var dev_config_load: Callable = _dev_load_config_resource
 @export_file("*.tres") var dev_loadable_config: String
 @export_tool_button("Clear Current Configuration") var dev_clear_config: Callable = clear
+@export_tool_button("Place Item") var dev_place_item: Callable = _dev_place_item_into_scene
+@export var dev_item_name: String
+@export var dev_item_location: Vector3i = Vector3i.ZERO
 
 
 static func generate_static_configuration_dictionary(_placer: GridMapPlacer) -> Dictionary[Vector3i,Array]:
@@ -172,6 +175,14 @@ func _dev_load_config_resource() -> void:
 	if config_resource:
 		apply_map_configuration_resource(config_resource)
 
+
+func _dev_place_item_into_scene() -> void:
+	if _possible_items.has(dev_item_name):
+		var instanced_item: Node3D = _instantiate_item_at_cell_position(dev_item_name,dev_item_location)
+		add_child(instanced_item)
+		instanced_item.owner = owner
+	else:
+		print("invalid item name:" + dev_item_name)
 
 func _generate() -> void:
 	clear()
