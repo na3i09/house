@@ -43,6 +43,7 @@ var _possible_items: Dictionary[StringName,PackedScene]:
 @export var dev_item_location: Vector3i = Vector3i.ZERO
 
 
+## Generate [Dictionary] of grid cell tiles and items from [member place_dict] and [member location_place_dict]
 static func generate_static_configuration_dictionary(_placer: GridMapPlacer) -> Dictionary[Vector3i,Array]:
 	var serialized_dict: Dictionary[Vector3i,Array] = generate_tile_configuration_dictionary(_placer)
 	var item_dict: Dictionary[Vector3i,Array] = generate_item_configuration_dictionary(_placer)
@@ -54,6 +55,7 @@ static func generate_static_configuration_dictionary(_placer: GridMapPlacer) -> 
 	return serialized_dict
 
 
+## Generate [Dictionary] of cell tile type and orientation
 static func generate_tile_configuration_dictionary(_map: GridMap) -> Dictionary[Vector3i,Array]:
 	var dict: Dictionary[Vector3i,Array]
 	
@@ -65,6 +67,7 @@ static func generate_tile_configuration_dictionary(_map: GridMap) -> Dictionary[
 	return dict
 
 
+## Generate [Dictionary] of items and their offset transforms from [member place_dict] and [member location_place_dict]
 static func generate_item_configuration_dictionary(_placer: GridMapPlacer) -> Dictionary[Vector3i,Array]:
 	var item_dict: Dictionary[Vector3i,Array] = {}
 	
@@ -79,6 +82,7 @@ static func generate_item_configuration_dictionary(_placer: GridMapPlacer) -> Di
 	return item_dict
 
 
+## Generate [Dictionary] representing a randomly assembled map made up of [GridMapConfiguration] segments in [param segments]
 static func generate_map(_placer: GridMap, segments: Array[GridMapConfiguration], _max_instances: int, origin: Vector3i = Vector3i(0,0,0)) -> Dictionary[Vector3i,Array]:
 	var generated_map: Dictionary[Vector3i,Array] = {}
 	
@@ -129,6 +133,8 @@ func _ready() -> void:
 		request_map_configuration.rpc_id(1)
 
 
+## Generate [Dictionary] of map configuration using the current map configuration 
+## and items currently placed in the scene
 func generate_live_configuration_dictionary() -> Dictionary[Vector3i,Array]:
 	var dict := generate_tile_configuration_dictionary(self)
 	var item_dict := _serialize_items()
@@ -140,6 +146,8 @@ func generate_live_configuration_dictionary() -> Dictionary[Vector3i,Array]:
 	return dict
 
 
+## Generate [GridMapConfiguration] resource using the current map configuration 
+## and items from [member place_dict], [member location_place_dict], and items currently placed in the scene
 func generate_configuration_resource() -> GridMapConfiguration:
 	var dict := GridMapPlacer.generate_static_configuration_dictionary(self)
 	var item_dict := _serialize_items()
@@ -152,6 +160,7 @@ func generate_configuration_resource() -> GridMapConfiguration:
 		)
 
 
+## Apply configuration from [param config] to current map with optional [param offset]
 func apply_map_configuration_resource(config: GridMapConfiguration, offset: Vector3i = Vector3i(0,0,0)) -> void:
 	_apply_map_configuration(config.configuration_dict,offset)
 
