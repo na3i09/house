@@ -196,11 +196,11 @@ func _serialize_items() -> Dictionary[Vector3i,Array]:
 	
 	for child: Node in children:
 		if child.name.begins_with("("):
+			var info_array: Array = _get_grid_location_orientation_and_offset_from_node_transform(child.transform)
 			var name_split: PackedStringArray = child.name.split("_")
-			var location: Vector3i = Helpers.string_to_vector3i(name_split[0])
 			
-			serialized_dict.get_or_add(location,[]).append("_".join(name_split.slice(1)))
-			serialized_dict[location].append_array(_get_grid_location_orientation_and_offset_from_node_transform(child.transform))
+			serialized_dict.get_or_add(info_array[0],[]).append("_".join(name_split.slice(1)))
+			serialized_dict[info_array[0]].append(info_array[2])
 	return serialized_dict
 
 func _get_grid_location_orientation_and_offset_from_node_transform(item_transform: Transform3D) -> Array:
