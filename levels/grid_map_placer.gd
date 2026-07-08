@@ -133,8 +133,13 @@ func generate_live_configuration_dictionary() -> Dictionary[Vector3i,Array]:
 
 
 func generate_configuration_resource() -> GridMapConfiguration:
+	var dict := GridMapPlacer.generate_static_configuration_dictionary(self)
+	var item_dict := _serialize_items()
+	for item_loc in item_dict:
+		if dict.has(item_loc):
+			dict[item_loc].append_array(item_dict[item_loc])
 	return GridMapConfiguration.generate_configuration_resource(
-		GridMapPlacer.generate_static_configuration_dictionary(self),
+		dict,
 		mesh_library.find_item_by_name("Edge")
 		)
 
