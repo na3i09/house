@@ -49,11 +49,11 @@ static func generate_static_configuration_dictionary(_placer: GridMapPlacer) -> 
 	for index: int in _placer.place_dict:
 		var instance_array: Array[Vector3i] = _placer.get_used_cells_by_item(index)
 		for inst: Vector3i in instance_array:
-			serialized_dict[inst].append(_placer.place_dict[index])
+			serialized_dict[inst].append_array([_placer.place_dict[index],Transform3D.IDENTITY])
 	
 	for location: Vector3i in _placer.location_place_dict:
 		if serialized_dict.has(location):
-			serialized_dict[location].append(_placer.location_place_dict[location])
+			serialized_dict[location].append_array([_placer.location_place_dict[location],Transform3D.IDENTITY])
 	
 	return serialized_dict
 
