@@ -26,20 +26,27 @@ static func generate_configuration_resource(configuration: Dictionary[Vector3i,A
 				config_resource.edge_locations[location] = configuration[location][1]
 				config_resource.configuration_dict.erase(location)
 	
-	#TODO: replace this with something less dumb
-	for location in config_resource.configuration_dict:
-		if location.x > config_resource.map_maximum.x:
-			config_resource.map_maximum.x = location.x
-		if location.y > config_resource.map_maximum.y:
-			config_resource.map_maximum.y = location.y
-		if location.z > config_resource.map_maximum.z:
-			config_resource.map_maximum.z = location.z
-		
-		if location.x < config_resource.map_minimum.x:
-			config_resource.map_minimum.x = location.x
-		if location.y < config_resource.map_minimum.y:
-			config_resource.map_minimum.y = location.y
-		if location.z < config_resource.map_minimum.z:
-			config_resource.map_minimum.z = location.z
+	config_resource.map_maximum = config_resource.configuration_dict.keys().reduce(_max_vector)
+	config_resource.map_minimum = config_resource.configuration_dict.keys().reduce(_min_vector)
 	
 	return config_resource
+
+static func _max_vector(accum: Vector3i, element: Vector3i) -> Vector3i:
+	if element.x > accum.x:
+		accum.x = element.x
+	if element.y > accum.y:
+		accum.y = element.y
+	if element.z > accum.z:
+		accum.z = element.z
+	
+	return accum
+
+static func _min_vector(accum: Vector3i, element: Vector3i) -> Vector3i:
+	if element.x < accum.x:
+		accum.x = element.x
+	if element.y < accum.y:
+		accum.y = element.y
+	if element.z < accum.z:
+		accum.z = element.z
+	
+	return accum
