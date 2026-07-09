@@ -1,6 +1,9 @@
 @tool
 extends GridMap
 class_name GridMapPlacer
+
+const REVERSED_ORIENTATION: int = 10
+
 ## [GridMap] with support for placing packed scenes into locations on the grid map
 ##
 ## Replication of grid map item configuration is handled via multiplayer spawner synchronization, 
@@ -97,28 +100,43 @@ static func generate_random_item_configuration_dictionary(_placer: GridMapPlacer
 
 
 ## Generate [Dictionary] representing a randomly assembled map made up of [GridMapConfiguration] segments in [param segments]
-static func generate_map(_placer: GridMap, segments: Array[GridMapConfiguration], _max_instances: int, origin: Vector3i = Vector3i(0,0,0)) -> Dictionary[Vector3i,Array]:
+static func generate_map(_placer: GridMap, segments: Array[GridMapConfiguration], _max_instances: int, _origin: Vector3i = Vector3i(0,0,0)) -> Dictionary[Vector3i,Array]:
 	var generated_map: Dictionary[Vector3i,Array] = {}
+	
+	var edge_pool: Dictionary[Vector3i,int] = {}
 	
 	var first_segment: GridMapConfiguration = segments.pick_random()
 	generated_map.merge(first_segment.configuration_dict)
 	
-	var segment_edges: Dictionary[Vector3i,int] = first_segment.edge_locations
+	edge_pool = first_segment.edge_locations.duplicate()
 	
-	for edge in segment_edges:
+	# hard grab reversed basis for mirroring the connecting edge
+	var reversed_basis: Basis = _placer.get_basis_with_orthogonal_index(REVERSED_ORIENTATION)
+	
+	for i in range(_max_instances - 1):
+		if edge_pool.is_empty():
+			break
+		var source_edge: Vector3i = edge_pool.keys().pick_random()
+		var source_edge_basis: Basis = _placer.get_basis_with_orthogonal_index(edge_pool[source_edge])
 		var new_segment: GridMapConfiguration = segments.pick_random()
 		
+		var source_edge_transform: Transform3D = Transform3D(source_edge_basis,source_edge)
+		
 		var connecting_edge: Vector3i = new_segment.edge_locations.keys().pick_random()
-		var edge_basis: Basis = _placer.get_basis_with_orthogonal_index(new_segment.edge_locations[connecting_edge])
-		var edge_direction: Vector3i = Vector3i(edge_basis.z)
+		var connecting_edge_basis: Basis = _placer.get_basis_with_orthogonal_index(new_segment.edge_locations[connecting_edge])
+		
+		var segment_edge_transform: Transform3D = Transform3D(connecting_edge_basis,connecting_edge)
+		
 		for loc in new_segment.configuration_dict:
-			var true_loc: Vector3i = loc - connecting_edge + origin# + edge_direction
+			var true_loc: Vector3i = Vector3i(source_edge_transform * (reversed_basis * (Vector3(loc) * segment_edge_transform)) - source_edge_transform.basis.z)
 			if not generated_map.has(true_loc):
 				var tile_basis: Basis = _placer.get_basis_with_orthogonal_index(new_segment.configuration_dict[loc][1])
-				var new_basis: Basis = edge_basis * tile_basis
+				var true_basis: Basis = source_edge_transform.basis * (reversed_basis * (segment_edge_transform.basis.inverse() * tile_basis))
 				var new_array: Array = new_segment.configuration_dict[loc].duplicate()
-				#new_array[1] = _placer.get_orthogonal_index_from_basis(new_basis)
+				new_array[1] = _placer.get_orthogonal_index_from_basis(true_basis)
 				generated_map[true_loc] = new_array
+		
+		edge_pool.erase(source_edge)
 	
 	return generated_map
 
