@@ -136,6 +136,17 @@ static func generate_map(_placer: GridMap, segments: Array[GridMapConfiguration]
 				new_array[1] = _placer.get_orthogonal_index_from_basis(true_basis)
 				generated_map[true_loc] = new_array
 		
+		for edge in new_segment.edge_locations:
+			if edge == connecting_edge:
+				continue
+			var true_edge: Vector3i = Vector3i(source_edge_transform * (reversed_basis * (Vector3(edge) * segment_edge_transform)) - source_edge_transform.basis.z)
+			var edge_basis: Basis = _placer.get_basis_with_orthogonal_index(new_segment.edge_locations[edge]) 
+			var true_edge_basis: Basis = source_edge_transform.basis * (reversed_basis * (segment_edge_transform.basis.inverse() * edge_basis))
+			var true_edge_orientation: int = _placer.get_orthogonal_index_from_basis(true_edge_basis)
+			
+			if not edge_pool.has(true_edge):
+				edge_pool[true_edge] = true_edge_orientation
+		
 		edge_pool.erase(source_edge)
 	
 	return generated_map
