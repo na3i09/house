@@ -233,6 +233,8 @@ func _instantiate_item_at_cell_position(item_name: String, location: Vector3i, o
 	_place_item_on_map(inst_scene,location,orientation,offset_transform)
 	inst_scene.name = _name_item(item_name,location,inst_scene.transform)
 	
+	inst_scene.add_to_group(name + "_items")
+	
 	return inst_scene
 
 func _dev_save_config_resource() -> void:
