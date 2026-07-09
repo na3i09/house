@@ -70,6 +70,7 @@ func _ready() -> void:
 	_spawner = find_child("MultiplayerSpawner")
 	if _spawner:
 		_spawner.spawn_function = _spawn_item
+		_spawner.spawned.connect(_post_spawn_item_processing)
 		_is_multiplayer = true
 	if is_multiplayer_authority():
 		if possible_segments:
@@ -217,10 +218,20 @@ func apply_map_configuration_resource(config: GridMapConfiguration, offset: Vect
 
 
 func _instance_item_on_cell(item_name: String, location: Vector3i, orientation: int = 0) -> void:
+	var instance: Node = null
 	if _is_multiplayer:
-		_spawner.spawn([item_name,location,orientation,Transform3D.IDENTITY])
+		instance = _spawner.spawn([item_name,location,orientation,Transform3D.IDENTITY])
 	else:
-		add_child(_instantiate_item_at_cell_position(item_name,location,orientation))
+		instance = _instantiate_item_at_cell_position(item_name,location,orientation)
+		add_child(instance)
+	
+	_post_spawn_item_processing(instance)
+
+
+func _post_spawn_item_processing(item: Node) -> void:
+	if item:
+		item.owner = owner
+
 
 func _instantiate_item_at_cell_position(item_name: String, location: Vector3i, orientation: int = 0, offset_transform: Transform3D = Transform3D.IDENTITY) -> Node:
 	var scene: PackedScene = _possible_items[item_name]
