@@ -33,6 +33,7 @@ var _possible_items: Dictionary[StringName,PackedScene]:
 
 @export_group("Developement Functions","dev")
 @export_tool_button("Generate Map") var dev_map_gen: Callable = _generate
+@export_range(1,20,1,"or_greater") var dev_segments: int = 4
 @export_tool_button("Save Configuration") var dev_config_save: Callable = _dev_save_config_resource
 @export_placeholder("Scene Name") var dev_config_save_name: String
 @export_tool_button("Load Configuration") var dev_config_load: Callable = _dev_load_config_resource
@@ -229,7 +230,7 @@ func _dev_place_item_into_scene() -> void:
 
 func _generate() -> void:
 	clear()
-	_apply_map_configuration(generate_map(self,possible_segments,4))
+	_apply_map_configuration(generate_map(self,possible_segments,dev_segments))
 
 
 func _serialize_items() -> Dictionary[Vector3i,Array]:
