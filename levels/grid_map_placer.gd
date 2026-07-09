@@ -34,6 +34,7 @@ var _possible_items: Dictionary[StringName,PackedScene]:
 
 @export var possible_segments: Array[GridMapConfiguration]
 
+#region dev_exports
 @export_group("Developement Functions","dev")
 @export_tool_button("Generate Map") var dev_map_gen: Callable = _generate
 @export_range(1,20,1,"or_greater") var dev_segments: int = 4
@@ -45,18 +46,7 @@ var _possible_items: Dictionary[StringName,PackedScene]:
 @export_tool_button("Place Item") var dev_place_item: Callable = _dev_place_item_into_scene
 @export var dev_item_name: String
 @export var dev_item_location: Vector3i = Vector3i.ZERO
-
-
-## Generate [Dictionary] of grid cell tiles and items from [member place_dict] and [member location_place_dict]
-func generate_static_configuration_dictionary() -> Dictionary[Vector3i,Array]:
-	var serialized_dict: Dictionary[Vector3i,Array] = generate_tile_configuration_dictionary(self)
-	var item_dict: Dictionary[Vector3i,Array] = generate_item_configuration_dictionary()
-	
-	for location: Vector3i in item_dict:
-		if serialized_dict.has(location):
-			serialized_dict[location].append_array(item_dict[location])
-	
-	return serialized_dict
+#endregion
 
 
 ## Generate [Dictionary] of cell tile type and orientation
@@ -69,6 +59,47 @@ static func generate_tile_configuration_dictionary(map: GridMap) -> Dictionary[V
 		dict[location] = [map.get_cell_item(location),map.get_cell_item_orientation(location)]
 	
 	return dict
+
+
+var spawner: MultiplayerSpawner
+var is_multiplayer: bool = false
+
+func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+	spawner = find_child("MultiplayerSpawner")
+	if spawner:
+		spawner.spawn_function = _spawn_item
+		is_multiplayer = true
+	if is_multiplayer_authority():
+		if possible_segments:
+			_generate()
+		
+		var item_dict := generate_item_configuration_dictionary()
+		
+		for location in item_dict:
+			_instance_item_on_cell(item_dict[location][0],location)
+		
+		var random_item_dict := generate_random_item_configuration_dictionary()
+		
+		for location in random_item_dict:
+			_instance_item_on_cell(random_item_dict[location][0],location)
+		
+		print(_serialize_items())
+	else:
+		request_map_configuration.rpc_id(1)
+
+
+## Generate [Dictionary] of grid cell tiles and items from [member place_dict] and [member location_place_dict]
+func generate_static_configuration_dictionary() -> Dictionary[Vector3i,Array]:
+	var serialized_dict: Dictionary[Vector3i,Array] = generate_tile_configuration_dictionary(self)
+	var item_dict: Dictionary[Vector3i,Array] = generate_item_configuration_dictionary()
+	
+	for location: Vector3i in item_dict:
+		if serialized_dict.has(location):
+			serialized_dict[location].append_array(item_dict[location])
+	
+	return serialized_dict
 
 
 ## Generate [Dictionary] of items and their offset transforms from [member place_dict] and [member location_place_dict]
@@ -84,6 +115,7 @@ func generate_item_configuration_dictionary() -> Dictionary[Vector3i,Array]:
 		item_dict.get_or_add(location,[]).append_array([location_place_dict[location],Transform3D.IDENTITY])
 	
 	return item_dict
+
 
 ## Generate [Dictionary] of instances of random items and their transforms from [member random_placer_dict]
 func generate_random_item_configuration_dictionary() -> Dictionary[Vector3i,Array]:
@@ -150,35 +182,6 @@ func generate_map(segments: Array[GridMapConfiguration], _max_instances: int, _o
 		edge_pool.erase(source_edge)
 	
 	return generated_map
-
-
-var spawner: MultiplayerSpawner
-var is_multiplayer: bool = false
-
-func _ready() -> void:
-	if Engine.is_editor_hint():
-		return
-	spawner = find_child("MultiplayerSpawner")
-	if spawner:
-		spawner.spawn_function = _spawn_item
-		is_multiplayer = true
-	if is_multiplayer_authority():
-		if possible_segments:
-			_generate()
-		
-		var item_dict := generate_item_configuration_dictionary()
-		
-		for location in item_dict:
-			_instance_item_on_cell(item_dict[location][0],location)
-		
-		var random_item_dict := generate_random_item_configuration_dictionary()
-		
-		for location in random_item_dict:
-			_instance_item_on_cell(random_item_dict[location][0],location)
-		
-		print(_serialize_items())
-	else:
-		request_map_configuration.rpc_id(1)
 
 
 ## Generate [Dictionary] of map configuration using the current map configuration 
