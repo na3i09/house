@@ -168,8 +168,7 @@ func generate_map(segments: Array[GridMapConfiguration], _max_instances: int, _o
 		
 		for loc in new_segment.configuration_dict:
 			var tile_transform: Transform3D = _make_grid_transform(loc,new_segment.configuration_dict[loc][1])
-			var true_transform: Transform3D = source_edge_transform * _reversed_transform * segment_edge_transform.inverse() * tile_transform
-			true_transform.origin -= source_edge_transform.basis.z
+			var true_transform: Transform3D = _get_true_grid_transform(tile_transform,source_edge_transform,segment_edge_transform)
 			var true_location := Vector3i(true_transform.origin)
 			if not generated_map.has(true_location):
 				var new_array: Array = new_segment.configuration_dict[loc].duplicate()
@@ -180,8 +179,7 @@ func generate_map(segments: Array[GridMapConfiguration], _max_instances: int, _o
 			if edge == connecting_edge:
 				continue
 			var edge_transform: Transform3D = _make_grid_transform(edge,new_segment.edge_locations[edge])
-			var true_edge_transform: Transform3D = source_edge_transform * _reversed_transform * segment_edge_transform.inverse() * edge_transform
-			true_edge_transform.origin -= source_edge_transform.basis.z
+			var true_edge_transform: Transform3D = _get_true_grid_transform(edge_transform,source_edge_transform,segment_edge_transform)
 			var true_edge_location := Vector3i(true_edge_transform.origin)
 			var true_edge_orientation: int = get_orthogonal_index_from_basis(true_edge_transform.basis)
 			
@@ -197,6 +195,13 @@ func _make_grid_transform(location: Vector3i, orientation: int) -> Transform3D:
 	var _basis: Basis = get_basis_with_orthogonal_index(orientation)
 	
 	return Transform3D(_basis,location)
+
+
+func _get_true_grid_transform(tile_transform: Transform3D, source_edge_transform: Transform3D, segment_edge_transform: Transform3D) -> Transform3D:
+	var true_transform: Transform3D = source_edge_transform * _reversed_transform * segment_edge_transform.inverse() * tile_transform
+	true_transform.origin -= source_edge_transform.basis.z
+	
+	return true_transform
 
 
 ## Generate [Dictionary] of map configuration using the current map configuration 
