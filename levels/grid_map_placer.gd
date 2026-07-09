@@ -51,6 +51,8 @@ var _possible_items: Dictionary[StringName,PackedScene]:
 @export var dev_item_location: Vector3i = Vector3i.ZERO
 #endregion
 
+# hard grab reversed basis for mirroring the connecting edge
+var _reversed_transform := Transform3D(get_basis_with_orthogonal_index(REVERSED_ORIENTATION))
 
 ## Generate [Dictionary] of cell tile type and orientation
 static func generate_tile_configuration_dictionary(map: GridMap) -> Dictionary[Vector3i,Array]:
@@ -150,9 +152,6 @@ func generate_map(segments: Array[GridMapConfiguration], _max_instances: int, _o
 	
 	edge_pool = first_segment.edge_locations.duplicate()
 	
-	# hard grab reversed basis for mirroring the connecting edge
-	var reversed_basis: Basis = get_basis_with_orthogonal_index(REVERSED_ORIENTATION)
-	
 	for i in range(_max_instances - 1):
 		if edge_pool.is_empty():
 			break
@@ -168,28 +167,36 @@ func generate_map(segments: Array[GridMapConfiguration], _max_instances: int, _o
 		var segment_edge_transform: Transform3D = Transform3D(connecting_edge_basis,connecting_edge)
 		
 		for loc in new_segment.configuration_dict:
-			var true_loc: Vector3i = Vector3i(source_edge_transform * (reversed_basis * (Vector3(loc) * segment_edge_transform)) - source_edge_transform.basis.z)
-			if not generated_map.has(true_loc):
-				var tile_basis: Basis = get_basis_with_orthogonal_index(new_segment.configuration_dict[loc][1])
-				var true_basis: Basis = source_edge_transform.basis * (reversed_basis * (segment_edge_transform.basis.inverse() * tile_basis))
+			var tile_transform: Transform3D = _make_grid_transform(loc,new_segment.configuration_dict[loc][1])
+			var true_transform: Transform3D = source_edge_transform * _reversed_transform * segment_edge_transform.inverse() * tile_transform
+			true_transform.origin -= source_edge_transform.basis.z
+			var true_location := Vector3i(true_transform.origin)
+			if not generated_map.has(true_location):
 				var new_array: Array = new_segment.configuration_dict[loc].duplicate()
-				new_array[1] = get_orthogonal_index_from_basis(true_basis)
-				generated_map[true_loc] = new_array
+				new_array[1] = get_orthogonal_index_from_basis(true_transform.basis)
+				generated_map[true_location] = new_array
 		
 		for edge in new_segment.edge_locations:
 			if edge == connecting_edge:
 				continue
-			var true_edge: Vector3i = Vector3i(source_edge_transform * (reversed_basis * (Vector3(edge) * segment_edge_transform)) - source_edge_transform.basis.z)
-			var edge_basis: Basis = get_basis_with_orthogonal_index(new_segment.edge_locations[edge]) 
-			var true_edge_basis: Basis = source_edge_transform.basis * (reversed_basis * (segment_edge_transform.basis.inverse() * edge_basis))
-			var true_edge_orientation: int = get_orthogonal_index_from_basis(true_edge_basis)
+			var edge_transform: Transform3D = _make_grid_transform(edge,new_segment.edge_locations[edge])
+			var true_edge_transform: Transform3D = source_edge_transform * _reversed_transform * segment_edge_transform.inverse() * edge_transform
+			true_edge_transform.origin -= source_edge_transform.basis.z
+			var true_edge_location := Vector3i(true_edge_transform.origin)
+			var true_edge_orientation: int = get_orthogonal_index_from_basis(true_edge_transform.basis)
 			
-			if not edge_pool.has(true_edge):
-				edge_pool[true_edge] = true_edge_orientation
+			if not edge_pool.has(true_edge_location):
+				edge_pool[true_edge_location] = true_edge_orientation
 		
 		edge_pool.erase(source_edge)
 	
 	return generated_map
+
+
+func _make_grid_transform(location: Vector3i, orientation: int) -> Transform3D:
+	var _basis: Basis = get_basis_with_orthogonal_index(orientation)
+	
+	return Transform3D(_basis,location)
 
 
 ## Generate [Dictionary] of map configuration using the current map configuration 
