@@ -156,15 +156,11 @@ func generate_map(segments: Array[GridMapConfiguration], _max_instances: int, _o
 		if edge_pool.is_empty():
 			break
 		var source_edge: Vector3i = edge_pool.keys().pick_random()
-		var source_edge_basis: Basis = get_basis_with_orthogonal_index(edge_pool[source_edge])
+		var source_edge_transform: Transform3D = _make_grid_transform(source_edge,edge_pool[source_edge])
 		var new_segment: GridMapConfiguration = segments.pick_random()
 		
-		var source_edge_transform: Transform3D = Transform3D(source_edge_basis,source_edge)
-		
-		var connecting_edge: Vector3i = new_segment.edge_locations.keys().pick_random()
-		var connecting_edge_basis: Basis = get_basis_with_orthogonal_index(new_segment.edge_locations[connecting_edge])
-		
-		var segment_edge_transform: Transform3D = Transform3D(connecting_edge_basis,connecting_edge)
+		var segment_edge: Vector3i = new_segment.edge_locations.keys().pick_random()
+		var segment_edge_transform: Transform3D = _make_grid_transform(segment_edge,new_segment.edge_locations[segment_edge])
 		
 		for loc in new_segment.configuration_dict:
 			var tile_transform: Transform3D = _make_grid_transform(loc,new_segment.configuration_dict[loc][1])
@@ -176,7 +172,7 @@ func generate_map(segments: Array[GridMapConfiguration], _max_instances: int, _o
 				generated_map[true_location] = new_array
 		
 		for edge in new_segment.edge_locations:
-			if edge == connecting_edge:
+			if edge == segment_edge:
 				continue
 			var edge_transform: Transform3D = _make_grid_transform(edge,new_segment.edge_locations[edge])
 			var true_edge_transform: Transform3D = _get_true_grid_transform(edge_transform,source_edge_transform,segment_edge_transform)
