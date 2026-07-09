@@ -1,13 +1,12 @@
 @tool
 extends GridMap
 class_name GridMapPlacer
-
-const REVERSED_ORIENTATION: int = 10
-
 ## [GridMap] with support for placing packed scenes into locations on the grid map
 ##
 ## Replication of grid map item configuration is handled via multiplayer spawner synchronization, 
 ## while replication of tile configuration is handled via rpc call.
+
+const REVERSED_ORIENTATION: int = 10
 
 ## [Dictionary] for scenes to be places onto all cells with matching grid map items
 @export var place_dict: Dictionary[int,String]
