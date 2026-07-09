@@ -42,7 +42,7 @@ var _possible_items: Dictionary[StringName,PackedScene]:
 @export_placeholder("Scene Name") var dev_config_save_name: String
 @export_tool_button("Load Configuration") var dev_config_load: Callable = _dev_load_config_resource
 @export_file("*.tres") var dev_loadable_config: String
-@export_tool_button("Clear Current Configuration") var dev_clear_config: Callable = clear
+@export_tool_button("Clear Current Configuration") var dev_clear_config: Callable = _dev_clear_map
 @export_tool_button("Place Item") var dev_place_item: Callable = _dev_place_item_into_scene
 @export var dev_item_name: String
 @export var dev_item_location: Vector3i = Vector3i.ZERO
@@ -262,8 +262,17 @@ func _dev_place_item_into_scene() -> void:
 	else:
 		print("invalid item name:" + dev_item_name)
 
-func _generate() -> void:
+
+func _dev_clear_map() -> void:
 	clear()
+	var items: Array[Node] = get_tree().get_nodes_in_group(name + "_items")
+	for item: Node in items:
+		if item.name.begins_with("("):
+			item.queue_free()
+
+
+func _generate() -> void:
+	_dev_clear_map()
 	_apply_map_configuration(generate_map(possible_segments,dev_segments))
 
 
