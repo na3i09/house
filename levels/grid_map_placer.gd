@@ -61,16 +61,16 @@ static func generate_tile_configuration_dictionary(map: GridMap) -> Dictionary[V
 	return dict
 
 
-var spawner: MultiplayerSpawner
-var is_multiplayer: bool = false
+var _spawner: MultiplayerSpawner
+var _is_multiplayer: bool = false
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	spawner = find_child("MultiplayerSpawner")
-	if spawner:
-		spawner.spawn_function = _spawn_item
-		is_multiplayer = true
+	_spawner = find_child("MultiplayerSpawner")
+	if _spawner:
+		_spawner.spawn_function = _spawn_item
+		_is_multiplayer = true
 	if is_multiplayer_authority():
 		if possible_segments:
 			_generate()
@@ -87,7 +87,7 @@ func _ready() -> void:
 		
 		print(_serialize_items())
 	else:
-		request_map_configuration.rpc_id(1)
+		_request_map_configuration.rpc_id(1)
 
 
 ## Generate [Dictionary] of grid cell tiles and items from [member place_dict] and [member location_place_dict]
@@ -217,8 +217,8 @@ func apply_map_configuration_resource(config: GridMapConfiguration, offset: Vect
 
 
 func _instance_item_on_cell(item_name: String, location: Vector3i, orientation: int = 0) -> void:
-	if is_multiplayer:
-		spawner.spawn([item_name,location,orientation,Transform3D.IDENTITY])
+	if _is_multiplayer:
+		_spawner.spawn([item_name,location,orientation,Transform3D.IDENTITY])
 	else:
 		add_child(_instantiate_item_at_cell_position(item_name,location,orientation))
 
@@ -328,7 +328,7 @@ func _create_local_item_transform(location: Vector3i, orientation: int, offset_t
 	return item_transform
 
 @rpc("any_peer","reliable","call_remote")
-func request_map_configuration() -> void:
+func _request_map_configuration() -> void:
 	_recieve_map_configuration.rpc_id(multiplayer.get_remote_sender_id(),generate_tile_configuration_dictionary(self))
 
 
