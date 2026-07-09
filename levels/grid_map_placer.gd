@@ -268,8 +268,8 @@ func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector
 		
 		set_cell_item(true_location,tile_type,tile_orientation)
 		
-		for item: int in items:
-			_instance_item_on_cell(_possible_items.keys()[item],true_location,tile_orientation) #TODO: ensure this will actually work from serializing key index position
+		for item: String in items:
+			_instance_item_on_cell(item,true_location,tile_orientation) #TODO: ensure this will actually work from serializing key index position
 
 func _spawn_item(args: Array) -> Node:
 	assert(args is Array)
