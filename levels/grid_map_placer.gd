@@ -21,7 +21,10 @@ const REVERSED_ORIENTATION: int = 10
 ## Vertical offset for placing scenes onto grid map
 @export var vertical_offset: float = 0.0
 
-@export var possible_item_resource: ItemTable
+@export var possible_item_resource: ItemTable:
+	set(value):
+		possible_item_resource = value
+		notify_property_list_changed()
 
 var _possible_items: Dictionary[StringName,PackedScene]:
 	get:
@@ -44,6 +47,7 @@ var _possible_items: Dictionary[StringName,PackedScene]:
 @export_file("*.tres") var dev_loadable_config: String
 @export_tool_button("Clear Current Configuration") var dev_clear_config: Callable = _dev_clear_map
 @export_tool_button("Place Item") var dev_place_item: Callable = _dev_place_item_into_scene
+#WARNING: dropdown list of item names does not update unless the possible_items_resource is unset and reset
 @export var dev_item_name: String
 @export var dev_item_location: Vector3i = Vector3i.ZERO
 #endregion
@@ -60,6 +64,10 @@ static func generate_tile_configuration_dictionary(map: GridMap) -> Dictionary[V
 	
 	return dict
 
+func _validate_property(property: Dictionary) -> void:
+	if property.name == "dev_item_name" && possible_item_resource:
+		property.hint = PROPERTY_HINT_ENUM_SUGGESTION
+		property.hint_string = ",".join(_possible_items.keys())
 
 var _spawner: MultiplayerSpawner
 var _is_multiplayer: bool = false
