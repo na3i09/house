@@ -15,7 +15,9 @@ var map_size: Vector3i:
 	set(value):
 		return
 
-static func generate_configuration_resource(configuration: Dictionary[Vector3i,Array], edge_id: int) -> GridMapConfiguration:
+## Create a [GridMapConfiguration] based on the given [param configuration] with an optional [param edge_id]
+## defining edges of the map segment to be used in map generation
+static func generate_configuration_resource(configuration: Dictionary[Vector3i,Array], edge_id: int = -1) -> GridMapConfiguration:
 	var config_resource: GridMapConfiguration = GridMapConfiguration.new()
 	
 	config_resource.configuration_dict = configuration.duplicate()
