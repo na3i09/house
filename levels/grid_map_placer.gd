@@ -77,7 +77,8 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	
-	_initialize_multiplayer_support()
+	if multiplayer.has_multiplayer_peer():
+		_initialize_multiplayer_support()
 	
 	if is_multiplayer_authority():
 		if possible_segments:
