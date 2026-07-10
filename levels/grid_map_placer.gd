@@ -253,12 +253,12 @@ func apply_map_configuration_resource(config: GridMapConfiguration, offset: Vect
 	_apply_map_configuration(config.configuration_dict,offset)
 
 
-func _instance_item_on_cell(item_name: String, location: Vector3i, orientation: int = 0) -> void:
+func _instance_item_on_cell(item_name: String, location: Vector3i, orientation: int = 0,offset_transform: Transform3D = Transform3D.IDENTITY) -> void:
 	var instance: Node = null
 	if _is_multiplayer:
-		instance = _spawner.spawn([item_name,location,orientation,Transform3D.IDENTITY])
+		instance = _spawner.spawn([item_name,location,orientation,offset_transform])
 	else:
-		instance = _instantiate_item_at_cell_position(item_name,location,orientation)
+		instance = _instantiate_item_at_cell_position(item_name,location,orientation,offset_transform)
 		add_child(instance)
 	
 	_post_spawn_item_processing(instance)
@@ -361,7 +361,7 @@ func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector
 		
 		assert(items.size() % 2 == 0, "Item array not made of item transform pairs")
 		for i in range(0,items.size(),2):
-			_instance_item_on_cell(items[i],true_location,tile_orientation) #TODO: ensure this will actually work from serializing key index position
+			_instance_item_on_cell(items[i],true_location,tile_orientation,items[i+1]) #TODO: ensure this will actually work from serializing key index position
 
 func _spawn_item(args: Array) -> Node:
 	assert(args is Array)
