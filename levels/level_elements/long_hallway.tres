@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="GridMapConfiguration" format=3 uid="uid://ci6wdjn0rovm6"]
+
+[ext_resource type="Script" uid="uid://dclwcyoux36im" path="res://components/grid_map_configuration.gd" id="1_llk5k"]
+
+[resource]
+script = ExtResource("1_llk5k")
+configuration_dict = Dictionary[Vector3i, Array]({
+Vector3i(-5, 0, -2): [3, 0],
+Vector3i(-5, 0, -1): [2, 16],
+Vector3i(-5, 0, 0): [3, 16],
+Vector3i(-4, 0, -2): [1, 0],
+Vector3i(-4, 0, -1): [0, 0],
+Vector3i(-4, 0, 0): [1, 10],
+Vector3i(-3, 0, -2): [1, 0],
+Vector3i(-3, 0, -1): [0, 0],
+Vector3i(-3, 0, 0): [1, 10],
+Vector3i(-2, 0, -2): [1, 0],
+Vector3i(-2, 0, -1): [0, 0],
+Vector3i(-2, 0, 0): [1, 10],
+Vector3i(-1, 0, -2): [1, 0, "ammo_pickup", Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)],
+Vector3i(-1, 0, -1): [0, 0],
+Vector3i(-1, 0, 0): [1, 10, "lantern", Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)],
+Vector3i(0, 0, -2): [1, 0],
+Vector3i(0, 0, -1): [0, 0],
+Vector3i(0, 0, 0): [1, 10],
+Vector3i(1, 0, -2): [1, 0],
+Vector3i(1, 0, -1): [0, 0],
+Vector3i(1, 0, 0): [1, 10],
+Vector3i(2, 0, -2): [1, 0],
+Vector3i(2, 0, -1): [0, 0],
+Vector3i(2, 0, 0): [1, 10],
+Vector3i(3, 0, -2): [3, 22],
+Vector3i(3, 0, -1): [2, 22],
+Vector3i(3, 0, 0): [3, 10]
+})
+edge_locations = Dictionary[Vector3i, int]({
+Vector3i(-6, 0, -1): 22,
+Vector3i(4, 0, -1): 16
+})
+map_minimum = Vector3i(-5, 0, -2)
+map_maximum = Vector3i(3, 0, 0)
