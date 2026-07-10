@@ -162,6 +162,16 @@ func generate_map(segments: Array[GridMapConfiguration], _max_instances: int, _o
 		var segment_edge: Vector3i = new_segment.edge_locations.keys().pick_random()
 		var segment_edge_transform: Transform3D = _make_grid_transform(segment_edge,new_segment.edge_locations[segment_edge])
 		
+		var total_transform: Transform3D = _get_true_grid_transform(Transform3D.IDENTITY,source_edge_transform,segment_edge_transform)
+		
+		if _find_overlap_in_range(
+			generated_map,
+			Vector3i(total_transform * Vector3(new_segment.map_minimum)),
+			Vector3i(total_transform * Vector3(new_segment.map_maximum))
+			):
+			print("overlap at " + str(i) + " iterations")
+			break
+		
 		for loc in new_segment.configuration_dict:
 			var tile_transform: Transform3D = _make_grid_transform(loc,new_segment.configuration_dict[loc][1])
 			var true_transform: Transform3D = _get_true_grid_transform(tile_transform,source_edge_transform,segment_edge_transform)
@@ -185,6 +195,16 @@ func generate_map(segments: Array[GridMapConfiguration], _max_instances: int, _o
 		edge_pool.erase(source_edge)
 	
 	return generated_map
+
+
+func _find_overlap_in_range(_map: Dictionary[Vector3i,Array],segment_min: Vector3i,segment_max: Vector3i) -> bool:
+	for x: int in range(segment_min.x,segment_max.x+1):
+		for y: int in range(segment_min.y,segment_max.y+1):
+			for z: int in range(segment_min.z,segment_max.z+1):
+				if _map.has(Vector3i(x,y,z)):
+					return true
+	
+	return false
 
 
 func _make_grid_transform(location: Vector3i, orientation: int) -> Transform3D:
