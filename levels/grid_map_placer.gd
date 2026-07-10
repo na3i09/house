@@ -173,28 +173,29 @@ func generate_map(segments: Array[GridMapConfiguration], _max_instances: int, _o
 			break
 		
 		for loc in new_segment.configuration_dict:
-			var tile_transform: Transform3D = _make_grid_transform(loc,new_segment.configuration_dict[loc][1])
-			var true_transform: Transform3D = _get_true_grid_transform(tile_transform,source_edge_transform,segment_edge_transform)
-			var true_location := Vector3i(true_transform.origin)
-			if not generated_map.has(true_location):
+			var true_tile_array: Array = _get_transformed_grid_loc_orient([loc,new_segment.configuration_dict[loc][1]],total_transform)
+			if not generated_map.has(true_tile_array[0]):
 				var new_array: Array = new_segment.configuration_dict[loc].duplicate()
-				new_array[1] = get_orthogonal_index_from_basis(true_transform.basis)
-				generated_map[true_location] = new_array
+				new_array[1] = true_tile_array[1]
+				generated_map[true_tile_array[0]] = new_array
 		
 		for edge in new_segment.edge_locations:
 			if edge == segment_edge:
 				continue
-			var edge_transform: Transform3D = _make_grid_transform(edge,new_segment.edge_locations[edge])
-			var true_edge_transform: Transform3D = _get_true_grid_transform(edge_transform,source_edge_transform,segment_edge_transform)
-			var true_edge_location := Vector3i(true_edge_transform.origin)
-			var true_edge_orientation: int = get_orthogonal_index_from_basis(true_edge_transform.basis)
-			
-			if not edge_pool.has(true_edge_location):
-				edge_pool[true_edge_location] = true_edge_orientation
+			var true_edge_array: Array = _get_transformed_grid_loc_orient([edge,new_segment.edge_locations[edge]],total_transform)
+			if not edge_pool.has(true_edge_array[0]):
+				edge_pool[true_edge_array[0]] = true_edge_array[1]
 		
 		edge_pool.erase(source_edge)
 	
 	return generated_map
+
+
+func _get_transformed_grid_loc_orient(loc_and_orient: Array, _transform: Transform3D) -> Array:
+	var tile_transform: Transform3D = _make_grid_transform.callv(loc_and_orient)
+	var true_transform: Transform3D = _transform * tile_transform
+	
+	return [Vector3i(true_transform.origin),get_orthogonal_index_from_basis(true_transform.basis)]
 
 
 func _find_overlap_in_range(_map: Dictionary[Vector3i,Array],segment_min: Vector3i,segment_max: Vector3i) -> bool:
