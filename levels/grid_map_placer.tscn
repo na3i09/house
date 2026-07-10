@@ -11,6 +11,3 @@ script = ExtResource("1_r41wo")
 vertical_offset = -4.5
 possible_item_resource = ExtResource("7_f3r5s")
 metadata/_custom_type_script = "uid://ja7r3oe7cvbv"
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=999225953]
-spawn_path = NodePath("..")

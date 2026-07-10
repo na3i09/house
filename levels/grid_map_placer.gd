@@ -76,11 +76,9 @@ var _is_multiplayer: bool = false
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	_spawner = find_child("MultiplayerSpawner")
-	if _spawner:
-		_spawner.spawn_function = _spawn_item
-		_spawner.spawned.connect(_post_spawn_item_processing)
-		_is_multiplayer = true
+	
+	_initialize_multiplayer_support()
+	
 	if is_multiplayer_authority():
 		if possible_segments:
 			_generate()
@@ -394,6 +392,24 @@ func _create_local_item_transform(location: Vector3i, orientation: int, offset_t
 	item_transform.origin += inst_location
 	
 	return item_transform
+
+
+func _initialize_multiplayer_support() -> void:
+	_spawner = _create_multiplayer_spawner()
+	if _spawner:
+		_spawner.spawn_function = _spawn_item
+		_spawner.spawned.connect(_post_spawn_item_processing)
+		_is_multiplayer = true
+
+
+func _create_multiplayer_spawner() -> MultiplayerSpawner:
+	var spawner := MultiplayerSpawner.new()
+	
+	spawner.spawn_path = ^".."
+	spawner.name = "PlacerSpawner"
+	add_child(spawner)
+	
+	return spawner
 
 
 @rpc("any_peer","reliable","call_remote")
