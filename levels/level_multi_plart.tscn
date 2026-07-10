@@ -2,10 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://bioqelqenfvfk" path="res://levels/grid_map_placer.tscn" id="1_1xplh"]
 [ext_resource type="Script" uid="uid://dclwcyoux36im" path="res://components/grid_map_configuration.gd" id="4_dmql2"]
-[ext_resource type="Resource" uid="uid://cu6tmsbse7kca" path="res://levels/level_elements/4_door_room.tres" id="7_5yd76"]
-[ext_resource type="Resource" uid="uid://ceqe5oth7ab2x" path="res://levels/level_elements/large_tunnel_intersection.tres" id="7_dmql2"]
-[ext_resource type="Resource" uid="uid://ggajq13f4rst" path="res://levels/level_elements/large_tunnel_straight.tres" id="8_dv5gv"]
-[ext_resource type="Resource" uid="uid://cesmg3vm5mnb" path="res://levels/level_elements/large_room.tres" id="8_nmoke"]
+[ext_resource type="Resource" uid="uid://dlifccijxtdj3" path="res://levels/level_elements/4_door_room.tres" id="7_5yd76"]
+[ext_resource type="Resource" uid="uid://bcysraa5w8qi5" path="res://levels/level_elements/large_tunnel_intersection.tres" id="7_dmql2"]
+[ext_resource type="Resource" uid="uid://bbq5voxr32dhc" path="res://levels/level_elements/large_tunnel_straight.tres" id="8_dv5gv"]
+[ext_resource type="Resource" uid="uid://bd52pnsonvuxx" path="res://levels/level_elements/large_room.tres" id="8_nmoke"]
 
 [sub_resource type="Environment" id="Environment_4dhkl"]
 background_energy_multiplier = 2.0

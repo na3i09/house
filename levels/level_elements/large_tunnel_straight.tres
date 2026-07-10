@@ -1,9 +1,9 @@
-[gd_resource type="Resource" script_class="GridMapConfiguration" format=3 uid="uid://ggajq13f4rst"]
+[gd_resource type="Resource" script_class="GridMapConfiguration" format=3 uid="uid://bbq5voxr32dhc"]
 
-[ext_resource type="Script" uid="uid://dclwcyoux36im" path="res://components/grid_map_configuration.gd" id="1_ra75o"]
+[ext_resource type="Script" uid="uid://dclwcyoux36im" path="res://components/grid_map_configuration.gd" id="1_mgro7"]
 
 [resource]
-script = ExtResource("1_ra75o")
+script = ExtResource("1_mgro7")
 configuration_dict = Dictionary[Vector3i, Array]({
 Vector3i(0, 0, -4): [4, 16],
 Vector3i(0, 0, -3): [4, 16],
@@ -17,3 +17,5 @@ edge_locations = Dictionary[Vector3i, int]({
 Vector3i(0, 0, -5): 10,
 Vector3i(0, 0, 3): 0
 })
+map_minimum = Vector3i(0, 0, -4)
+map_maximum = Vector3i(0, 0, 2)
