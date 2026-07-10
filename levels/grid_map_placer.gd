@@ -272,13 +272,10 @@ func _post_spawn_item_processing(item: Node) -> void:
 func _instantiate_item_at_cell_position(item_name: String, location: Vector3i, orientation: int = 0, offset_transform: Transform3D = Transform3D.IDENTITY) -> Node:
 	var scene: PackedScene = _possible_items[item_name]
 	assert(scene.can_instantiate())
-	if find_child(str(location) + "*"):
-		push_warning("Item overlap")
-		return
 	var inst_scene := scene.instantiate() as Node3D
 	assert(inst_scene, "Scene to be instantiated was not derived from Node3D")
 	_place_item_on_map(inst_scene,location,orientation,offset_transform)
-	inst_scene.name = _name_item(item_name,location,inst_scene.transform)
+	inst_scene.name = _name_item(item_name,location)
 	
 	inst_scene.add_to_group(name + "_items")
 	
@@ -370,12 +367,13 @@ func _spawn_item(args: Array) -> Node:
 	return _instantiate_item_at_cell_position.callv(args)
 
 
-func _name_item(item_name: String, location: Vector3i, item_transform: Transform3D) -> String:
-	return str(location) + "_" + item_name + "=" + str(hash(item_transform))
+func _name_item(item_name: String, location: Vector3i) -> String:
+	return str(location) + "_" + item_name + "=" + str(randi())
 
 
 func _place_item_on_map(item: Node3D, location: Vector3i, orientation: int = 0, offset_transform: Transform3D = Transform3D.IDENTITY) -> void:
 	item.transform = _create_local_item_transform(location,orientation,offset_transform)
+
 
 func _create_local_item_transform(location: Vector3i, orientation: int, offset_transform: Transform3D = Transform3D.IDENTITY) -> Transform3D:
 	var inst_location: Vector3 = map_to_local(location)
@@ -385,6 +383,7 @@ func _create_local_item_transform(location: Vector3i, orientation: int, offset_t
 	item_transform.origin += inst_location
 	
 	return item_transform
+
 
 @rpc("any_peer","reliable","call_remote")
 func _request_map_configuration() -> void:
