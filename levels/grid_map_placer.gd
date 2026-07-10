@@ -253,6 +253,7 @@ func apply_map_configuration_resource(config: GridMapConfiguration, offset: Vect
 	_apply_map_configuration(config.configuration_dict,offset)
 
 
+# Creates and adds to the tree the item given by [param item_name]
 func _instance_item_on_cell(item_name: String, location: Vector3i, orientation: int = 0,offset_transform: Transform3D = Transform3D.IDENTITY) -> void:
 	var instance: Node = null
 	if _is_multiplayer:
@@ -264,11 +265,13 @@ func _instance_item_on_cell(item_name: String, location: Vector3i, orientation: 
 	_post_spawn_item_processing(instance)
 
 
+# Called on server and clients to perform any spawned item processing after the node is added to the tree
 func _post_spawn_item_processing(item: Node) -> void:
 	if item:
 		item.owner = owner
 
 
+# Creates and returns the node for the given item
 func _instantiate_item_at_cell_position(item_name: String, location: Vector3i, orientation: int = 0, offset_transform: Transform3D = Transform3D.IDENTITY) -> Node:
 	var scene: PackedScene = _possible_items[item_name]
 	assert(scene.can_instantiate())
@@ -320,6 +323,7 @@ func _generate() -> void:
 	_apply_map_configuration(generate_map(possible_segments,dev_segments))
 
 
+# Serailize item children into a configuration dictionary
 func _serialize_items() -> Dictionary[Vector3i,Array]:
 	var serialized_dict: Dictionary[Vector3i,Array]
 	
@@ -334,6 +338,8 @@ func _serialize_items() -> Dictionary[Vector3i,Array]:
 			serialized_dict[info_array[0]].append(info_array[2])
 	return serialized_dict
 
+
+# convert a local node transform into a grid location, orientation, and offset transform for serailization
 func _get_grid_location_orientation_and_offset_from_node_transform(item_transform: Transform3D) -> Array:
 	var grid_location: Vector3i = local_to_map(item_transform.origin)
 	var grid_center_position: Vector3 = map_to_local(grid_location)
@@ -346,6 +352,8 @@ func _get_grid_location_orientation_and_offset_from_node_transform(item_transfor
 	
 	return [grid_location,grid_item_orientation,offset_transform]
 
+
+# Apply map configuration defined in [param config] with optional [param offset]
 func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector3i = Vector3i(0,0,0)) -> void:
 	for location: Vector3i in config:
 		var tile_type: int = config[location][0]
