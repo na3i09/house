@@ -278,9 +278,11 @@ func _instantiate_item_at_cell_position(item_name: String, location: Vector3i, o
 	var inst_scene := scene.instantiate() as Node3D
 	assert(inst_scene, "Scene to be instantiated was not derived from Node3D")
 	_place_item_on_map(inst_scene,location,orientation,offset_transform)
-	inst_scene.name = _name_item(item_name,location)
+	inst_scene.name = _name_item(item_name)
 	
 	inst_scene.add_to_group(name + "_items")
+	
+	inst_scene.set_meta("is_placer_item",true)
 	
 	return inst_scene
 
@@ -314,7 +316,7 @@ func _dev_clear_map() -> void:
 	clear()
 	var items: Array[Node] = get_tree().get_nodes_in_group(name + "_items")
 	for item: Node in items:
-		if item.name.begins_with("("):
+		if item.has_meta("is_placer_item"):
 			item.queue_free()
 
 
@@ -330,11 +332,12 @@ func _serialize_items() -> Dictionary[Vector3i,Array]:
 	var children: Array[Node] = get_children()
 	
 	for child: Node in children:
-		if child.name.begins_with("("):
+		if child.has_meta("is_placer_item"):
 			var info_array: Array = _get_grid_location_orientation_and_offset_from_node_transform(child.transform)
-			var name_split: PackedStringArray = child.name.get_slice("=",0).split("_")
 			
-			serialized_dict.get_or_add(info_array[0],[]).append("_".join(name_split.slice(1)))
+			var item_name: String = child.name.get_slice("=",0)
+			
+			serialized_dict.get_or_add(info_array[0],[]).append(item_name)
 			serialized_dict[info_array[0]].append(info_array[2])
 	return serialized_dict
 
@@ -375,8 +378,8 @@ func _spawn_item(args: Array) -> Node:
 	return _instantiate_item_at_cell_position.callv(args)
 
 
-func _name_item(item_name: String, location: Vector3i) -> String:
-	return str(location) + "_" + item_name + "=" + str(randi())
+func _name_item(item_name: String) -> String:
+	return item_name + "=" + str(randi())
 
 
 func _place_item_on_map(item: Node3D, location: Vector3i, orientation: int = 0, offset_transform: Transform3D = Transform3D.IDENTITY) -> void:
