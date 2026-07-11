@@ -11,8 +11,8 @@ const REVERSED_ORIENTATION: int = 10
 ## [Dictionary] for scenes to be places onto all cells with matching grid map items
 @export var place_dict: Dictionary[int,String]
 
-## [Dictionary] for scenes to be placed randomly with a percentage chance onto matching grid map items
-@export var random_place_dict: Dictionary[int,RandomItemSelection]
+## [Array] of randomly spawned item definitions
+@export var random_items: Array[RandomItemSelection]
 
 ## [Dictionary] for scenes to be placed only on specified grid cell locations
 @export var location_place_dict: Dictionary[Vector3i,String]
@@ -140,12 +140,12 @@ func generate_item_configuration_dictionary() -> Dictionary[Vector3i,Array]:
 func generate_random_item_configuration_dictionary() -> Dictionary[Vector3i,Array]:
 	var item_dict: Dictionary[Vector3i,Array] = {}
 	
-	for index: int in random_place_dict:
-			var instance_array: Array[Vector3i] = get_used_cells_by_item(index)
-			for inst: Vector3i in instance_array:
-				var random_scene: StringName = random_place_dict[index].pick_item()
-				if random_scene:
-					item_dict.get_or_add(inst,[]).append_array([random_scene,Transform3D.IDENTITY])
+	for random_item: RandomItemSelection in random_items:
+		var location_array: Array[Vector3i] = get_used_cells_by_item(mesh_library.find_item_by_name(random_item.spawned_tile))
+		for location: Vector3i in location_array:
+			var item: Array = random_item.instance_item()
+			if item:
+				item_dict.get_or_add(location,[]).append_array(item)
 	
 	return item_dict
 
