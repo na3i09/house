@@ -8,8 +8,8 @@ class_name RandomItemSelection
 @export var spawned_tile: StringName
 @export var spawn_chance: float = 0.2
 
-@export var min_rotation: float = deg_to_rad(0.0)
-@export var max_rotation: float = deg_to_rad(0.0)
+@export_range(-180,0,0.1,"radians_as_degrees") var min_rotation: float = deg_to_rad(0.0)
+@export_range(0,180,0.1,"radians_as_degrees") var max_rotation: float = deg_to_rad(0.0)
 @export var rotation_axis: Vector3 = Vector3.UP
 
 @export var min_location_offset: Vector3 = Vector3.ZERO
