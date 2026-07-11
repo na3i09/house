@@ -34,21 +34,7 @@ static func generate_configuration_resource(configuration: Dictionary[Vector3i,A
 	return config_resource
 
 static func _max_vector(accum: Vector3i, element: Vector3i) -> Vector3i:
-	if element.x > accum.x:
-		accum.x = element.x
-	if element.y > accum.y:
-		accum.y = element.y
-	if element.z > accum.z:
-		accum.z = element.z
-	
-	return accum
+	return accum.max(element)
 
 static func _min_vector(accum: Vector3i, element: Vector3i) -> Vector3i:
-	if element.x < accum.x:
-		accum.x = element.x
-	if element.y < accum.y:
-		accum.y = element.y
-	if element.z < accum.z:
-		accum.z = element.z
-	
-	return accum
+	return accum.min(element)
