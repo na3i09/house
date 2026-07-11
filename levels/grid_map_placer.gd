@@ -82,6 +82,7 @@ func _ready() -> void:
 	
 	if is_multiplayer_authority():
 		if possible_segments:
+			_dev_clear_map()
 			_generate()
 		
 		var item_dict := generate_item_configuration_dictionary()
