@@ -88,12 +88,12 @@ func _ready() -> void:
 		var item_dict := generate_item_configuration_dictionary()
 		
 		for location in item_dict:
-			_instance_item_on_cell(item_dict[location][0],location)
+			_instance_item_array(location,get_cell_item_orientation(location),item_dict[location])
 		
 		var random_item_dict := generate_random_item_configuration_dictionary()
 		
 		for location in random_item_dict:
-			_instance_item_on_cell(random_item_dict[location][0],location)
+			_instance_item_array(location,get_cell_item_orientation(location),random_item_dict[location])
 		
 		# ensure there is a spawn point on the map
 		if find_children("spawn_point*").is_empty():
@@ -262,6 +262,13 @@ func apply_map_configuration_resource(config: GridMapConfiguration, offset: Vect
 	_apply_map_configuration(config.configuration_dict,offset)
 
 
+# Creates and adds to tree all items in the [param items] array at thier specified offsets
+func _instance_item_array(location: Vector3i, orientation: int, items: Array) -> void:
+	assert(items.size() % 2 == 0, "Item array not made of item transform pairs")
+	for i in range(0,items.size(),2):
+		_instance_item_on_cell(items[i],location,orientation,items[i+1])
+
+
 # Creates and adds to the tree the item given by [param item_name]
 func _instance_item_on_cell(item_name: String, location: Vector3i, orientation: int = 0,offset_transform: Transform3D = Transform3D.IDENTITY) -> void:
 	var instance: Node = null
@@ -376,9 +383,7 @@ func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector
 		
 		set_cell_item(true_location,tile_type,tile_orientation)
 		
-		assert(items.size() % 2 == 0, "Item array not made of item transform pairs")
-		for i in range(0,items.size(),2):
-			_instance_item_on_cell(items[i],true_location,tile_orientation,items[i+1]) #TODO: ensure this will actually work from serializing key index position
+		_instance_item_array(true_location,tile_orientation,items)
 
 func _spawn_item(args: Array) -> Node:
 	assert(args is Array)
