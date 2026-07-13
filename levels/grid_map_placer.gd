@@ -269,8 +269,10 @@ func _instance_item_array(location: Vector3i, orientation: int, items: Array) ->
 		_instance_item_on_cell(items[i],location,orientation,items[i+1])
 
 
-# Creates and adds to the tree the item given by [param item_name]
-func _instance_item_on_cell(item_name: String, location: Vector3i, orientation: int = 0,offset_transform: Transform3D = Transform3D.IDENTITY) -> void:
+# Creates and adds to the tree the item given by [param item_name].
+# Returns the spawned item added to the tree and with owner set to match the owner of the [GridMapPlacer].
+# Called only on the authority of the [GridMapPlacer].
+func _instance_item_on_cell(item_name: String, location: Vector3i, orientation: int = 0,offset_transform: Transform3D = Transform3D.IDENTITY) -> Node:
 	var instance: Node = null
 	var random_id: int = randi() #TODO: add collision guards to random id creation
 	if _is_multiplayer:
@@ -280,6 +282,8 @@ func _instance_item_on_cell(item_name: String, location: Vector3i, orientation: 
 		add_child(instance)
 	
 	_post_spawn_item_processing(instance)
+	
+	return instance
 
 
 # Called on server and clients to perform any spawned item processing after the node is added to the tree
