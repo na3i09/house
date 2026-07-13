@@ -28,7 +28,7 @@ NetworkSimulator="*uid://1y2ey1e6qjwr"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/grid_map_extras/plugin.cfg", "res://addons/guide/plugin.cfg", "res://addons/netfox.extras/plugin.cfg", "res://addons/netfox.internals/plugin.cfg", "res://addons/netfox/plugin.cfg")
+enabled=PackedStringArray("res://addons/guide/plugin.cfg", "res://addons/minos_mapper/plugin.cfg", "res://addons/netfox.extras/plugin.cfg", "res://addons/netfox.internals/plugin.cfg", "res://addons/netfox/plugin.cfg")
 
 [file_customization]
 
