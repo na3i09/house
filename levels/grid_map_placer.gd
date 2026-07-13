@@ -8,6 +8,8 @@ class_name GridMapPlacer
 
 const REVERSED_ORIENTATION: int = 10
 
+const RETRY_LIMIT: int = 4
+
 ## [Dictionary] for scenes to be places onto all cells with matching grid map items
 @export var place_dict: Dictionary[int,String]
 
@@ -161,11 +163,22 @@ func generate_map(segments: Array[GridMapConfiguration], _max_instances: int, _o
 	
 	edge_pool = first_segment.edge_locations.duplicate()
 	
+	var retries: int = 0
+	
 	for i in range(_max_instances - 1):
 		var success: bool = _generate_segment(generated_map,edge_pool,segments)
 		
 		if not success:
-			break
+			while retries < RETRY_LIMIT:
+				retries += 1
+				success = _generate_segment(generated_map,edge_pool,segments)
+				if success:
+					retries = 0
+					break
+			
+			if retries >= RETRY_LIMIT:
+				push_warning("failed to retry on iteration: " + str(i))
+				break
 	
 	return generated_map
 
@@ -186,7 +199,7 @@ func _generate_segment(map: Dictionary[Vector3i,Array], edge_pool: Dictionary, s
 		Vector3i(total_transform * Vector3(new_segment.map_minimum)),
 		Vector3i(total_transform * Vector3(new_segment.map_maximum))
 		):
-		print("overlap")
+		push_warning("Overlap")
 		return false
 	
 	for loc in new_segment.configuration_dict:
