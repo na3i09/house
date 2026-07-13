@@ -272,10 +272,11 @@ func _instance_item_array(location: Vector3i, orientation: int, items: Array) ->
 # Creates and adds to the tree the item given by [param item_name]
 func _instance_item_on_cell(item_name: String, location: Vector3i, orientation: int = 0,offset_transform: Transform3D = Transform3D.IDENTITY) -> void:
 	var instance: Node = null
+	var random_id: int = randi() #TODO: add collision guards to random id creation
 	if _is_multiplayer:
-		instance = _spawner.spawn([item_name,location,orientation,offset_transform])
+		instance = _spawner.spawn([item_name,location,random_id,orientation,offset_transform])
 	else:
-		instance = _instantiate_item_at_cell_position(item_name,location,orientation,offset_transform)
+		instance = _instantiate_item_at_cell_position(item_name,location,random_id,orientation,offset_transform)
 		add_child(instance)
 	
 	_post_spawn_item_processing(instance)
@@ -288,13 +289,13 @@ func _post_spawn_item_processing(item: Node) -> void:
 
 
 # Creates and returns the node for the given item
-func _instantiate_item_at_cell_position(item_name: String, location: Vector3i, orientation: int = 0, offset_transform: Transform3D = Transform3D.IDENTITY) -> Node:
+func _instantiate_item_at_cell_position(item_name: String, location: Vector3i, random_id: int, orientation: int = 0, offset_transform: Transform3D = Transform3D.IDENTITY) -> Node:
 	var scene: PackedScene = _possible_items[item_name]
 	assert(scene.can_instantiate())
 	var inst_scene := scene.instantiate() as Node3D
 	assert(inst_scene, "Scene to be instantiated was not derived from Node3D")
 	_place_item_on_map(inst_scene,location,orientation,offset_transform)
-	inst_scene.name = _name_item(item_name)
+	inst_scene.name = _name_item(item_name,random_id)
 	
 	inst_scene.add_to_group(name + "_items")
 	
@@ -321,7 +322,8 @@ func _dev_load_config_resource() -> void:
 
 func _dev_place_item_into_scene() -> void:
 	if _possible_items.has(dev_item_name):
-		var instanced_item: Node3D = _instantiate_item_at_cell_position(dev_item_name,dev_item_location)
+		var random_id: int = randi()
+		var instanced_item: Node3D = _instantiate_item_at_cell_position(dev_item_name,dev_item_location,random_id)
 		add_child(instanced_item)
 		instanced_item.owner = owner
 	else:
@@ -387,13 +389,13 @@ func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector
 
 func _spawn_item(args: Array) -> Node:
 	assert(args is Array)
-	assert(args.size() == 4)
+	assert(args.size() == 5)
 	
 	return _instantiate_item_at_cell_position.callv(args)
 
 
-func _name_item(item_name: String) -> String:
-	return item_name + "=" + str(randi())
+func _name_item(item_name: String, random_id: int) -> String:
+	return item_name + "=" + str(random_id)
 
 
 func _place_item_on_map(item: Node3D, location: Vector3i, orientation: int = 0, offset_transform: Transform3D = Transform3D.IDENTITY) -> void:
