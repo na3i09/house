@@ -1,6 +1,8 @@
 extends Resource
 class_name GridMapConfiguration
 
+const EDGE_NAME: StringName = "Edge"
+
 @export_storage var configuration_dict: Dictionary[Vector3i,Array]
 
 @export_storage var edge_locations: Dictionary[Vector3i,int]
@@ -15,10 +17,11 @@ var map_size: Vector3i:
 	set(value):
 		return
 
-## Create a [GridMapConfiguration] based on the given [param configuration] with an optional [param edge_id]
-## defining edges of the map segment to be used in map generation
-static func generate_configuration_resource(configuration: Dictionary[Vector3i,Array], edge_id: int = -1) -> GridMapConfiguration:
+## Create a [GridMapConfiguration] based on the given [param configuration] with the [param mesh_library] argument
+## to infer the tile id of edges of the map segment to be used in map generation
+static func generate_configuration_resource(configuration: Dictionary[Vector3i,Array], mesh_library: MeshLibrary) -> GridMapConfiguration:
 	var config_resource: GridMapConfiguration = GridMapConfiguration.new()
+	var edge_id: int = mesh_library.find_item_by_name(EDGE_NAME)
 	
 	config_resource.configuration_dict = configuration.duplicate()
 	

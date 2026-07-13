@@ -253,7 +253,7 @@ func generate_configuration_resource() -> GridMapConfiguration:
 			dict[item_loc].append_array(item_dict[item_loc])
 	return GridMapConfiguration.generate_configuration_resource(
 		dict,
-		mesh_library.find_item_by_name("Edge")
+		mesh_library
 		)
 
 
