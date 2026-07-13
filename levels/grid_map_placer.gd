@@ -162,42 +162,50 @@ func generate_map(segments: Array[GridMapConfiguration], _max_instances: int, _o
 	edge_pool = first_segment.edge_locations.duplicate()
 	
 	for i in range(_max_instances - 1):
-		if edge_pool.is_empty():
+		var success: bool = _generate_segment(generated_map,edge_pool,segments)
+		
+		if not success:
 			break
-		var source_edge: Vector3i = edge_pool.keys().pick_random()
-		var source_edge_transform: Transform3D = _make_grid_transform(source_edge,edge_pool[source_edge])
-		var new_segment: GridMapConfiguration = segments.pick_random()
-		
-		var segment_edge: Vector3i = new_segment.edge_locations.keys().pick_random()
-		var segment_edge_transform: Transform3D = _make_grid_transform(segment_edge,new_segment.edge_locations[segment_edge])
-		
-		var total_transform: Transform3D = _get_true_grid_transform(Transform3D.IDENTITY,source_edge_transform,segment_edge_transform)
-		
-		if _find_overlap_in_range(
-			generated_map,
-			Vector3i(total_transform * Vector3(new_segment.map_minimum)),
-			Vector3i(total_transform * Vector3(new_segment.map_maximum))
-			):
-			print("overlap at " + str(i) + " iterations")
-			break
-		
-		for loc in new_segment.configuration_dict:
-			var true_tile_array: Array = _get_transformed_grid_loc_orient([loc,new_segment.configuration_dict[loc][1]],total_transform)
-			if not generated_map.has(true_tile_array[0]):
-				var new_array: Array = new_segment.configuration_dict[loc].duplicate()
-				new_array[1] = true_tile_array[1]
-				generated_map[true_tile_array[0]] = new_array
-		
-		for edge in new_segment.edge_locations:
-			if edge == segment_edge:
-				continue
-			var true_edge_array: Array = _get_transformed_grid_loc_orient([edge,new_segment.edge_locations[edge]],total_transform)
-			if not edge_pool.has(true_edge_array[0]):
-				edge_pool[true_edge_array[0]] = true_edge_array[1]
-		
-		edge_pool.erase(source_edge)
 	
 	return generated_map
+
+func _generate_segment(map: Dictionary[Vector3i,Array], edge_pool: Dictionary, segments: Array[GridMapConfiguration]) -> bool:
+	if edge_pool.is_empty():
+		return false
+	var source_edge: Vector3i = edge_pool.keys().pick_random()
+	var source_edge_transform: Transform3D = _make_grid_transform(source_edge,edge_pool[source_edge])
+	var new_segment: GridMapConfiguration = segments.pick_random()
+	
+	var segment_edge: Vector3i = new_segment.edge_locations.keys().pick_random()
+	var segment_edge_transform: Transform3D = _make_grid_transform(segment_edge,new_segment.edge_locations[segment_edge])
+	
+	var total_transform: Transform3D = _get_true_grid_transform(Transform3D.IDENTITY,source_edge_transform,segment_edge_transform)
+	
+	if _find_overlap_in_range(
+		map,
+		Vector3i(total_transform * Vector3(new_segment.map_minimum)),
+		Vector3i(total_transform * Vector3(new_segment.map_maximum))
+		):
+		print("overlap")
+		return false
+	
+	for loc in new_segment.configuration_dict:
+		var true_tile_array: Array = _get_transformed_grid_loc_orient([loc,new_segment.configuration_dict[loc][1]],total_transform)
+		if not map.has(true_tile_array[0]):
+			var new_array: Array = new_segment.configuration_dict[loc].duplicate()
+			new_array[1] = true_tile_array[1]
+			map[true_tile_array[0]] = new_array
+	
+	for edge in new_segment.edge_locations:
+		if edge == segment_edge:
+			continue
+		var true_edge_array: Array = _get_transformed_grid_loc_orient([edge,new_segment.edge_locations[edge]],total_transform)
+		if not edge_pool.has(true_edge_array[0]):
+			edge_pool[true_edge_array[0]] = true_edge_array[1]
+	
+	edge_pool.erase(source_edge)
+	
+	return true
 
 
 func _get_transformed_grid_loc_orient(loc_and_orient: Array, _transform: Transform3D) -> Array:
