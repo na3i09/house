@@ -326,10 +326,7 @@ func _dev_load_config_resource() -> void:
 
 func _dev_place_item_into_scene() -> void:
 	if _possible_items.has(dev_item_name):
-		var random_id: int = randi()
-		var instanced_item: Node3D = _instantiate_item_at_cell_position(dev_item_name,dev_item_location,random_id)
-		add_child(instanced_item)
-		instanced_item.owner = owner
+		_instance_item_on_cell(dev_item_name,dev_item_location)
 	else:
 		print("invalid item name:" + dev_item_name)
 
