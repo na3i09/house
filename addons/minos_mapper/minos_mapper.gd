@@ -11,6 +11,8 @@ var menu_item_id: int = -1
 
 var save_dialog: EditorFileDialog = null
 
+var save_callable: Callable
+
 var bottom_panel: EditorDock = null
 
 
@@ -60,6 +62,10 @@ func _make_visible(visible: bool) -> void:
 func _create_placer_bottom_panel() -> void:
 	bottom_panel = MINOS_BOTTOM_PANEL.instantiate()
 	
+	if save_dialog:
+		bottom_panel.save_dialog = save_dialog
+		save_callable = bottom_panel.save_configuration
+	
 	add_dock(bottom_panel)
 	bottom_panel.close()
 
@@ -92,7 +98,8 @@ func show_save_dialog() -> void:
 
 
 func _save_file(path: String) -> void:
-	print("Dummy Save: " + path)
+	if save_callable.is_valid():
+		save_callable.call(path)
 
 
 func _add_export_as_entry(menu: PopupMenu) -> void:

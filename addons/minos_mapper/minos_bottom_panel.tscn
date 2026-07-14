@@ -13,24 +13,41 @@ transient = true
 default_slot = 8
 available_layouts = 2
 script = ExtResource("1_xcl38")
-generation_segments = NodePath("MapGeneration/GenerationSegments")
+generation_segments = NodePath("HBoxContainer/MapGeneration/GenerationSegments")
 
-[node name="MapGeneration" type="HBoxContainer" parent="." unique_id=461503527]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1154355250]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="GenerateButton" type="Button" parent="MapGeneration" unique_id=1289700406]
+[node name="MapGeneration" type="HBoxContainer" parent="HBoxContainer" unique_id=461503527]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="GenerateButton" type="Button" parent="HBoxContainer/MapGeneration" unique_id=1289700406]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "Generate"
 
-[node name="GenerationSegments" type="SpinBox" parent="MapGeneration" unique_id=1939332395]
+[node name="GenerationSegments" type="SpinBox" parent="HBoxContainer/MapGeneration" unique_id=1939332395]
 layout_mode = 2
 min_value = 1.0
 value = 1.0
 allow_greater = true
 alignment = 1
 
-[connection signal="pressed" from="MapGeneration/GenerateButton" to="." method="_on_generate_button_pressed"]
+[node name="SaveAndLoad" type="VBoxContainer" parent="HBoxContainer" unique_id=1911019459]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="SaveButton" type="Button" parent="HBoxContainer/SaveAndLoad" unique_id=1749576030]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Save Configuration"
+
+[connection signal="pressed" from="HBoxContainer/MapGeneration/GenerateButton" to="." method="_on_generate_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/SaveAndLoad/SaveButton" to="." method="_on_save_button_pressed"]
