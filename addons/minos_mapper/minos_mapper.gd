@@ -35,18 +35,17 @@ func _add_export_as_entry(menu: PopupMenu) -> void:
 		menu_item_id = randi() % 10000
 		safety += 1
 	menu.add_item("Bake Csg Meshes",menu_item_id)
-	menu.id_pressed.connect(_run_bake_meshes)
+	# callable set here will be called when menu item is pressed, totally undocumented functionality
+	menu.set_item_metadata(menu.get_item_index(menu_item_id),_run_bake_meshes)
 
 
 func _remove_export_as_entry(menu: PopupMenu) -> void:
 	var menu_item_index: int = menu.get_item_index(menu_item_id)
 	menu.remove_item(menu_item_index)
-	menu.id_pressed.disconnect(_run_bake_meshes)
 
 
-func _run_bake_meshes(id: int) -> void:
-	if id == menu_item_id:
-		_bake_meshes()
+func _run_bake_meshes(...args) -> void:
+	_bake_meshes()
 
 
 func _bake_meshes() -> void:
