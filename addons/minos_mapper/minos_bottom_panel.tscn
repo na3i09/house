@@ -14,8 +14,10 @@ default_slot = 8
 available_layouts = 2
 script = ExtResource("1_xcl38")
 
-[node name="Button" type="Button" parent="." unique_id=1289700406]
+[node name="GenerateButton" type="Button" parent="." unique_id=1289700406]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "Generate"
+
+[connection signal="pressed" from="GenerateButton" to="." method="_on_generate_button_pressed"]
