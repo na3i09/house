@@ -5,6 +5,8 @@ var export_as_menu: PopupMenu = null
 
 var menu_item_id: int = -1
 
+var save_dialog: EditorFileDialog = null
+
 func _enable_plugin() -> void:
 	# Add autoloads here.
 	pass
@@ -19,13 +21,40 @@ func _enter_tree() -> void:
 	# Initialization of the plugin goes here.
 	export_as_menu = get_export_as_menu()
 	_add_export_as_entry(export_as_menu)
+	_create_save_dialog()
 	pass
 
 
 func _exit_tree() -> void:
 	# Clean-up of the plugin goes here.
 	_remove_export_as_entry(export_as_menu)
+	_destory_save_dialog()
 	pass
+
+
+func _create_save_dialog() -> void:
+	save_dialog = EditorFileDialog.new()
+	
+	save_dialog.file_mode = EditorFileDialog.FILE_MODE_SAVE_FILE
+	save_dialog.access = EditorFileDialog.ACCESS_RESOURCES
+	
+	save_dialog.add_filter("*.tres", "Godot Resourses")
+	
+	save_dialog.file_selected.connect(_save_file)
+	EditorInterface.get_base_control().add_child(save_dialog)
+
+
+func _destory_save_dialog() -> void:
+	if save_dialog:
+		save_dialog.queue_free()
+
+
+func show_save_dialog() -> void:
+	save_dialog.popup_centered_clamped(Vector2i(700,500))	
+
+
+func _save_file(path: String) -> void:
+	print("Dummy Save: " + path)
 
 
 func _add_export_as_entry(menu: PopupMenu) -> void:
