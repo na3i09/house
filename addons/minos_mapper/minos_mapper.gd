@@ -29,7 +29,11 @@ func _exit_tree() -> void:
 
 
 func _add_export_as_entry(menu: PopupMenu) -> void:
-	menu_item_id = randi()
+	menu_item_id = randi() % 10000
+	var safety: int = 0
+	while menu.get_item_index(menu_item_id) != -1 and safety < 30:
+		menu_item_id = randi() % 10000
+		safety += 1
 	menu.add_item("Bake Csg Meshes",menu_item_id)
 	menu.id_pressed.connect(_run_bake_meshes)
 
