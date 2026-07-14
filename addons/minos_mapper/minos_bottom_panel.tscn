@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://nkjob6chn5sj" path="res://addons/minos_mapper/minos_bottom_panel.gd" id="1_xcl38"]
 
-[node name="MinosBottomPanel" type="EditorDock" unique_id=981067581]
+[node name="MinosBottomPanel" type="EditorDock" unique_id=981067581 node_paths=PackedStringArray("generation_segments")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -13,11 +13,24 @@ transient = true
 default_slot = 8
 available_layouts = 2
 script = ExtResource("1_xcl38")
+generation_segments = NodePath("MapGeneration/GenerationSegments")
 
-[node name="GenerateButton" type="Button" parent="." unique_id=1289700406]
+[node name="MapGeneration" type="HBoxContainer" parent="." unique_id=461503527]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="GenerateButton" type="Button" parent="MapGeneration" unique_id=1289700406]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "Generate"
 
-[connection signal="pressed" from="GenerateButton" to="." method="_on_generate_button_pressed"]
+[node name="GenerationSegments" type="SpinBox" parent="MapGeneration" unique_id=1939332395]
+layout_mode = 2
+min_value = 1.0
+value = 1.0
+allow_greater = true
+alignment = 1
+
+[connection signal="pressed" from="MapGeneration/GenerateButton" to="." method="_on_generate_button_pressed"]
