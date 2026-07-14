@@ -1,11 +1,18 @@
 @tool
 extends EditorPlugin
 
+
+const MINOS_BOTTOM_PANEL = preload("res://addons/minos_mapper/minos_bottom_panel.tscn")
+
+
 var export_as_menu: PopupMenu = null
 
 var menu_item_id: int = -1
 
 var save_dialog: EditorFileDialog = null
+
+var bottom_panel: EditorDock = null
+
 
 func _enable_plugin() -> void:
 	# Add autoloads here.
@@ -22,6 +29,7 @@ func _enter_tree() -> void:
 	export_as_menu = get_export_as_menu()
 	_add_export_as_entry(export_as_menu)
 	_create_save_dialog()
+	_create_placer_bottom_panel()
 	pass
 
 
@@ -29,7 +37,37 @@ func _exit_tree() -> void:
 	# Clean-up of the plugin goes here.
 	_remove_export_as_entry(export_as_menu)
 	_destory_save_dialog()
+	_destory_placer_bottom_panel()
 	pass
+
+
+func _handles(object: Object) -> bool:
+	if object is GridMapPlacer:
+		return true
+	else:
+		return false
+
+
+func _make_visible(visible: bool) -> void:
+	if visible:
+		if bottom_panel:
+			bottom_panel.make_visible()
+	else:
+		if bottom_panel:
+			bottom_panel.close()
+
+
+func _create_placer_bottom_panel() -> void:
+	bottom_panel = MINOS_BOTTOM_PANEL.instantiate()
+	
+	add_dock(bottom_panel)
+	bottom_panel.close()
+
+
+func _destory_placer_bottom_panel() -> void:
+	if bottom_panel:
+		remove_dock(bottom_panel)
+		bottom_panel.queue_free()
 
 
 func _create_save_dialog() -> void:

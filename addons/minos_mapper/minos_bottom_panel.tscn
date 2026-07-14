@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://dy5nhhk47q6v2"]
+
+[ext_resource type="Script" uid="uid://nkjob6chn5sj" path="res://addons/minos_mapper/minos_bottom_panel.gd" id="1_xcl38"]
+
+[node name="MinosBottomPanel" type="EditorDock" unique_id=981067581]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+title = "MinosMap"
+transient = true
+default_slot = 8
+available_layouts = 2
+script = ExtResource("1_xcl38")
+
+[node name="Button" type="Button" parent="." unique_id=1289700406]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Generate"
