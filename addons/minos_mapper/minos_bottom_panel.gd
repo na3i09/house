@@ -3,7 +3,8 @@ extends EditorDock
 
 @export var generation_segments: SpinBox
 
-var save_dialog: EditorFileDialog = null
+var show_save_dialog: Callable
+var show_load_dialog: Callable
 
 
 func _on_generate_button_pressed() -> void:
@@ -13,8 +14,8 @@ func _on_generate_button_pressed() -> void:
 
 
 func _on_save_button_pressed() -> void:
-	save_dialog.popup_centered_clamped(Vector2i(700,500))
-	pass
+	if show_save_dialog.is_valid():
+		show_save_dialog.call()
 
 
 func save_configuration(save_name: String) -> void:
@@ -22,3 +23,15 @@ func save_configuration(save_name: String) -> void:
 	if map_placer:
 		var map_config: GridMapConfiguration = map_placer.generate_configuration_resource()
 		ResourceSaver.save(map_config,save_name)
+
+
+func _on_load_button_pressed() -> void:
+	if show_load_dialog.is_valid():
+		show_load_dialog.call()
+
+
+func load_configuration(load_path: String) -> void:
+	var config_resource: GridMapConfiguration = load(load_path)
+	var map_placer: GridMapPlacer = EditorInterface.get_inspector().get_edited_object() as GridMapPlacer
+	if config_resource:
+		map_placer.apply_map_configuration_resource(config_resource)

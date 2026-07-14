@@ -11,7 +11,11 @@ var menu_item_id: int = -1
 
 var save_dialog: EditorFileDialog = null
 
+var load_dialog: EditorFileDialog = null
+
 var save_callable: Callable
+
+var load_callable: Callable
 
 var bottom_panel: EditorDock = null
 
@@ -31,6 +35,7 @@ func _enter_tree() -> void:
 	export_as_menu = get_export_as_menu()
 	_add_export_as_entry(export_as_menu)
 	_create_save_dialog()
+	_create_load_dialog()
 	_create_placer_bottom_panel()
 	pass
 
@@ -39,6 +44,7 @@ func _exit_tree() -> void:
 	# Clean-up of the plugin goes here.
 	_remove_export_as_entry(export_as_menu)
 	_destory_save_dialog()
+	_destory_load_dialog()
 	_destory_placer_bottom_panel()
 	pass
 
@@ -63,8 +69,10 @@ func _create_placer_bottom_panel() -> void:
 	bottom_panel = MINOS_BOTTOM_PANEL.instantiate()
 	
 	if save_dialog:
-		bottom_panel.save_dialog = save_dialog
+		bottom_panel.show_save_dialog = show_save_dialog
 		save_callable = bottom_panel.save_configuration
+		bottom_panel.show_load_dialog = show_load_dialog
+		load_callable = bottom_panel.load_configuration
 	
 	add_dock(bottom_panel)
 	bottom_panel.close()
@@ -100,6 +108,32 @@ func show_save_dialog() -> void:
 func _save_file(path: String) -> void:
 	if save_callable.is_valid():
 		save_callable.call(path)
+
+
+func _create_load_dialog() -> void:
+	load_dialog = EditorFileDialog.new()
+	
+	load_dialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE
+	load_dialog.access = EditorFileDialog.ACCESS_RESOURCES
+	
+	load_dialog.add_filter("*.tres", "Godot Resourses")
+	
+	load_dialog.file_selected.connect(_load_file)
+	EditorInterface.get_base_control().add_child(load_dialog)
+
+
+func _destory_load_dialog() -> void:
+	if load_dialog:
+		load_dialog.queue_free()
+
+
+func show_load_dialog() -> void:
+	load_dialog.popup_centered_clamped(Vector2i(700,500))	
+
+
+func _load_file(path: String) -> void:
+	if load_callable.is_valid():
+		load_callable.call(path)
 
 
 func _add_export_as_entry(menu: PopupMenu) -> void:
