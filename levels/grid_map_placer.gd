@@ -339,9 +339,9 @@ func _dev_clear_map() -> void:
 			item.queue_free()
 
 
-func _generate() -> void:
+func _generate(generation_segments: int = -1) -> void:
 	_dev_clear_map()
-	_apply_map_configuration(generate_map(possible_segments,dev_segments))
+	_apply_map_configuration(generate_map(possible_segments,generation_segments if generation_segments > 0 else dev_segments))
 
 
 # Serailize item children into a configuration dictionary
