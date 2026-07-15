@@ -1,9 +1,9 @@
-[gd_resource type="Resource" script_class="GridMapConfiguration" format=3 uid="uid://bcysraa5w8qi5"]
+[gd_resource type="Resource" script_class="MinosMapConfiguration" format=3 uid="uid://d25jrhgpcwisu"]
 
-[ext_resource type="Script" uid="uid://dclwcyoux36im" path="res://components/grid_map_configuration.gd" id="1_jp5yw"]
+[ext_resource type="Script" uid="uid://bu486f0sfj83e" path="res://addons/minos_mapper/minos_map_configuration.gd" id="1_vitsb"]
 
 [resource]
-script = ExtResource("1_jp5yw")
+script = ExtResource("1_vitsb")
 configuration_dict = Dictionary[Vector3i, Array]({
 Vector3i(-3, 0, -1): [4, 10],
 Vector3i(-2, 0, -1): [4, 10],
