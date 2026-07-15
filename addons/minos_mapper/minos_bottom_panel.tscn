@@ -13,6 +13,20 @@ func generate_options(option_list: Array[StringName]) -> void:
 		add_item(option)
 "
 
+[sub_resource type="GDScript" id="GDScript_7tkr0"]
+script/source = "@tool
+extends HBoxContainer
+
+
+@export var x_spin_box: SpinBox
+@export var y_spin_box: SpinBox
+@export var z_spin_box: SpinBox
+
+
+func get_location() -> Vector3i:
+	return Vector3i(int(x_spin_box.value),int(y_spin_box.value),int(z_spin_box.value))
+"
+
 [node name="MinosBottomPanel" type="EditorDock" unique_id=981067581 node_paths=PackedStringArray("generation_segments", "item_type_dropdown")]
 anchors_preset = 15
 anchor_right = 1.0
@@ -71,6 +85,31 @@ layout_mode = 2
 [node name="ItemTypeDropdown" type="OptionButton" parent="HBoxContainer/PlaceItem" unique_id=1897540837]
 layout_mode = 2
 script = SubResource("GDScript_4dhkl")
+
+[node name="LocationSelection" type="HBoxContainer" parent="HBoxContainer/PlaceItem" unique_id=597633066 node_paths=PackedStringArray("x_spin_box", "y_spin_box", "z_spin_box")]
+layout_mode = 2
+script = SubResource("GDScript_7tkr0")
+x_spin_box = NodePath("XSpinBox")
+y_spin_box = NodePath("YSpinBox")
+z_spin_box = NodePath("ZSpinBox")
+
+[node name="XSpinBox" type="SpinBox" parent="HBoxContainer/PlaceItem/LocationSelection" unique_id=300121641]
+layout_mode = 2
+allow_greater = true
+allow_lesser = true
+alignment = 2
+
+[node name="YSpinBox" type="SpinBox" parent="HBoxContainer/PlaceItem/LocationSelection" unique_id=996595443]
+layout_mode = 2
+allow_greater = true
+allow_lesser = true
+alignment = 2
+
+[node name="ZSpinBox" type="SpinBox" parent="HBoxContainer/PlaceItem/LocationSelection" unique_id=1876891985]
+layout_mode = 2
+allow_greater = true
+allow_lesser = true
+alignment = 2
 
 [connection signal="pressed" from="HBoxContainer/MapGeneration/GenerateButton" to="." method="_on_generate_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/SaveAndLoad/SaveButton" to="." method="_on_save_button_pressed"]
