@@ -65,3 +65,8 @@ func _on_place_item_button_pressed() -> void:
 	if map_placer:
 		if item_type_dropdown.text:
 			map_placer._instance_item_on_cell(item_type_dropdown.text,location_selection.get_location())
+
+
+func _on_clear_button_pressed() -> void:
+	if map_placer:
+		map_placer._dev_clear_map()

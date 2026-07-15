@@ -80,6 +80,10 @@ text = "Save Configuration"
 layout_mode = 2
 text = "Load Configuration"
 
+[node name="ClearButton" type="Button" parent="HBoxContainer/SaveAndLoad" unique_id=1265273247]
+layout_mode = 2
+text = "Clear Configuration"
+
 [node name="PlaceItem" type="VBoxContainer" parent="HBoxContainer" unique_id=1509154041]
 layout_mode = 2
 
@@ -119,4 +123,5 @@ text = "Place Item"
 [connection signal="pressed" from="HBoxContainer/MapGeneration/GenerateButton" to="." method="_on_generate_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/SaveAndLoad/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/SaveAndLoad/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/SaveAndLoad/ClearButton" to="." method="_on_clear_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/PlaceItem/PlaceItemButton" to="." method="_on_place_item_button_pressed"]
