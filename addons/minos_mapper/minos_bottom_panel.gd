@@ -27,7 +27,7 @@ var map_placer: MinosMap = null:
 
 func _on_generate_button_pressed() -> void:
 	if map_placer:
-		map_placer._generate(int(generation_segments.value))
+		map_placer.generate(int(generation_segments.value))
 
 
 func _on_save_button_pressed() -> void:

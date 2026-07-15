@@ -38,20 +38,8 @@ var _possible_items: Dictionary[StringName,PackedScene]:
 
 @export var possible_segments: Array[MinosMapConfiguration]
 
-#region dev_exports
-@export_group("Developement Functions","dev")
-@export_tool_button("Generate Map") var dev_map_gen: Callable = _generate
-@export_range(1,20,1,"or_greater") var dev_segments: int = 4
-@export_tool_button("Save Configuration") var dev_config_save: Callable = _dev_save_config_resource
-@export_placeholder("Scene Name") var dev_config_save_name: String
-@export_tool_button("Load Configuration") var dev_config_load: Callable = _dev_load_config_resource
-@export_file("*.tres") var dev_loadable_config: String
-@export_tool_button("Clear Current Configuration") var dev_clear_config: Callable = _dev_clear_map
-@export_tool_button("Place Item") var dev_place_item: Callable = _dev_place_item_into_scene
-#WARNING: dropdown list of item names does not update unless the possible_items_resource is unset and reset
-@export var dev_item_name: String
-@export var dev_item_location: Vector3i = Vector3i.ZERO
-#endregion
+@export_group("Settings")
+@export_range(1,20,1,"or_greater") var auto_generation_segments: int = 1
 
 # hard grab reversed basis for mirroring the connecting edge
 var _reversed_transform := Transform3D(get_basis_with_orthogonal_index(REVERSED_ORIENTATION))
@@ -85,7 +73,7 @@ func _ready() -> void:
 	if is_multiplayer_authority():
 		if possible_segments:
 			_dev_clear_map()
-			_generate()
+			generate(auto_generation_segments)
 		
 		var item_dict := generate_item_configuration_dictionary()
 		
@@ -328,29 +316,6 @@ func _instantiate_item_at_cell_position(item_name: String, location: Vector3i, r
 	
 	return inst_scene
 
-func _dev_save_config_resource() -> void:
-	var save_name: String
-	if dev_config_save_name:
-		save_name = owner.scene_file_path.get_base_dir().path_join(dev_config_save_name + ".tres")
-	else:
-		save_name = owner.scene_file_path.replace(".tscn",".tres")
-	
-	var map_config: MinosMapConfiguration = generate_configuration_resource()
-	ResourceSaver.save(map_config,save_name)
-
-
-func _dev_load_config_resource() -> void:
-	var config_resource: MinosMapConfiguration = load(dev_loadable_config)
-	if config_resource:
-		apply_map_configuration_resource(config_resource)
-
-
-func _dev_place_item_into_scene() -> void:
-	if _possible_items.has(dev_item_name):
-		_instance_item_on_cell(dev_item_name,dev_item_location)
-	else:
-		print("invalid item name:" + dev_item_name)
-
 
 func _dev_clear_map() -> void:
 	clear()
@@ -360,9 +325,9 @@ func _dev_clear_map() -> void:
 			item.queue_free()
 
 
-func _generate(generation_segments: int = -1) -> void:
+func generate(generation_segments: int = -1) -> void:
 	_dev_clear_map()
-	_apply_map_configuration(generate_map(possible_segments,generation_segments if generation_segments > 0 else dev_segments))
+	_apply_map_configuration(generate_map(possible_segments,generation_segments))
 
 
 # Serailize item children into a configuration dictionary
