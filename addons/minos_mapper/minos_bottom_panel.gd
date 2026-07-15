@@ -17,7 +17,7 @@ var editor_selection: EditorSelection = null:
 		
 		editor_selection = value
 
-var map_placer: GridMapPlacer = null:
+var map_placer: MinosMap = null:
 	set(value):
 		item_type_dropdown.clear()
 		if value:
@@ -37,7 +37,7 @@ func _on_save_button_pressed() -> void:
 
 func save_configuration(save_name: String) -> void:
 	if map_placer:
-		var map_config: GridMapConfiguration = map_placer.generate_configuration_resource()
+		var map_config: MinosMapConfiguration = map_placer.generate_configuration_resource()
 		ResourceSaver.save(map_config,save_name)
 
 
@@ -47,7 +47,7 @@ func _on_load_button_pressed() -> void:
 
 
 func load_configuration(load_path: String) -> void:
-	var config_resource: GridMapConfiguration = load(load_path)
+	var config_resource: MinosMapConfiguration = load(load_path)
 	if config_resource:
 		map_placer.apply_map_configuration_resource(config_resource)
 
@@ -56,7 +56,7 @@ func _on_selection_changed() -> void:
 	var selected_nodes: Array[Node] = editor_selection.get_top_selected_nodes()
 	
 	if selected_nodes:
-		map_placer = selected_nodes[0] as GridMapPlacer
+		map_placer = selected_nodes[0] as MinosMap
 	else:
 		map_placer = null
 

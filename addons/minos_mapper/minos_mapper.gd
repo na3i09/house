@@ -53,7 +53,7 @@ func _exit_tree() -> void:
 
 
 func _handles(object: Object) -> bool:
-	if object is GridMapPlacer:
+	if object is MinosMap:
 		return true
 	else:
 		return false
