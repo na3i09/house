@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ItemTable" format=3 uid="uid://42qdh1d2rddq"]
 
-[ext_resource type="Script" uid="uid://jow5wk8ic3u7" path="res://components/item_table.gd" id="1_puuhx"]
+[ext_resource type="Script" uid="uid://jow5wk8ic3u7" path="res://addons/minos_mapper/item_table.gd" id="1_puuhx"]
 [ext_resource type="PackedScene" uid="uid://b3jsniupbiutk" path="res://lantern.tscn" id="2_dxbwk"]
 [ext_resource type="PackedScene" uid="uid://tqs8ytugpcni" path="res://ammo_pickup.tscn" id="3_i2eki"]
 [ext_resource type="PackedScene" uid="uid://dqvarinahvjmf" path="res://assets/spawnpoint_offset.tscn" id="4_dvbpi"]

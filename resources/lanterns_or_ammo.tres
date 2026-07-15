@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="RandomItemSelection" format=3 uid="uid://c7koavrvrx7vl"]
 
-[ext_resource type="Script" uid="uid://wgn56dovjkpr" path="res://components/random_item_selection.gd" id="1_jgmpm"]
+[ext_resource type="Script" uid="uid://wgn56dovjkpr" path="res://addons/minos_mapper/random_item_selection.gd" id="1_jgmpm"]
 
 [resource]
 script = ExtResource("1_jgmpm")
