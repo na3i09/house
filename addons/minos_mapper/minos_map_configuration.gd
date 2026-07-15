@@ -3,6 +3,10 @@ class_name MinosMapConfiguration
 
 const EDGE_NAME: StringName = "Edge"
 
+const COLLISION_MARGIN: float = 0.001
+
+const COLLISION_MARGIN_VECTOR := Vector3(COLLISION_MARGIN,COLLISION_MARGIN,COLLISION_MARGIN)
+
 @export_storage var configuration_dict: Dictionary[Vector3i,Array]
 
 @export_storage var edge_locations: Dictionary[Vector3i,int]
@@ -35,6 +39,13 @@ static func generate_configuration_resource(configuration: Dictionary[Vector3i,A
 	config_resource.map_minimum = config_resource.configuration_dict.keys().reduce(_min_vector)
 	
 	return config_resource
+
+## Return [AABB] for configuration expanded by [member COLLISION_MARGIN] to detect overlaps
+func get_collision_aabb() -> AABB:
+	var col_map_min: Vector3 = Vector3(map_minimum) - COLLISION_MARGIN_VECTOR
+	var col_map_max: Vector3 = Vector3(map_maximum) + COLLISION_MARGIN_VECTOR
+	
+	return AABB(col_map_min,(col_map_max - col_map_min))
 
 static func _max_vector(accum: Vector3i, element: Vector3i) -> Vector3i:
 	return accum.max(element)
