@@ -7,7 +7,7 @@ script/source = "@tool
 extends OptionButton
 
 
-func generate_options(option_list: Array[String]) -> void:
+func generate_options(option_list: Array[StringName]) -> void:
 	clear()
 	for option: String in option_list:
 		add_item(option)
