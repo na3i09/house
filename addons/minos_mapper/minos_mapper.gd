@@ -59,7 +59,7 @@ func _handles(object: Object) -> bool:
 func _make_visible(visible: bool) -> void:
 	if visible:
 		if bottom_panel:
-			bottom_panel.make_visible()
+			bottom_panel.open()
 	else:
 		if bottom_panel:
 			bottom_panel.close()
