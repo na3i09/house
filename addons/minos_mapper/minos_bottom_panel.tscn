@@ -2,6 +2,17 @@
 
 [ext_resource type="Script" uid="uid://nkjob6chn5sj" path="res://addons/minos_mapper/minos_bottom_panel.gd" id="1_xcl38"]
 
+[sub_resource type="GDScript" id="GDScript_4dhkl"]
+script/source = "@tool
+extends OptionButton
+
+
+func generate_options(option_list: Array[String]) -> void:
+	clear()
+	for option: String in option_list:
+		add_item(option)
+"
+
 [node name="MinosBottomPanel" type="EditorDock" unique_id=981067581 node_paths=PackedStringArray("generation_segments")]
 anchors_preset = 15
 anchor_right = 1.0
@@ -52,6 +63,13 @@ text = "Save Configuration"
 [node name="LoadButton" type="Button" parent="HBoxContainer/SaveAndLoad" unique_id=477801742]
 layout_mode = 2
 text = "Load Configuration"
+
+[node name="PlaceItem" type="VBoxContainer" parent="HBoxContainer" unique_id=1509154041]
+layout_mode = 2
+
+[node name="ItemTypeDropdown" type="OptionButton" parent="HBoxContainer/PlaceItem" unique_id=1897540837]
+layout_mode = 2
+script = SubResource("GDScript_4dhkl")
 
 [connection signal="pressed" from="HBoxContainer/MapGeneration/GenerateButton" to="." method="_on_generate_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/SaveAndLoad/SaveButton" to="." method="_on_save_button_pressed"]
