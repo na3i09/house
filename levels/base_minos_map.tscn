@@ -6,6 +6,7 @@
 
 [node name="MinosMap" type="GridMap" unique_id=785683228]
 mesh_library = ExtResource("1_lywbl")
+cell_size = Vector3(10, 10, 10)
 script = ExtResource("2_xirj5")
 vertical_offset = -4.5
 possible_item_resource = ExtResource("3_xirj5")
