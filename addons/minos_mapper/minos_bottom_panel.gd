@@ -62,9 +62,15 @@ func _on_selection_changed() -> void:
 
 
 func _on_place_item_button_pressed() -> void:
+	var editor_root: Node = EditorInterface.get_resource_filesystem().get_node("/root")
+	var grid_map_plugin: GridMapEditorPlugin = editor_root.find_children("*","GridMapEditorPlugin",true,false).get(0)
+	var selection_location: Vector3i = location_selection.get_location()
+	if grid_map_plugin:
+		if grid_map_plugin.has_selection():
+			selection_location = grid_map_plugin.get_selected_cells().get(0)
 	if map_placer:
 		if item_type_dropdown.text:
-			map_placer._instance_item_on_cell(item_type_dropdown.text,location_selection.get_location())
+			map_placer._instance_item_on_cell(item_type_dropdown.text,selection_location)
 
 
 func _on_clear_button_pressed() -> void:

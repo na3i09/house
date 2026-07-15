@@ -92,6 +92,7 @@ layout_mode = 2
 script = SubResource("GDScript_4dhkl")
 
 [node name="LocationSelection" type="HBoxContainer" parent="HBoxContainer/PlaceItem" unique_id=597633066 node_paths=PackedStringArray("x_spin_box", "y_spin_box", "z_spin_box")]
+visible = false
 layout_mode = 2
 script = SubResource("GDScript_7tkr0")
 x_spin_box = NodePath("XSpinBox")
