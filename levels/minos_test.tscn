@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://ckys8lfbd7c4k"]
+
+[ext_resource type="PackedScene" uid="uid://daxhahnr5yvjr" path="res://levels/base_minos_map.tscn" id="1_p8mep"]
+[ext_resource type="Script" uid="uid://bu486f0sfj83e" path="res://addons/minos_mapper/minos_map_configuration.gd" id="2_34lcs"]
+[ext_resource type="Environment" uid="uid://bwy5o65wfm2bp" path="res://resources/test_environment.tres" id="2_rojct"]
+[ext_resource type="Resource" uid="uid://bft8r42bt7mg8" path="res://levels/level_elements/4_door_room.tres" id="3_4ltkn"]
+[ext_resource type="Resource" uid="uid://dg8ukthhvh1se" path="res://levels/level_elements/large_room.tres" id="4_4xafv"]
+[ext_resource type="Resource" uid="uid://d25jrhgpcwisu" path="res://levels/level_elements/large_tunnel_intersection.tres" id="5_2ptc1"]
+[ext_resource type="Resource" uid="uid://cfw3f5x8xdpsr" path="res://levels/level_elements/large_tunnel_straight.tres" id="6_q0a5b"]
+
+[node name="MinosTestMap" type="Node3D" unique_id=1475111929]
+
+[node name="MinosMap" parent="." unique_id=785683228 instance=ExtResource("1_p8mep")]
+possible_segments = Array[ExtResource("2_34lcs")]([ExtResource("3_4ltkn"), ExtResource("4_4xafv"), ExtResource("5_2ptc1"), ExtResource("6_q0a5b")])
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1243861345]
+environment = ExtResource("2_rojct")
