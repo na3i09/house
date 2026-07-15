@@ -19,6 +19,8 @@ var load_callable: Callable
 
 var bottom_panel: EditorDock = null
 
+var editor_selection: EditorSelection = null
+
 
 func _enable_plugin() -> void:
 	# Add autoloads here.
@@ -34,6 +36,7 @@ func _enter_tree() -> void:
 	# Initialization of the plugin goes here.
 	export_as_menu = get_export_as_menu()
 	_add_export_as_entry(export_as_menu)
+	editor_selection = EditorInterface.get_selection()
 	_create_save_dialog()
 	_create_load_dialog()
 	_create_placer_bottom_panel()
@@ -74,12 +77,16 @@ func _create_placer_bottom_panel() -> void:
 		bottom_panel.show_load_dialog = show_load_dialog
 		load_callable = bottom_panel.load_configuration
 	
+	if editor_selection:
+		bottom_panel.editor_selection = editor_selection
+	
 	add_dock(bottom_panel)
 	bottom_panel.close()
 
 
 func _destory_placer_bottom_panel() -> void:
 	if bottom_panel:
+		bottom_panel.editor_selection = null
 		remove_dock(bottom_panel)
 		bottom_panel.queue_free()
 
