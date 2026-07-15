@@ -2,6 +2,7 @@
 extends EditorDock
 
 @export var generation_segments: SpinBox
+@export var item_type_dropdown: OptionButton
 
 var show_save_dialog: Callable
 var show_load_dialog: Callable
@@ -15,7 +16,13 @@ var editor_selection: EditorSelection = null:
 		
 		editor_selection = value
 
-var map_placer: GridMapPlacer = null
+var map_placer: GridMapPlacer = null:
+	set(value):
+		item_type_dropdown.clear()
+		if value:
+			item_type_dropdown.generate_options(value._possible_items.keys())
+		
+		map_placer = value
 
 func _on_generate_button_pressed() -> void:
 	if map_placer:
