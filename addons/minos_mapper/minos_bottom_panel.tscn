@@ -27,7 +27,7 @@ func get_location() -> Vector3i:
 	return Vector3i(int(x_spin_box.value),int(y_spin_box.value),int(z_spin_box.value))
 "
 
-[node name="MinosBottomPanel" type="EditorDock" unique_id=981067581 node_paths=PackedStringArray("generation_segments", "item_type_dropdown")]
+[node name="MinosBottomPanel" type="EditorDock" unique_id=981067581 node_paths=PackedStringArray("generation_segments", "item_type_dropdown", "location_selection")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -40,6 +40,7 @@ available_layouts = 2
 script = ExtResource("1_xcl38")
 generation_segments = NodePath("HBoxContainer/MapGeneration/GenerationSegments")
 item_type_dropdown = NodePath("HBoxContainer/PlaceItem/ItemTypeDropdown")
+location_selection = NodePath("HBoxContainer/PlaceItem/LocationSelection")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1154355250]
 layout_mode = 2
@@ -111,6 +112,11 @@ allow_greater = true
 allow_lesser = true
 alignment = 2
 
+[node name="PlaceItemButton" type="Button" parent="HBoxContainer/PlaceItem" unique_id=253806481]
+layout_mode = 2
+text = "Place Item"
+
 [connection signal="pressed" from="HBoxContainer/MapGeneration/GenerateButton" to="." method="_on_generate_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/SaveAndLoad/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/SaveAndLoad/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/PlaceItem/PlaceItemButton" to="." method="_on_place_item_button_pressed"]

@@ -3,6 +3,7 @@ extends EditorDock
 
 @export var generation_segments: SpinBox
 @export var item_type_dropdown: OptionButton
+@export var location_selection: HBoxContainer
 
 var show_save_dialog: Callable
 var show_load_dialog: Callable
@@ -58,3 +59,9 @@ func _on_selection_changed() -> void:
 		map_placer = selected_nodes[0] as GridMapPlacer
 	else:
 		map_placer = null
+
+
+func _on_place_item_button_pressed() -> void:
+	if map_placer:
+		if item_type_dropdown.text:
+			map_placer._instance_item_on_cell(item_type_dropdown.text,location_selection.get_location())
