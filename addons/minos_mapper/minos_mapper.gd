@@ -54,9 +54,9 @@ func _enter_tree() -> void:
 func _exit_tree() -> void:
 	# Clean-up of the plugin goes here.
 	_remove_export_as_entry(export_as_menu)
-	_destory_save_dialog(minos_mesh_save_dialog)
-	_destory_save_dialog(save_dialog)
-	_destory_load_dialog(load_dialog)
+	_destory_file_dialog(minos_mesh_save_dialog)
+	_destory_file_dialog(save_dialog)
+	_destory_file_dialog(load_dialog)
 	_destory_placer_bottom_panel()
 	remove_resource_conversion_plugin(conversion_plugin)
 	pass
@@ -114,9 +114,9 @@ func _create_save_dialog(_save_callable: Callable) -> EditorFileDialog:
 	return _save_dialog
 
 
-func _destory_save_dialog(_save_dialog: EditorFileDialog) -> void:
-	if _save_dialog:
-		_save_dialog.queue_free()
+func _destory_file_dialog(_dialog: EditorFileDialog) -> void:
+	if _dialog:
+		_dialog.queue_free()
 
 
 func show_save_dialog() -> void:
@@ -140,11 +140,6 @@ func _create_load_dialog(_load_callable: Callable) -> EditorFileDialog:
 	EditorInterface.get_base_control().add_child(_load_dialog)
 	
 	return _load_dialog
-
-
-func _destory_load_dialog(_load_dialog) -> void:
-	if _load_dialog:
-		_load_dialog.queue_free()
 
 
 func show_load_dialog() -> void:
