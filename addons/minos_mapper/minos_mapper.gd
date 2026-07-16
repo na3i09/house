@@ -40,9 +40,9 @@ func _enter_tree() -> void:
 	export_as_menu = get_export_as_menu()
 	_add_export_as_entry(export_as_menu)
 	editor_selection = EditorInterface.get_selection()
-	_create_save_dialog()
-	_create_load_dialog()
 	_create_placer_bottom_panel()
+	save_dialog = _create_save_dialog(save_callable)
+	load_dialog = _create_load_dialog(load_callable)
 	conversion_plugin = ConvertMeshLibToMinos.new()
 	add_resource_conversion_plugin(conversion_plugin)
 	pass
@@ -51,8 +51,8 @@ func _enter_tree() -> void:
 func _exit_tree() -> void:
 	# Clean-up of the plugin goes here.
 	_remove_export_as_entry(export_as_menu)
-	_destory_save_dialog()
-	_destory_load_dialog()
+	_destory_save_dialog(save_dialog)
+	_destory_load_dialog(load_dialog)
 	_destory_placer_bottom_panel()
 	remove_resource_conversion_plugin(conversion_plugin)
 	pass
@@ -77,11 +77,10 @@ func _make_visible(visible: bool) -> void:
 func _create_placer_bottom_panel() -> void:
 	bottom_panel = MINOS_BOTTOM_PANEL.instantiate()
 	
-	if save_dialog:
-		bottom_panel.show_save_dialog = show_save_dialog
-		save_callable = bottom_panel.save_configuration
-		bottom_panel.show_load_dialog = show_load_dialog
-		load_callable = bottom_panel.load_configuration
+	bottom_panel.show_save_dialog = show_save_dialog
+	save_callable = bottom_panel.save_configuration
+	bottom_panel.show_load_dialog = show_load_dialog
+	load_callable = bottom_panel.load_configuration
 	
 	if editor_selection:
 		bottom_panel.editor_selection = editor_selection
@@ -97,56 +96,60 @@ func _destory_placer_bottom_panel() -> void:
 		bottom_panel.queue_free()
 
 
-func _create_save_dialog() -> void:
-	save_dialog = EditorFileDialog.new()
+func _create_save_dialog(_save_callable: Callable) -> EditorFileDialog:
+	var _save_dialog := EditorFileDialog.new()
 	
-	save_dialog.file_mode = EditorFileDialog.FILE_MODE_SAVE_FILE
-	save_dialog.access = EditorFileDialog.ACCESS_RESOURCES
+	_save_dialog.file_mode = EditorFileDialog.FILE_MODE_SAVE_FILE
+	_save_dialog.access = EditorFileDialog.ACCESS_RESOURCES
 	
-	save_dialog.add_filter("*.tres", "Godot Resourses")
+	_save_dialog.add_filter("*.tres", "Godot Resourses")
 	
-	save_dialog.file_selected.connect(_save_file)
-	EditorInterface.get_base_control().add_child(save_dialog)
+	_save_dialog.file_selected.connect(_save_file.bind(_save_callable))
+	EditorInterface.get_base_control().add_child(_save_dialog)
+	
+	return _save_dialog
 
 
-func _destory_save_dialog() -> void:
-	if save_dialog:
-		save_dialog.queue_free()
+func _destory_save_dialog(_save_dialog: EditorFileDialog) -> void:
+	if _save_dialog:
+		_save_dialog.queue_free()
 
 
 func show_save_dialog() -> void:
 	save_dialog.popup_centered_clamped(Vector2i(700,500))	
 
 
-func _save_file(path: String) -> void:
-	if save_callable.is_valid():
-		save_callable.call(path)
+func _save_file(path: String, _save_callable: Callable) -> void:
+	if _save_callable.is_valid():
+		_save_callable.call(path)
 
 
-func _create_load_dialog() -> void:
-	load_dialog = EditorFileDialog.new()
+func _create_load_dialog(_load_callable: Callable) -> EditorFileDialog:
+	var _load_dialog := EditorFileDialog.new()
 	
-	load_dialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE
-	load_dialog.access = EditorFileDialog.ACCESS_RESOURCES
+	_load_dialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE
+	_load_dialog.access = EditorFileDialog.ACCESS_RESOURCES
 	
-	load_dialog.add_filter("*.tres", "Godot Resourses")
+	_load_dialog.add_filter("*.tres", "Godot Resourses")
 	
-	load_dialog.file_selected.connect(_load_file)
-	EditorInterface.get_base_control().add_child(load_dialog)
+	_load_dialog.file_selected.connect(_load_file.bind(_load_callable))
+	EditorInterface.get_base_control().add_child(_load_dialog)
+	
+	return _load_dialog
 
 
-func _destory_load_dialog() -> void:
-	if load_dialog:
-		load_dialog.queue_free()
+func _destory_load_dialog(_load_dialog) -> void:
+	if _load_dialog:
+		_load_dialog.queue_free()
 
 
 func show_load_dialog() -> void:
 	load_dialog.popup_centered_clamped(Vector2i(700,500))	
 
 
-func _load_file(path: String) -> void:
-	if load_callable.is_valid():
-		load_callable.call(path)
+func _load_file(path: String, _load_callable: Callable) -> void:
+	if _load_callable.is_valid():
+		_load_callable.call(path)
 
 
 func _add_export_as_entry(menu: PopupMenu) -> void:
