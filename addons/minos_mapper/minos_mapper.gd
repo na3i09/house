@@ -4,6 +4,8 @@ extends EditorPlugin
 
 const MINOS_BOTTOM_PANEL = preload("res://addons/minos_mapper/minos_bottom_panel.tscn")
 
+const ConvertMeshLibToMinos = preload("res://addons/minos_mapper/convert_mesh_lib_to_minos.gd")
+
 
 var export_as_menu: PopupMenu = null
 
@@ -21,6 +23,7 @@ var bottom_panel: EditorDock = null
 
 var editor_selection: EditorSelection = null
 
+var conversion_plugin: EditorResourceConversionPlugin
 
 func _enable_plugin() -> void:
 	# Add autoloads here.
@@ -40,6 +43,8 @@ func _enter_tree() -> void:
 	_create_save_dialog()
 	_create_load_dialog()
 	_create_placer_bottom_panel()
+	conversion_plugin = ConvertMeshLibToMinos.new()
+	add_resource_conversion_plugin(conversion_plugin)
 	pass
 
 
@@ -49,6 +54,7 @@ func _exit_tree() -> void:
 	_destory_save_dialog()
 	_destory_load_dialog()
 	_destory_placer_bottom_panel()
+	remove_resource_conversion_plugin(conversion_plugin)
 	pass
 
 
