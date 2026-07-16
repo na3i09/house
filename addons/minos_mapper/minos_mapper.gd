@@ -101,6 +101,9 @@ func _destory_placer_bottom_panel() -> void:
 
 
 func _create_save_dialog(_save_callable: Callable) -> EditorFileDialog:
+	if not _save_callable.is_valid():
+		return null
+	
 	var _save_dialog := EditorFileDialog.new()
 	
 	_save_dialog.file_mode = EditorFileDialog.FILE_MODE_SAVE_FILE
@@ -129,6 +132,9 @@ func _save_file(path: String, _save_callable: Callable) -> void:
 
 
 func _create_load_dialog(_load_callable: Callable) -> EditorFileDialog:
+	if not _load_callable.is_valid():
+		return null
+	
 	var _load_dialog := EditorFileDialog.new()
 	
 	_load_dialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE
