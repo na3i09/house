@@ -233,11 +233,29 @@ func _build_mesh_library(scene_root: Node) -> MinosMeshLibrary:
 		mesh_lib.set_item_name(item_id,mesh_name)
 		
 		mesh_preview_dict[item_id] = mesh_resource
+		
+		if mesh_name == "Edge":
+			mesh_lib.edge_info[item_id] = mesh_name
 	
 	var previews: Array[Texture2D] = EditorInterface.make_mesh_previews(mesh_preview_dict.values(),64)
 	
 	for i: int in range(mesh_preview_dict.keys().size()):
 		mesh_lib.set_item_preview(mesh_preview_dict.keys()[i],previews[i])
 	
+	var overlay_texture: Texture2D = load("res://addons/minos_mapper/assets/E.png") #TODO: consider moving into file preload for responsiveness
+	var overlay_image: Image = overlay_texture.get_image()
+	
+	for edge_id in mesh_lib.edge_info:
+		var preview_tex: Texture2D = mesh_lib.get_item_preview(edge_id)
+		
+		var preview_image: Image = preview_tex.get_image()
+		
+		preview_image.blend_rect(overlay_image,Rect2i(0,0,overlay_image.get_width(),overlay_image.get_height()),Vector2i(0,0))
+		
+		if preview_tex is ImageTexture:
+			preview_tex.update(preview_image)
+		else:
+			var blended_texture := ImageTexture.create_from_image(preview_image)
+			mesh_lib.set_item_preview(edge_id,blended_texture)
 	
 	return mesh_lib
