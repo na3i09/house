@@ -210,6 +210,7 @@ func _build_mesh_library(scene_root: Node) -> MinosMeshLibrary:
 	
 	var mesh_preview_dict: Dictionary[int,Mesh]
 	
+	# collect library parameters from mesh instances
 	for mesh: MeshInstance3D in mesh_instances:
 		var mesh_resource: Mesh = mesh.mesh
 		
@@ -245,6 +246,7 @@ func _build_mesh_library(scene_root: Node) -> MinosMeshLibrary:
 	var overlay_texture: Texture2D = load("res://addons/minos_mapper/assets/E.png") #TODO: consider moving into file preload for responsiveness
 	var overlay_image: Image = overlay_texture.get_image()
 	
+	# apply overlay image onto edge items
 	for edge_id in mesh_lib.edge_info:
 		var preview_tex: Texture2D = mesh_lib.get_item_preview(edge_id)
 		
