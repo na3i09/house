@@ -111,7 +111,7 @@ func _create_save_dialog(_save_callable: Callable) -> EditorFileDialog:
 	
 	_save_dialog.add_filter("*.tres", "Godot Resourses")
 	
-	_save_dialog.file_selected.connect(_save_file.bind(_save_callable))
+	_save_dialog.file_selected.connect(_save_callable)
 	EditorInterface.get_base_control().add_child(_save_dialog)
 	
 	return _save_dialog
@@ -126,11 +126,6 @@ func show_save_dialog() -> void:
 	save_dialog.popup_centered_clamped(Vector2i(700,500))	
 
 
-func _save_file(path: String, _save_callable: Callable) -> void:
-	if _save_callable.is_valid():
-		_save_callable.call(path)
-
-
 func _create_load_dialog(_load_callable: Callable) -> EditorFileDialog:
 	if not _load_callable.is_valid():
 		return null
@@ -142,7 +137,7 @@ func _create_load_dialog(_load_callable: Callable) -> EditorFileDialog:
 	
 	_load_dialog.add_filter("*.tres", "Godot Resourses")
 	
-	_load_dialog.file_selected.connect(_load_file.bind(_load_callable))
+	_load_dialog.file_selected.connect(_load_callable)
 	EditorInterface.get_base_control().add_child(_load_dialog)
 	
 	return _load_dialog
@@ -150,11 +145,6 @@ func _create_load_dialog(_load_callable: Callable) -> EditorFileDialog:
 
 func show_load_dialog() -> void:
 	load_dialog.popup_centered_clamped(Vector2i(700,500))	
-
-
-func _load_file(path: String, _load_callable: Callable) -> void:
-	if _load_callable.is_valid():
-		_load_callable.call(path)
 
 
 func _add_export_as_entry(menu: PopupMenu) -> void:
