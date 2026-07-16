@@ -202,7 +202,7 @@ func _create_minos_mesh_library(save_path: String) -> void:
 	for node in generated_nodes:
 		node.queue_free()
 
-
+# create [MinosMeshLibrary] from a scene tree following the format of the standard mesh library generator
 func _build_mesh_library(scene_root: Node) -> MinosMeshLibrary:
 	var mesh_lib := MinosMeshLibrary.new()
 	
@@ -235,8 +235,7 @@ func _build_mesh_library(scene_root: Node) -> MinosMeshLibrary:
 		
 		mesh_preview_dict[item_id] = mesh_resource
 		
-		if mesh_name == "Edge":
-			mesh_lib.edge_info[item_id] = mesh_name
+		_apply_metadata_and_suffixes(mesh,item_id,mesh_lib)
 	
 	var previews: Array[Texture2D] = EditorInterface.make_mesh_previews(mesh_preview_dict.values(),64)
 	
@@ -261,3 +260,12 @@ func _build_mesh_library(scene_root: Node) -> MinosMeshLibrary:
 			mesh_lib.set_item_preview(edge_id,blended_texture)
 	
 	return mesh_lib
+
+
+func _apply_metadata_and_suffixes(mesh: MeshInstance3D, item_id: int, mesh_lib: MinosMeshLibrary) -> void:
+	var mesh_name: String = mesh.name
+	
+	if mesh_name.ends_with("-edge"):
+		mesh_name = mesh_name.trim_suffix("-edge")
+		mesh_lib.edge_info[item_id] = mesh_name
+		mesh_lib.set_item_name(item_id,mesh_name)
