@@ -220,11 +220,13 @@ func _create_minos_mesh_library() -> void:
 	for node in generated_nodes:
 		node.queue_free()
 
+
 func _build_mesh_library(scene_root: Node) -> MinosMeshLibrary:
 	var mesh_lib := MinosMeshLibrary.new()
 	
 	var mesh_instances: Array[Node] = scene_root.find_children("*","MeshInstance3D",false,false)
 	
+	var mesh_preview_dict: Dictionary[int,Mesh]
 	
 	for mesh: MeshInstance3D in mesh_instances:
 		var mesh_resource: Mesh = mesh.mesh
@@ -248,5 +250,12 @@ func _build_mesh_library(scene_root: Node) -> MinosMeshLibrary:
 		mesh_lib.set_item_shapes(item_id,col_shapes)
 		mesh_lib.set_item_name(item_id,mesh_name)
 		
+		mesh_preview_dict[item_id] = mesh_resource
+	
+	var previews: Array[Texture2D] = EditorInterface.make_mesh_previews(mesh_preview_dict.values(),64)
+	
+	for i: int in range(mesh_preview_dict.keys().size()):
+		mesh_lib.set_item_preview(mesh_preview_dict.keys()[i],previews[i])
+	
 	
 	return mesh_lib
