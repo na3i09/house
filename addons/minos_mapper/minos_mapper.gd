@@ -25,6 +25,8 @@ var editor_selection: EditorSelection = null
 
 var conversion_plugin: EditorResourceConversionPlugin
 
+var minos_mesh_save_dialog: EditorFileDialog = null
+
 func _enable_plugin() -> void:
 	# Add autoloads here.
 	pass
@@ -38,6 +40,7 @@ func _disable_plugin() -> void:
 func _enter_tree() -> void:
 	# Initialization of the plugin goes here.
 	export_as_menu = get_export_as_menu()
+	minos_mesh_save_dialog = _create_save_dialog(_create_minos_mesh_library)
 	_add_export_as_entry(export_as_menu)
 	editor_selection = EditorInterface.get_selection()
 	_create_placer_bottom_panel()
@@ -51,6 +54,7 @@ func _enter_tree() -> void:
 func _exit_tree() -> void:
 	# Clean-up of the plugin goes here.
 	_remove_export_as_entry(export_as_menu)
+	_destory_save_dialog(minos_mesh_save_dialog)
 	_destory_save_dialog(save_dialog)
 	_destory_load_dialog(load_dialog)
 	_destory_placer_bottom_panel()
@@ -160,7 +164,7 @@ func _add_export_as_entry(menu: PopupMenu) -> void:
 		safety += 1
 	menu.add_item("MinosMeshLibrary...",menu_item_id)
 	# callable set here will be called when menu item is pressed, totally undocumented functionality
-	menu.set_item_metadata(menu.get_item_index(menu_item_id),_create_minos_mesh_library)
+	menu.set_item_metadata(menu.get_item_index(menu_item_id),_show_minos_mesh_save_dialog)
 
 
 func _remove_export_as_entry(menu: PopupMenu) -> void:
@@ -194,7 +198,11 @@ func _bake_meshes() -> void:
 		mesh_inst.create_trimesh_collision()
 
 
-func _create_minos_mesh_library() -> void:
+func _show_minos_mesh_save_dialog() -> void:
+	minos_mesh_save_dialog.popup_centered_clamped(Vector2i(700,500))
+
+
+func _create_minos_mesh_library(save_path: String) -> void:
 	var scene_root: Node = EditorInterface.get_edited_scene_root()
 	
 	var csgs: Array = scene_root.find_children("*","CSGShape3D",false)
@@ -215,7 +223,7 @@ func _create_minos_mesh_library() -> void:
 	
 	var mesh_lib: MinosMeshLibrary = _build_mesh_library(scene_root)
 	
-	ResourceSaver.save(mesh_lib,"res://assets/".path_join("test_minos_meshes.tres"))
+	ResourceSaver.save(mesh_lib,save_path)
 	
 	for node in generated_nodes:
 		node.queue_free()
