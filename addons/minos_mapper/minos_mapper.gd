@@ -155,9 +155,9 @@ func _add_export_as_entry(menu: PopupMenu) -> void:
 	while menu.get_item_index(menu_item_id) != -1 and safety < 30:
 		menu_item_id = randi() % 10000
 		safety += 1
-	menu.add_item("Bake Csg Meshes",menu_item_id)
+	menu.add_item("MinosMeshLibrary...",menu_item_id)
 	# callable set here will be called when menu item is pressed, totally undocumented functionality
-	menu.set_item_metadata(menu.get_item_index(menu_item_id),_run_bake_meshes)
+	menu.set_item_metadata(menu.get_item_index(menu_item_id),_create_minos_mesh_library)
 
 
 func _remove_export_as_entry(menu: PopupMenu) -> void:
@@ -189,3 +189,61 @@ func _bake_meshes() -> void:
 		mesh_inst.owner = scene_root
 		
 		mesh_inst.create_trimesh_collision()
+
+
+func _create_minos_mesh_library() -> void:
+	var scene_root: Node = EditorInterface.get_edited_scene_root()
+	
+	var csgs: Array = scene_root.find_children("*","CSGShape3D",false)
+	
+	var generated_nodes: Array[Node] = []
+	
+	for csg: CSGShape3D in csgs:
+		var baked_mesh: ArrayMesh = csg.bake_static_mesh()
+		
+		var mesh_inst := MeshInstance3D.new()
+		mesh_inst.mesh = baked_mesh
+		mesh_inst.name = csg.name.replace("CSG","")
+		scene_root.add_child(mesh_inst)
+		mesh_inst.global_position = csg.global_position
+		generated_nodes.append(mesh_inst)
+		
+		mesh_inst.create_trimesh_collision()
+	
+	var mesh_lib: MinosMeshLibrary = _build_mesh_library(scene_root)
+	
+	ResourceSaver.save(mesh_lib,"res://assets/".path_join("test_minos_meshes.tres"))
+	
+	for node in generated_nodes:
+		node.queue_free()
+
+func _build_mesh_library(scene_root: Node) -> MinosMeshLibrary:
+	var mesh_lib := MinosMeshLibrary.new()
+	
+	var mesh_instances: Array[Node] = scene_root.find_children("*","MeshInstance3D",false,false)
+	
+	
+	for mesh: MeshInstance3D in mesh_instances:
+		var mesh_resource: Mesh = mesh.mesh
+		
+		var mesh_name: String = mesh.name
+		
+		var collision: StaticBody3D = mesh.find_children("*","StaticBody3D",true,false).get(0)
+		
+		var col_shapes: Array
+		
+		var shapes: Array = collision.find_children("*","CollisionShape3D",true,false)
+		
+		for shape in shapes:
+			col_shapes.append_array([shape.shape,shape.transform])
+		
+		var item_id: int = mesh_lib.get_last_unused_item_id()
+		
+		mesh_lib.create_item(item_id)
+		
+		mesh_lib.set_item_mesh(item_id,mesh_resource)
+		mesh_lib.set_item_shapes(item_id,col_shapes)
+		mesh_lib.set_item_name(item_id,mesh_name)
+		
+	
+	return mesh_lib
