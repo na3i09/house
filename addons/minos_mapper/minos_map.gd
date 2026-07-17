@@ -66,6 +66,14 @@ func _validate_property(property: Dictionary) -> void:
 		property.hint = PROPERTY_HINT_ENUM_SUGGESTION
 		property.hint_string = ",".join(_possible_items.keys())
 
+func _get_configuration_warnings() -> PackedStringArray:
+	var warnings: PackedStringArray = []
+	
+	if mesh_library is not MinosMeshLibrary: #TODO: find way to actually update configuration warnings when setting mesh library
+		warnings.append("Using standard mesh libraries not fully supported, switch to a MinosMeshLibrary resource")
+	
+	return warnings
+
 var _spawner: MultiplayerSpawner
 var _is_multiplayer: bool = false
 
