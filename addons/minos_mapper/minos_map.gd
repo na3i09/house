@@ -61,11 +61,6 @@ static func generate_tile_configuration_dictionary(map: GridMap) -> Dictionary[V
 	
 	return dict
 
-func _validate_property(property: Dictionary) -> void:
-	if property.name == "dev_item_name" && possible_item_resource:
-		property.hint = PROPERTY_HINT_ENUM_SUGGESTION
-		property.hint_string = ",".join(_possible_items.keys())
-
 func _get_configuration_warnings() -> PackedStringArray:
 	var warnings: PackedStringArray = []
 	
