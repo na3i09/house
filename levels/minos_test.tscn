@@ -4,16 +4,37 @@
 [ext_resource type="MeshLibrary" uid="uid://bgb5damgkyvtu" path="res://assets/minos_csg_grid_library.tres" id="2_4ltkn"]
 [ext_resource type="Script" uid="uid://bu486f0sfj83e" path="res://addons/minos_mapper/minos_map_configuration.gd" id="2_34lcs"]
 [ext_resource type="Environment" uid="uid://bwy5o65wfm2bp" path="res://resources/test_environment.tres" id="2_rojct"]
-[ext_resource type="Resource" uid="uid://bft8r42bt7mg8" path="res://levels/level_elements/4_door_room.tres" id="3_4ltkn"]
-[ext_resource type="Resource" uid="uid://dg8ukthhvh1se" path="res://levels/level_elements/large_room.tres" id="4_4xafv"]
-[ext_resource type="Resource" uid="uid://d25jrhgpcwisu" path="res://levels/level_elements/large_tunnel_intersection.tres" id="5_2ptc1"]
-[ext_resource type="Resource" uid="uid://cfw3f5x8xdpsr" path="res://levels/level_elements/large_tunnel_straight.tres" id="6_q0a5b"]
+[ext_resource type="Resource" uid="uid://c3yg870xjx2vk" path="res://levels/minos_level_elements/four_posts.tres" id="4_ycpk3"]
 
-[node name="MinosTestMap" type="Node3D" unique_id=1475111929]
+[sub_resource type="GDScript" id="GDScript_ycpk3"]
+resource_name = "TestMap"
+script/source = "extends Node3D
+
+@export var minos_map: MinosMap
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+	
+	if is_multiplayer_authority():
+		# ensure there is a spawn point on the map
+		if find_children(\"spawn_point*\").is_empty():
+			var floors: Array = minos_map.get_used_cells_by_item(minos_map.mesh_library.find_item_by_name(\"Floor\"))
+			
+			if not floors.is_empty():
+				minos_map._instance_item_on_cell(\"spawn_point\",floors.pick_random())
+			elif not minos_map.get_used_cells().is_empty():
+				minos_map._instance_item_on_cell(\"spawn_point\",minos_map.get_used_cells().pick_random())
+"
+
+[node name="MinosTestMap" type="Node3D" unique_id=1475111929 node_paths=PackedStringArray("minos_map")]
+script = SubResource("GDScript_ycpk3")
+minos_map = NodePath("MinosMap")
 
 [node name="MinosMap" parent="." unique_id=785683228 instance=ExtResource("1_p8mep")]
 mesh_library = ExtResource("2_4ltkn")
-possible_segments = Array[ExtResource("2_34lcs")]([ExtResource("3_4ltkn"), ExtResource("4_4xafv"), ExtResource("5_2ptc1"), ExtResource("6_q0a5b")])
+possible_segments = Array[ExtResource("2_34lcs")]([ExtResource("4_ycpk3")])
 minos_mesh_library = ExtResource("2_4ltkn")
 auto_generate = true
 
