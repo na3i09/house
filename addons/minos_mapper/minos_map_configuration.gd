@@ -9,7 +9,7 @@ const COLLISION_MARGIN_VECTOR := Vector3(COLLISION_MARGIN,COLLISION_MARGIN,COLLI
 
 @export_storage var configuration_dict: Dictionary[Vector3i,Array]
 
-@export_storage var edge_locations: Dictionary[Vector3i,int]
+@export_storage var edge_locations: Dictionary[Vector3i,Array]
 
 @export_storage var map_minimum: Vector3i = Vector3i.ZERO
 
@@ -23,16 +23,19 @@ var map_size: Vector3i:
 
 ## Create a [MinosMapConfiguration] based on the given [param configuration] with the [param mesh_library] argument
 ## to infer the tile id of edges of the map segment to be used in map generation
-static func generate_configuration_resource(configuration: Dictionary[Vector3i,Array], mesh_library: MeshLibrary) -> MinosMapConfiguration:
+static func generate_configuration_resource(configuration: Dictionary[Vector3i,Array], mesh_library: MinosMeshLibrary) -> MinosMapConfiguration:
 	var config_resource: MinosMapConfiguration = MinosMapConfiguration.new()
 	var edge_id: int = mesh_library.find_item_by_name(EDGE_NAME)
 	
+	var edge_ids: Array = mesh_library.edge_info.keys()
+	
 	config_resource.configuration_dict = configuration.duplicate()
 	
-	if edge_id != -1:
-		for location in configuration.keys():
-			if configuration[location][0] == edge_id:
-				config_resource.edge_locations[location] = configuration[location][1]
+	if edge_ids:
+		for location: Vector3i in configuration.keys():
+			if configuration[location][0] in edge_ids:
+				config_resource.edge_locations[location] = configuration[location].slice(0,2)
+				config_resource.edge_locations[location].append_array(mesh_library.edge_info[config_resource.edge_locations[location][0]])
 				config_resource.configuration_dict.erase(location)
 	
 	config_resource.map_maximum = config_resource.configuration_dict.keys().reduce(_max_vector)

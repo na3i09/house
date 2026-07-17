@@ -165,7 +165,7 @@ func generate_random_item_configuration_dictionary() -> Dictionary[Vector3i,Arra
 func generate_map(segments: Array[MinosMapConfiguration], _max_instances: int, _origin: Vector3i = Vector3i(0,0,0)) -> Dictionary[Vector3i,Array]:
 	var generated_map: Dictionary[Vector3i,Array] = {}
 	
-	var edge_pool: Dictionary[Vector3i,int] = {}
+	var edge_pool: Dictionary[Vector3i,Array] = {}
 	
 	var first_segment: MinosMapConfiguration = segments.pick_random()
 	generated_map.merge(first_segment.configuration_dict)
@@ -195,11 +195,11 @@ func _generate_segment(map: Dictionary[Vector3i,Array], edge_pool: Dictionary, s
 	if edge_pool.is_empty():
 		return false
 	var source_edge: Vector3i = edge_pool.keys().pick_random()
-	var source_edge_transform: Transform3D = _make_grid_transform(source_edge,edge_pool[source_edge])
+	var source_edge_transform: Transform3D = _make_grid_transform(source_edge,edge_pool[source_edge][1])
 	var new_segment: MinosMapConfiguration = segments.pick_random()
 	
 	var segment_edge: Vector3i = new_segment.edge_locations.keys().pick_random()
-	var segment_edge_transform: Transform3D = _make_grid_transform(segment_edge,new_segment.edge_locations[segment_edge])
+	var segment_edge_transform: Transform3D = _make_grid_transform(segment_edge,new_segment.edge_locations[segment_edge][1])
 	
 	var total_transform: Transform3D = _get_true_grid_transform(Transform3D.IDENTITY,source_edge_transform,segment_edge_transform)
 	
@@ -221,7 +221,7 @@ func _generate_segment(map: Dictionary[Vector3i,Array], edge_pool: Dictionary, s
 	for edge in new_segment.edge_locations:
 		if edge == segment_edge:
 			continue
-		var true_edge_array: Array = _get_transformed_grid_loc_orient([edge,new_segment.edge_locations[edge]],total_transform)
+		var true_edge_array: Array = _get_transformed_grid_loc_orient([edge,new_segment.edge_locations[edge][1]],total_transform)
 		if not edge_pool.has(true_edge_array[0]):
 			edge_pool[true_edge_array[0]] = true_edge_array[1]
 	
@@ -298,7 +298,7 @@ func apply_map_configuration_resource(config: MinosMapConfiguration, offset: Vec
 				edge_id = mesh_library.edge_info.keys()[0]
 			else:
 				edge_id = mesh_library.find_item_by_name("Edge")
-			loaded_dict[edge] = [edge_id,config.edge_locations[edge]]
+			loaded_dict[edge] = [edge_id,config.edge_locations[edge][1]]
 	_apply_map_configuration(loaded_dict,offset)
 
 
