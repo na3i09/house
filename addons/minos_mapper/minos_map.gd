@@ -44,6 +44,13 @@ var _possible_items: Dictionary[StringName,PackedScene]:
 
 @export var possible_segments: Array[MinosMapConfiguration]
 
+@export var minos_mesh_library: MinosMeshLibrary:
+	get:
+		return mesh_library
+	set(value):
+		mesh_library = value
+		update_configuration_warnings()
+
 @export_group("Settings")
 @export_range(1,20,1,"or_greater") var auto_generation_segments: int = 1
 
@@ -61,10 +68,14 @@ static func generate_tile_configuration_dictionary(map: GridMap) -> Dictionary[V
 	
 	return dict
 
+func _validate_property(property: Dictionary) -> void:
+	if property.name == "mesh_library":
+		property.usage &= ~PROPERTY_USAGE_EDITOR
+
 func _get_configuration_warnings() -> PackedStringArray:
 	var warnings: PackedStringArray = []
 	
-	if mesh_library is not MinosMeshLibrary: #TODO: find way to actually update configuration warnings when setting mesh library
+	if mesh_library is not MinosMeshLibrary:
 		warnings.append("Using standard mesh libraries not fully supported, switch to a MinosMeshLibrary resource")
 	
 	return warnings
