@@ -111,7 +111,7 @@ func _ready() -> void:
 			
 			if not floors.is_empty():
 				_instance_item_on_cell("spawn_point",floors.pick_random())
-			else:
+			elif not get_used_cells().is_empty():
 				_instance_item_on_cell("spawn_point",get_used_cells().pick_random())
 		
 		print(_serialize_items())
