@@ -4,6 +4,8 @@ extends EditorDock
 @export var generation_segments: SpinBox
 @export var item_type_dropdown: OptionButton
 @export var location_selection: HBoxContainer
+@export var load_edges: CheckBox
+
 
 var show_save_dialog: Callable
 var show_load_dialog: Callable
@@ -50,7 +52,10 @@ func _on_load_button_pressed() -> void:
 func load_configuration(load_path: String) -> void:
 	var config_resource: MinosMapConfiguration = load(load_path)
 	if config_resource:
-		map_placer.apply_map_configuration_resource(config_resource)
+		var load_flags: MinosMap.LoadFlags = MinosMap.LoadFlags.NONE
+		if load_edges.button_pressed:
+			load_flags |= MinosMap.LoadFlags.INCLUDE_EDGES
+		map_placer.apply_map_configuration_resource(config_resource,Vector3i.ZERO,load_flags)
 		EditorInterface.mark_scene_as_unsaved()
 
 
