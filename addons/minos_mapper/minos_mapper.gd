@@ -258,5 +258,5 @@ func _apply_metadata_and_suffixes(mesh: MeshInstance3D, item_id: int, mesh_lib: 
 	
 	if mesh_name.ends_with("-edge"):
 		mesh_name = mesh_name.trim_suffix("-edge")
-		mesh_lib.edge_info[item_id] = mesh_name
 		mesh_lib.set_item_name(item_id,mesh_name)
+		mesh_lib.set_edge(item_id)
