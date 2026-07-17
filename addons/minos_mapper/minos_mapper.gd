@@ -185,6 +185,11 @@ func _create_minos_mesh_library(save_path: String) -> void:
 		generated_nodes.append(mesh_inst)
 		
 		mesh_inst.create_trimesh_collision()
+		
+		var meta_list: Array[StringName] = csg.get_meta_list().filter(_filter_metadata)
+		
+		for meta: StringName in meta_list:
+			mesh_inst.set_meta(meta,csg.get_meta(meta))
 	
 	var mesh_lib: MinosMeshLibrary = _build_mesh_library(scene_root)
 	
@@ -192,6 +197,12 @@ func _create_minos_mesh_library(save_path: String) -> void:
 	
 	for node in generated_nodes:
 		node.queue_free()
+
+func _filter_metadata(element: StringName) -> bool:
+	if element.begins_with("minos_"):
+		return true
+	else:
+		return false
 
 # create [MinosMeshLibrary] from a scene tree following the format of the standard mesh library generator
 func _build_mesh_library(scene_root: Node) -> MinosMeshLibrary:
@@ -259,4 +270,7 @@ func _apply_metadata_and_suffixes(mesh: MeshInstance3D, item_id: int, mesh_lib: 
 	if mesh_name.ends_with("-edge"):
 		mesh_name = mesh_name.trim_suffix("-edge")
 		mesh_lib.set_item_name(item_id,mesh_name)
+		mesh_lib.set_edge(item_id)
+
+	if mesh.get_meta("minos_edge",false):
 		mesh_lib.set_edge(item_id)
