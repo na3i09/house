@@ -52,6 +52,7 @@ var _possible_items: Dictionary[StringName,PackedScene]:
 		update_configuration_warnings()
 
 @export_group("Settings")
+@export var auto_generate: bool = false
 @export_range(1,20,1,"or_greater") var auto_generation_segments: int = 1
 
 # hard grab reversed basis for mirroring the connecting edge
@@ -91,7 +92,7 @@ func _ready() -> void:
 		_initialize_multiplayer_support()
 	
 	if is_multiplayer_authority():
-		if possible_segments:
+		if possible_segments and auto_generate:
 			_dev_clear_map()
 			generate(auto_generation_segments)
 		

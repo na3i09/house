@@ -15,6 +15,7 @@
 mesh_library = ExtResource("2_4ltkn")
 possible_segments = Array[ExtResource("2_34lcs")]([ExtResource("3_4ltkn"), ExtResource("4_4xafv"), ExtResource("5_2ptc1"), ExtResource("6_q0a5b")])
 minos_mesh_library = ExtResource("2_4ltkn")
+auto_generate = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1243861345]
 environment = ExtResource("2_rojct")
