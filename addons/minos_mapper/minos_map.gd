@@ -6,6 +6,12 @@ class_name MinosMap
 ## Replication of grid map item configuration is handled via multiplayer spawner synchronization, 
 ## while replication of tile configuration is handled via rpc call.
 
+enum LoadFlags {
+	NONE = 0,
+	INCLUDE_EDGES = 1,
+	ALL = INCLUDE_EDGES,
+}
+
 const REVERSED_ORIENTATION: int = 10
 
 const RETRY_LIMIT: int = 4
@@ -266,9 +272,19 @@ func generate_configuration_resource() -> MinosMapConfiguration:
 		)
 
 
-## Apply configuration from [param config] to current map with optional [param offset]
-func apply_map_configuration_resource(config: MinosMapConfiguration, offset: Vector3i = Vector3i(0,0,0)) -> void:
-	_apply_map_configuration(config.configuration_dict,offset)
+## Apply configuration from [param config] to current map with optional [param offset] and optional [member LoadFlags]
+func apply_map_configuration_resource(config: MinosMapConfiguration, offset: Vector3i = Vector3i(0,0,0), flags: LoadFlags = LoadFlags.NONE) -> void:
+	var loaded_dict: Dictionary[Vector3i,Array] = config.configuration_dict
+	if flags & LoadFlags.INCLUDE_EDGES:
+		loaded_dict = config.configuration_dict.duplicate()
+		for edge in config.edge_locations:
+			var edge_id: int
+			if mesh_library is MinosMeshLibrary:
+				edge_id = mesh_library.edge_info.keys()[0]
+			else:
+				edge_id = mesh_library.find_item_by_name("Edge")
+			loaded_dict[edge] = [edge_id,config.edge_locations[edge]]
+	_apply_map_configuration(loaded_dict,offset)
 
 
 # Creates and adds to tree all items in the [param items] array at thier specified offsets
