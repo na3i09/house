@@ -106,16 +106,8 @@ func _ready() -> void:
 		for location in random_item_dict:
 			_instance_item_array(location,get_cell_item_orientation(location),random_item_dict[location])
 		
-		# ensure there is a spawn point on the map
-		if find_children("spawn_point*").is_empty():
-			var floors: Array = get_used_cells_by_item(mesh_library.find_item_by_name("Floor"))
-			
-			if not floors.is_empty():
-				_instance_item_on_cell("spawn_point",floors.pick_random())
-			elif not get_used_cells().is_empty():
-				_instance_item_on_cell("spawn_point",get_used_cells().pick_random())
-		
-		print(_serialize_items())
+		if OS.has_feature("editor"):
+			print(_serialize_items())
 	else:
 		_request_map_configuration.rpc_id(1)
 
