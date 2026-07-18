@@ -92,6 +92,7 @@ func generate_random_item_configuration_dictionary() -> Dictionary[Vector3i,Arra
 	return item_dict
 
 
+#region Map Generation
 ## Generate [Dictionary] representing a randomly assembled map made up of [MinosMapConfiguration] segments in [param segments]
 func generate_map(segments: Array[MinosMapConfiguration], _max_instances: int, _origin: Vector3i = Vector3i(0,0,0)) -> Dictionary[Vector3i,Array]:
 	var generated_map: Dictionary[Vector3i,Array] = {}
@@ -198,6 +199,7 @@ func generate(generation_segments: int = -1, clear_current_configuration: bool =
 	if clear_current_configuration:
 		clear_map()
 	_apply_map_configuration(generate_map(possible_segments,generation_segments))
+#endregion
 
 
 ## Generate [Dictionary] of map configuration using the current map configuration 
@@ -308,6 +310,7 @@ func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector
 		_instance_item_array(true_location,tile_orientation,items)
 
 
+#region Item Instancing
 # Creates and adds to tree all items in the [param items] array at thier specified offsets
 func _instance_item_array(location: Vector3i, orientation: int, items: Array) -> void:
 	assert(items.size() % 2 == 0, "Item array not made of item transform pairs")
@@ -377,3 +380,4 @@ func _create_local_item_transform(location: Vector3i, orientation: int, offset_t
 	item_transform.origin += inst_location
 	
 	return item_transform
+#endregion

@@ -78,6 +78,7 @@ func _make_visible(visible: bool) -> void:
 			bottom_panel.close()
 
 
+#region Bottom Panel
 func _create_placer_bottom_panel() -> void:
 	bottom_panel = MINOS_BOTTOM_PANEL.instantiate()
 	
@@ -98,8 +99,10 @@ func _destory_placer_bottom_panel() -> void:
 		bottom_panel.editor_selection = null
 		remove_dock(bottom_panel)
 		bottom_panel.queue_free()
+#endregion
 
 
+#region Dialogs
 func _create_file_dialog(_save_callable: Callable, file_mode: FileDialog.FileMode) -> EditorFileDialog:
 	if not _save_callable.is_valid():
 		return null
@@ -129,7 +132,12 @@ func show_save_dialog() -> void:
 func show_load_dialog() -> void:
 	load_dialog.popup_centered_clamped(Vector2i(700,500))
 
+func _show_minos_mesh_save_dialog() -> void:
+	minos_mesh_save_dialog.popup_centered_clamped(Vector2i(700,500))
+#endregion
 
+
+#region Export Entry
 func _add_export_as_entry(menu: PopupMenu) -> void:
 	menu_item_id = randi() % 10000
 	var safety: int = 0
@@ -144,12 +152,10 @@ func _add_export_as_entry(menu: PopupMenu) -> void:
 func _remove_export_as_entry(menu: PopupMenu) -> void:
 	var menu_item_index: int = menu.get_item_index(menu_item_id)
 	menu.remove_item(menu_item_index)
+#endregion
 
 
-func _show_minos_mesh_save_dialog() -> void:
-	minos_mesh_save_dialog.popup_centered_clamped(Vector2i(700,500))
-
-
+#region Mesh Library Creation
 func _create_minos_mesh_library(save_path: String) -> void:
 	var scene_root: Node = EditorInterface.get_edited_scene_root()
 	
@@ -284,3 +290,4 @@ func _validate_and_apply_edge_mates(mesh_lib: MinosMeshLibrary) -> void:
 				push_warning("No matching edge found called: " + mate_name)
 			mesh_lib.edge_info[id][i] = mate_id
 		mesh_lib.edge_info[id] = mesh_lib.edge_info[id].filter(func(id: int): return id != -1)
+#endregion

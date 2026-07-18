@@ -63,6 +63,7 @@ static func _max_vector(accum: Vector3i, element: Vector3i) -> Vector3i:
 static func _min_vector(accum: Vector3i, element: Vector3i) -> Vector3i:
 	return accum.min(element)
 
+#region Conversion
 static func _swap_via_table(config: Dictionary, translation_table: Dictionary) -> void:
 	for key in config:
 		var lookup_key = config[key][0]
@@ -94,3 +95,4 @@ static func _convert_efficient(config_resource: MinosMapConfiguration, mesh_libr
 	_swap_via_table(config_resource.edge_locations,translation_table)
 	
 	config_resource.reliable = false
+#endregion

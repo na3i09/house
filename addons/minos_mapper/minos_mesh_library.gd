@@ -6,6 +6,7 @@ class_name MinosMeshLibrary
 @export_storage var edge_info: Dictionary[int,Array]
 
 
+#region Edge methods
 func set_edge(item_id: int) -> void:
 	edge_info.get_or_add(item_id,[])
 
@@ -27,8 +28,10 @@ func add_edge_mate(item_id: int, mate_id: int) -> void:
 func remove_edge_mate(item_id: int, mate_id: int) -> void:
 	if edge_info.has(item_id):
 		edge_info[item_id].erase(mate_id)
+#endregion
 
 
+#region Translation Tables
 func get_id_to_name_translation_table() -> Dictionary[int,String]:
 	var translation_table: Dictionary[int,String]
 	
@@ -47,3 +50,4 @@ func get_name_to_id_translation_table() -> Dictionary[String,int]:
 		inverse_translation_table[translation_table[id]] = id
 	
 	return inverse_translation_table
+#endregion

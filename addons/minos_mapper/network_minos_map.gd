@@ -26,6 +26,7 @@ func _ready() -> void:
 		_request_map_configuration.rpc_id(1)
 
 
+#region Multiplayer Initialization
 func _initialize_multiplayer_support() -> MultiplayerSpawner:
 	var _spawner: MultiplayerSpawner = _create_multiplayer_spawner()
 	if _spawner:
@@ -44,8 +45,10 @@ func _create_multiplayer_spawner() -> MultiplayerSpawner:
 	add_child(spawner)
 	
 	return spawner
+#endregion
 
 
+#region Synchronization RPCs
 @rpc("any_peer","reliable","call_remote")
 func _request_map_configuration() -> void:
 	_recieve_map_configuration.rpc_id(multiplayer.get_remote_sender_id(),generate_tile_configuration_dictionary(self))
@@ -54,3 +57,4 @@ func _request_map_configuration() -> void:
 @rpc("authority","reliable","call_remote")
 func _recieve_map_configuration(configuration: Dictionary[Vector3i,Array]) -> void:
 	_apply_map_configuration(configuration)
+#endregion
