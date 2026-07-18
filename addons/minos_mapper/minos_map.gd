@@ -283,7 +283,8 @@ func _instantiate_item_at_cell_position(item_name: String, location: Vector3i, r
 	return inst_scene
 
 
-func _dev_clear_map() -> void:
+## Clear all cells and placed items
+func clear_map() -> void:
 	clear()
 	var items: Array[Node] = get_tree().get_nodes_in_group(name + "_items")
 	for item: Node in items:
@@ -292,7 +293,7 @@ func _dev_clear_map() -> void:
 
 
 func generate(generation_segments: int = -1) -> void:
-	_dev_clear_map()
+	clear_map()
 	_apply_map_configuration(generate_map(possible_segments,generation_segments))
 
 

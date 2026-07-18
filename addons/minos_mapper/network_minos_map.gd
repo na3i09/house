@@ -12,7 +12,7 @@ func _ready() -> void:
 	
 	if is_multiplayer_authority():
 		if possible_segments and auto_generate:
-			_dev_clear_map()
+			clear_map()
 			generate(auto_generation_segments)
 		
 		var random_item_dict := generate_random_item_configuration_dictionary()
