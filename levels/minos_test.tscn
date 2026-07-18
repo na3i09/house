@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://ckys8lfbd7c4k"]
 
 [ext_resource type="PackedScene" uid="uid://daxhahnr5yvjr" path="res://levels/base_minos_map.tscn" id="1_p8mep"]
-[ext_resource type="MeshLibrary" uid="uid://bgb5damgkyvtu" path="res://assets/minos_csg_grid_library.tres" id="2_4ltkn"]
 [ext_resource type="Script" uid="uid://bu486f0sfj83e" path="res://addons/minos_mapper/minos_map_configuration.gd" id="2_34lcs"]
 [ext_resource type="Environment" uid="uid://bwy5o65wfm2bp" path="res://resources/test_environment.tres" id="2_rojct"]
 [ext_resource type="Resource" uid="uid://c3yg870xjx2vk" path="res://levels/minos_level_elements/four_posts.tres" id="4_ycpk3"]
@@ -33,9 +32,7 @@ script = SubResource("GDScript_ycpk3")
 minos_map = NodePath("MinosMap")
 
 [node name="MinosMap" parent="." unique_id=785683228 instance=ExtResource("1_p8mep")]
-mesh_library = ExtResource("2_4ltkn")
 possible_segments = Array[ExtResource("2_34lcs")]([ExtResource("4_ycpk3")])
-minos_mesh_library = ExtResource("2_4ltkn")
 auto_generate = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1243861345]
