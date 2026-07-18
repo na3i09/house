@@ -27,7 +27,7 @@ func get_location() -> Vector3i:
 	return Vector3i(int(x_spin_box.value),int(y_spin_box.value),int(z_spin_box.value))
 "
 
-[node name="MinosBottomPanel" type="EditorDock" unique_id=981067581 node_paths=PackedStringArray("generation_segments", "item_type_dropdown", "location_selection", "load_edges")]
+[node name="MinosBottomPanel" type="EditorDock" unique_id=981067581 node_paths=PackedStringArray("generation_segments", "item_type_dropdown", "location_selection", "reliable", "load_edges")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -41,6 +41,7 @@ script = ExtResource("1_xcl38")
 generation_segments = NodePath("HBoxContainer/MapGeneration/GenerationSegments")
 item_type_dropdown = NodePath("HBoxContainer/PlaceItem/ItemTypeDropdown")
 location_selection = NodePath("HBoxContainer/PlaceItem/LocationSelection")
+reliable = NodePath("HBoxContainer/SaveAndLoad/Save/Reliable")
 load_edges = NodePath("HBoxContainer/SaveAndLoad/Load/LoadEdges")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1154355250]
@@ -71,9 +72,17 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="SaveButton" type="Button" parent="HBoxContainer/SaveAndLoad" unique_id=1749576030]
+[node name="Save" type="HBoxContainer" parent="HBoxContainer/SaveAndLoad" unique_id=770822585]
+layout_mode = 2
+
+[node name="SaveButton" type="Button" parent="HBoxContainer/SaveAndLoad/Save" unique_id=1749576030]
 layout_mode = 2
 text = "Save Configuration"
+
+[node name="Reliable" type="CheckBox" parent="HBoxContainer/SaveAndLoad/Save" unique_id=46364554]
+layout_mode = 2
+tooltip_text = "Save configuration in a more reliable format via mesh library item names instead of ids."
+text = "Reliable"
 
 [node name="Load" type="HBoxContainer" parent="HBoxContainer/SaveAndLoad" unique_id=1356137559]
 layout_mode = 2
@@ -128,7 +137,7 @@ layout_mode = 2
 text = "Place Item"
 
 [connection signal="pressed" from="HBoxContainer/MapGeneration/GenerateButton" to="." method="_on_generate_button_pressed"]
-[connection signal="pressed" from="HBoxContainer/SaveAndLoad/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/SaveAndLoad/Save/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/SaveAndLoad/Load/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/SaveAndLoad/ClearButton" to="." method="_on_clear_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/PlaceItem/PlaceItemButton" to="." method="_on_place_item_button_pressed"]

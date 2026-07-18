@@ -4,6 +4,7 @@ extends EditorDock
 @export var generation_segments: SpinBox
 @export var item_type_dropdown: OptionButton
 @export var location_selection: HBoxContainer
+@export var reliable: CheckBox
 @export var load_edges: CheckBox
 
 
@@ -40,7 +41,7 @@ func _on_save_button_pressed() -> void:
 
 func save_configuration(save_name: String) -> void:
 	if map_placer:
-		var map_config: MinosMapConfiguration = map_placer.generate_configuration_resource()
+		var map_config: MinosMapConfiguration = map_placer.generate_configuration_resource(reliable.button_pressed)
 		ResourceSaver.save(map_config,save_name)
 
 

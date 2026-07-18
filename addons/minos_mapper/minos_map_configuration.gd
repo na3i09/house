@@ -17,6 +17,9 @@ const COLLISION_MARGIN_VECTOR := Vector3(COLLISION_MARGIN,COLLISION_MARGIN,COLLI
 
 @export_storage var map_maximum: Vector3i = Vector3i.ZERO
 
+## [bool] indicating if the configuration stores grid items using ids or using item names.
+@export_storage var reliable: bool = false
+
 var map_size: Vector3i:
 	get:
 		return map_maximum - map_minimum
@@ -25,7 +28,7 @@ var map_size: Vector3i:
 
 ## Create a [MinosMapConfiguration] based on the given [param configuration] with the [param mesh_library] argument
 ## to infer the tile id of edges of the map segment to be used in map generation
-static func generate_configuration_resource(configuration: Dictionary[Vector3i,Array], mesh_library: MinosMeshLibrary) -> MinosMapConfiguration:
+static func generate_configuration_resource(configuration: Dictionary[Vector3i,Array], mesh_library: MinosMeshLibrary, make_reliable: bool = false) -> MinosMapConfiguration:
 	var config_resource: MinosMapConfiguration = MinosMapConfiguration.new()
 	
 	var edge_ids: Array = mesh_library.edge_info.keys()
@@ -42,6 +45,9 @@ static func generate_configuration_resource(configuration: Dictionary[Vector3i,A
 	config_resource.map_maximum = config_resource.configuration_dict.keys().reduce(_max_vector)
 	config_resource.map_minimum = config_resource.configuration_dict.keys().reduce(_min_vector)
 	
+	if make_reliable:
+		_convert_reliable(config_resource,mesh_library)
+	
 	return config_resource
 
 ## Return [AABB] for configuration expanded by [member COLLISION_MARGIN] to detect overlaps
@@ -56,3 +62,35 @@ static func _max_vector(accum: Vector3i, element: Vector3i) -> Vector3i:
 
 static func _min_vector(accum: Vector3i, element: Vector3i) -> Vector3i:
 	return accum.min(element)
+
+static func _swap_via_table(config: Dictionary, translation_table: Dictionary) -> void:
+	for key in config:
+		var lookup_key = config[key][0]
+		
+		config[key][0] = translation_table[lookup_key]
+
+static func _convert_reliable(config_resource: MinosMapConfiguration, mesh_library: MinosMeshLibrary) -> void:
+	var translation_table: Dictionary[int,String] = mesh_library.get_id_to_name_translation_table()
+	
+	_swap_via_table(config_resource.configuration_dict,translation_table)
+	
+	for edge_loc in config_resource.edge_locations:
+		for i in range(2,config_resource.edge_locations[edge_loc].size()):
+			config_resource.edge_locations[edge_loc][i] = translation_table[config_resource.edge_locations[edge_loc][i]]
+	
+	_swap_via_table(config_resource.edge_locations,translation_table)
+	
+	config_resource.reliable = true
+
+static func _convert_efficient(config_resource: MinosMapConfiguration, mesh_library: MinosMeshLibrary) -> void:
+	var translation_table: Dictionary[String,int] = mesh_library.get_name_to_id_translation_table()
+	
+	_swap_via_table(config_resource.configuration_dict,translation_table)
+	
+	for edge_loc in config_resource.edge_locations:
+		for i in range(1,config_resource.edge_locations[edge_loc].size()):
+			config_resource.edge_locations[edge_loc][i] = translation_table[config_resource.edge_locations[edge_loc][i]]
+	
+	_swap_via_table(config_resource.edge_locations,translation_table)
+	
+	config_resource.reliable = false
