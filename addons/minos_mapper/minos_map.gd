@@ -231,12 +231,10 @@ func apply_map_configuration_resource(config: MinosMapConfiguration, offset: Vec
 	var loaded_dict: Dictionary[Vector3i,Array] = config.configuration_dict
 	if flags & LoadFlags.INCLUDE_EDGES:
 		loaded_dict = config.configuration_dict.duplicate()
+		assert(mesh_library is MinosMeshLibrary)
 		for edge in config.edge_locations:
 			var edge_id: int
-			if mesh_library is MinosMeshLibrary:
-				edge_id = mesh_library.edge_info.keys()[0]
-			else:
-				edge_id = mesh_library.find_item_by_name("Edge")
+			edge_id = mesh_library.edge_info.keys()[0]
 			loaded_dict[edge] = [edge_id,config.edge_locations[edge][1]]
 	_apply_map_configuration(loaded_dict,offset)
 
