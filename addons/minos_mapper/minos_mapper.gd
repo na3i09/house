@@ -170,7 +170,7 @@ func _create_minos_mesh_library(save_path: String) -> void:
 		mesh_inst.mesh = baked_mesh
 		mesh_inst.name = csg.name.replace("CSG","")
 		scene_root.add_child(mesh_inst)
-		mesh_inst.global_position = csg.global_position
+		mesh_inst.transform = csg.transform
 		generated_nodes.append(mesh_inst)
 		
 		mesh_inst.create_trimesh_collision()
@@ -223,6 +223,7 @@ func _build_mesh_library(scene_root: Node) -> MinosMeshLibrary:
 		mesh_lib.set_item_mesh(item_id,mesh_resource)
 		mesh_lib.set_item_shapes(item_id,col_shapes)
 		mesh_lib.set_item_name(item_id,mesh_name)
+		mesh_lib.set_item_mesh_transform(item_id,Transform3D(mesh.basis,Vector3.ZERO))
 		
 		mesh_index_dict[item_id] = mesh
 		
