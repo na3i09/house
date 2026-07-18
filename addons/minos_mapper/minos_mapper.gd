@@ -210,7 +210,7 @@ func _build_mesh_library(scene_root: Node) -> MinosMeshLibrary:
 	
 	var mesh_instances: Array[Node] = scene_root.find_children("*","MeshInstance3D",false,false)
 	
-	var mesh_preview_dict: Dictionary[int,Mesh]
+	var mesh_index_dict: Dictionary[int,MeshInstance3D]
 	
 	# collect library parameters from mesh instances
 	for mesh: MeshInstance3D in mesh_instances:
@@ -235,7 +235,7 @@ func _build_mesh_library(scene_root: Node) -> MinosMeshLibrary:
 		mesh_lib.set_item_shapes(item_id,col_shapes)
 		mesh_lib.set_item_name(item_id,mesh_name)
 		
-		mesh_preview_dict[item_id] = mesh_resource
+		mesh_index_dict[item_id] = mesh
 		
 		_apply_metadata_and_suffixes(mesh,item_id,mesh_lib)
 	
@@ -243,8 +243,8 @@ func _build_mesh_library(scene_root: Node) -> MinosMeshLibrary:
 	
 	var previews: Array[Texture2D] = EditorInterface.make_mesh_previews(mesh_index_dict.values().map(func(mesh_inst: MeshInstance3D): return mesh_inst.mesh),64)
 	
-	for i: int in range(mesh_preview_dict.keys().size()):
-		mesh_lib.set_item_preview(mesh_preview_dict.keys()[i],previews[i])
+	for i: int in range(mesh_index_dict.keys().size()):
+		mesh_lib.set_item_preview(mesh_index_dict.keys()[i],previews[i])
 	
 	var overlay_texture: Texture2D = load("res://addons/minos_mapper/assets/E.png") #TODO: consider moving into file preload for responsiveness
 	var overlay_image: Image = overlay_texture.get_image()
