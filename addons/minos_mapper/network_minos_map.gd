@@ -15,11 +15,6 @@ func _ready() -> void:
 			_dev_clear_map()
 			generate(auto_generation_segments)
 		
-		var item_dict := generate_item_configuration_dictionary()
-		
-		for location in item_dict:
-			_instance_item_array(location,get_cell_item_orientation(location),item_dict[location])
-		
 		var random_item_dict := generate_random_item_configuration_dictionary()
 		
 		for location in random_item_dict:

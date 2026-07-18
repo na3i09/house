@@ -16,14 +16,8 @@ const REVERSED_ORIENTATION: int = 10
 
 const RETRY_LIMIT: int = 4
 
-## [Dictionary] for scenes to be places onto all cells with matching grid map items
-@export var place_dict: Dictionary[int,String]
-
 ## [Array] of randomly spawned item definitions
 @export var random_items: Array[RandomItemSelection]
-
-## [Dictionary] for scenes to be placed only on specified grid cell locations
-@export var location_place_dict: Dictionary[Vector3i,String]
 
 ## Vertical offset for placing scenes onto grid map
 @export var vertical_offset: float = 0.0
@@ -82,33 +76,6 @@ func _get_configuration_warnings() -> PackedStringArray:
 	return warnings
 
 var _spawn_function: Callable = _spawn_item
-
-
-## Generate [Dictionary] of grid cell tiles and items from [member place_dict] and [member location_place_dict]
-func generate_static_configuration_dictionary() -> Dictionary[Vector3i,Array]:
-	var serialized_dict: Dictionary[Vector3i,Array] = generate_tile_configuration_dictionary(self)
-	var item_dict: Dictionary[Vector3i,Array] = generate_item_configuration_dictionary()
-	
-	for location: Vector3i in item_dict:
-		if serialized_dict.has(location):
-			serialized_dict[location].append_array(item_dict[location])
-	
-	return serialized_dict
-
-
-## Generate [Dictionary] of items and their offset transforms from [member place_dict] and [member location_place_dict]
-func generate_item_configuration_dictionary() -> Dictionary[Vector3i,Array]:
-	var item_dict: Dictionary[Vector3i,Array] = {}
-	
-	for index: int in place_dict:
-		var instance_array: Array[Vector3i] = get_used_cells_by_item(index)
-		for inst: Vector3i in instance_array:
-			item_dict.get_or_add(inst,[]).append_array([place_dict[index],Transform3D.IDENTITY])
-	
-	for location: Vector3i in location_place_dict:
-		item_dict.get_or_add(location,[]).append_array([location_place_dict[location],Transform3D.IDENTITY])
-	
-	return item_dict
 
 
 ## Generate [Dictionary] of instances of random items and their transforms from [member random_placer_dict]
@@ -243,7 +210,7 @@ func generate_live_configuration_dictionary() -> Dictionary[Vector3i,Array]:
 ## and items from [member place_dict], [member location_place_dict], and items currently placed in the scene.
 ## The parameter [param make_reliable] saves the configuration in a more reliable, but larger and slower, format.
 func generate_configuration_resource(make_reliable: bool = false) -> MinosMapConfiguration:
-	var dict := generate_static_configuration_dictionary()
+	var dict := generate_tile_configuration_dictionary(self)
 	var item_dict := _serialize_items()
 	for item_loc in item_dict:
 		if dict.has(item_loc):
