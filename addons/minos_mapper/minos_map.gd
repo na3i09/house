@@ -193,8 +193,10 @@ func _get_true_grid_transform(tile_transform: Transform3D, source_edge_transform
 	return true_transform
 
 
-func generate(generation_segments: int = -1) -> void:
-	clear_map()
+## Generate and apply map configuration with [param generation_segments] number of segments
+func generate(generation_segments: int = -1, clear_current_configuration: bool = true) -> void:
+	if clear_current_configuration:
+		clear_map()
 	_apply_map_configuration(generate_map(possible_segments,generation_segments))
 
 
