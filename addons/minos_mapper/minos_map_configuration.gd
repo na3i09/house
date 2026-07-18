@@ -1,3 +1,4 @@
+@tool
 extends Resource
 class_name MinosMapConfiguration
 
@@ -96,3 +97,41 @@ static func _convert_efficient(config_resource: MinosMapConfiguration, mesh_libr
 	
 	config_resource.reliable = false
 #endregion
+
+
+func has_valid_mates(edge_type: int, mesh_library: MinosMeshLibrary) -> bool:
+	assert(mesh_library.is_edge(edge_type))
+	var mate_types: Array = mesh_library.edge_info[edge_type]
+	
+	if mate_types.is_empty():
+		return true
+	
+	if reliable:
+		var conversion_table := mesh_library.get_id_to_name_translation_table()
+		mate_types = mate_types.map(func(value: int): return conversion_table[value])
+	
+	for edge: Vector3i in edge_locations:
+		if edge_locations[edge][0] in mate_types:
+			return true
+	
+	return false
+
+
+func get_valid_mates(edge_type: int, mesh_library: MinosMeshLibrary) -> Array[Vector3i]:
+	var valid_mates: Array[Vector3i]
+	
+	assert(mesh_library.is_edge(edge_type))
+	var mate_types: Array = mesh_library.edge_info[edge_type]
+	
+	if mate_types.is_empty():
+		return edge_locations.keys()
+	
+	if reliable:
+		var conversion_table := mesh_library.get_id_to_name_translation_table()
+		mate_types = mate_types.map(func(value: int): return conversion_table[value])
+	
+	for edge: Vector3i in edge_locations:
+		if edge_locations[edge][0] in mate_types:
+			valid_mates.append(edge)
+	
+	return valid_mates
