@@ -388,10 +388,25 @@ func _get_grid_location_orientation_and_offset_from_node_transform(item_transfor
 	return [grid_location,grid_item_orientation,offset_transform]
 
 
+func _get_tile_id_from_id_or_name(value: Variant) -> int:
+	assert(value is int or value is String, "Malformed argument")
+	if value is int:
+		return value
+	elif value is String:
+		var item_id: int = mesh_library.find_item_by_name(value)
+		assert(item_id != -1)
+		if item_id == -1:
+			push_error("Could not find matching mesh library item for name: " + value)
+		return item_id
+	else:
+		push_error("Malformed argument")
+		return -1
+
+
 # Apply map configuration defined in [param config] with optional [param offset]
 func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector3i = Vector3i(0,0,0)) -> void:
 	for location: Vector3i in config:
-		var tile_type: int = config[location][0]
+		var tile_type: int = _get_tile_id_from_id_or_name(config[location][0])
 		var tile_orientation: int = config[location][1]
 		var items: Array = config[location].slice(2)
 		
