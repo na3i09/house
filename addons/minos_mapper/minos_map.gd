@@ -81,8 +81,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 	
 	return warnings
 
-var _spawner: MultiplayerSpawner
-var _is_multiplayer: bool = false
+var _spawn_function: Callable = _spawn_item
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -311,10 +310,10 @@ func _instance_item_array(location: Vector3i, orientation: int, items: Array) ->
 func _instance_item_on_cell(item_name: String, location: Vector3i, orientation: int = 0,offset_transform: Transform3D = Transform3D.IDENTITY) -> Node:
 	var instance: Node = null
 	var random_id: int = randi() #TODO: add collision guards to random id creation
-	if _is_multiplayer:
-		instance = _spawner.spawn([item_name,location,random_id,orientation,offset_transform])
-	else:
-		instance = _instantiate_item_at_cell_position(item_name,location,random_id,orientation,offset_transform)
+	
+	instance = _spawn_function.call([item_name,location,random_id,orientation,offset_transform])
+	
+	if not instance.is_inside_tree():
 		add_child(instance)
 	
 	_post_spawn_item_processing(instance)
@@ -442,11 +441,11 @@ func _create_local_item_transform(location: Vector3i, orientation: int, offset_t
 
 
 func _initialize_multiplayer_support() -> void:
-	_spawner = _create_multiplayer_spawner()
+	var _spawner: MultiplayerSpawner = _create_multiplayer_spawner()
 	if _spawner:
 		_spawner.spawn_function = _spawn_item
+		_spawn_function = _spawner.spawn
 		_spawner.spawned.connect(_post_spawn_item_processing)
-		_is_multiplayer = true
 
 
 func _create_multiplayer_spawner() -> MultiplayerSpawner:
