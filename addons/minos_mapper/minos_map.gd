@@ -127,8 +127,8 @@ func _generate_segment(map: Dictionary[Vector3i,Array], edge_pool: Dictionary, s
 		return false
 	var source_edge: Vector3i = edge_pool.keys().pick_random()
 	var source_edge_transform: Transform3D = _make_grid_transform(source_edge,edge_pool[source_edge][1])
+
 	var new_segment: MinosMapConfiguration = segments.pick_random()
-	
 	var segment_edge: Vector3i = new_segment.edge_locations.keys().pick_random()
 	var segment_edge_transform: Transform3D = _make_grid_transform(segment_edge,new_segment.edge_locations[segment_edge][1])
 	
@@ -142,25 +142,25 @@ func _generate_segment(map: Dictionary[Vector3i,Array], edge_pool: Dictionary, s
 		push_warning("Overlap")
 		return false
 	
-	for loc in new_segment.configuration_dict:
-		var true_tile_array: Array = _get_transformed_grid_loc_orient([loc,new_segment.configuration_dict[loc][1]],total_transform)
-		if not map.has(true_tile_array[0]):
-			var new_array: Array = new_segment.configuration_dict[loc].duplicate()
-			new_array[1] = true_tile_array[1]
-			map[true_tile_array[0]] = new_array
+	_add_transformed_tiles_to_dictionary(new_segment.configuration_dict,map,total_transform)
 	
-	for edge in new_segment.edge_locations:
-		if edge == segment_edge:
-			continue
-		var true_edge_array: Array = _get_transformed_grid_loc_orient([edge,new_segment.edge_locations[edge][1]],total_transform)
-		if not edge_pool.has(true_edge_array[0]):
-			var true_edge_value_array: Array = new_segment.edge_locations[edge].duplicate()
-			true_edge_value_array[1] = true_edge_array[1]
-			edge_pool[true_edge_array[0]] = true_edge_value_array
+	var unused_segments: Dictionary[Vector3i,Array] = new_segment.edge_locations.duplicate()
+	unused_segments.erase(segment_edge)
+	
+	_add_transformed_tiles_to_dictionary(unused_segments,edge_pool,total_transform)
 	
 	edge_pool.erase(source_edge)
 	
 	return true
+
+
+func _add_transformed_tiles_to_dictionary(source: Dictionary[Vector3i,Array], destination: Dictionary[Vector3i,Array], total_transform: Transform3D) -> void:
+	for location: Vector3i in source:
+		var true_tile_array: Array = _get_transformed_grid_loc_orient([location,source[location][1]],total_transform)
+		if not destination.has(true_tile_array[0]):
+			var new_array: Array = source[location].duplicate()
+			new_array[1] = true_tile_array[1]
+			destination[true_tile_array[0]] = new_array
 
 
 func _get_transformed_grid_loc_orient(loc_and_orient: Array, _transform: Transform3D) -> Array:
