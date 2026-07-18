@@ -128,9 +128,13 @@ func _generate_segment(map: Dictionary[Vector3i,Array], edge_pool: Dictionary, s
 		return false
 	var source_edge: Vector3i = edge_pool.keys().pick_random()
 	var source_edge_transform: Transform3D = _make_grid_transform(source_edge,edge_pool[source_edge][1])
-
-	var new_segment: MinosMapConfiguration = segments.pick_random()
-	var segment_edge: Vector3i = new_segment.edge_locations.keys().pick_random()
+	
+	var valid_segments: Array[MinosMapConfiguration] = _get_segments_with_valid_mates(edge_pool[source_edge][0],segments)
+	if valid_segments.is_empty():
+		return false
+	
+	var new_segment: MinosMapConfiguration = valid_segments.pick_random()
+	var segment_edge: Vector3i = new_segment.get_valid_mates(_get_tile_id_from_id_or_name(edge_pool[source_edge][0]),mesh_library).pick_random()
 	var segment_edge_transform: Transform3D = _make_grid_transform(segment_edge,new_segment.edge_locations[segment_edge][1])
 	
 	var total_transform: Transform3D = _get_true_grid_transform(Transform3D.IDENTITY,source_edge_transform,segment_edge_transform)
@@ -192,6 +196,16 @@ func _get_true_grid_transform(tile_transform: Transform3D, source_edge_transform
 	true_transform.origin -= source_edge_transform.basis.z
 	
 	return true_transform
+
+
+func _get_segments_with_valid_mates(edge_type: Variant, segments: Array[MinosMapConfiguration]) -> Array[MinosMapConfiguration]:
+	var valid_segments: Array[MinosMapConfiguration]
+	
+	for segment: MinosMapConfiguration in segments:
+		if segment.has_valid_mates(_get_tile_id_from_id_or_name(edge_type),mesh_library):
+			valid_segments.append(segment)
+	
+	return valid_segments
 
 
 ## Generate and apply map configuration with [param generation_segments] number of segments
