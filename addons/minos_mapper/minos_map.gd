@@ -193,6 +193,11 @@ func _get_true_grid_transform(tile_transform: Transform3D, source_edge_transform
 	return true_transform
 
 
+func generate(generation_segments: int = -1) -> void:
+	clear_map()
+	_apply_map_configuration(generate_map(possible_segments,generation_segments))
+
+
 ## Generate [Dictionary] of map configuration using the current map configuration 
 ## and items currently placed in the scene
 func generate_live_configuration_dictionary() -> Dictionary[Vector3i,Array]:
@@ -290,11 +295,6 @@ func clear_map() -> void:
 	for item: Node in items:
 		if item.has_meta("is_placer_item"):
 			item.queue_free()
-
-
-func generate(generation_segments: int = -1) -> void:
-	clear_map()
-	_apply_map_configuration(generate_map(possible_segments,generation_segments))
 
 
 # Serailize item children into a configuration dictionary
