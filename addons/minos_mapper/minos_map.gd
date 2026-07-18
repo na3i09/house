@@ -202,6 +202,7 @@ func generate(generation_segments: int = -1, clear_current_configuration: bool =
 #endregion
 
 
+#region Configuration Generation
 ## Generate [Dictionary] of map configuration using the current map configuration 
 ## and items currently placed in the scene
 func generate_live_configuration_dictionary() -> Dictionary[Vector3i,Array]:
@@ -226,28 +227,6 @@ func generate_configuration_resource(make_reliable: bool = false) -> MinosMapCon
 		mesh_library,
 		make_reliable
 		)
-
-
-## Apply configuration from [param config] to current map with optional [param offset] and optional [member LoadFlags]
-func apply_map_configuration_resource(config: MinosMapConfiguration, offset: Vector3i = Vector3i(0,0,0), flags: LoadFlags = LoadFlags.NONE) -> void:
-	var loaded_dict: Dictionary[Vector3i,Array] = config.configuration_dict
-	if flags & LoadFlags.INCLUDE_EDGES:
-		loaded_dict = config.configuration_dict.duplicate()
-		assert(mesh_library is MinosMeshLibrary)
-		for edge in config.edge_locations:
-			var edge_id: int
-			edge_id = mesh_library.edge_info.keys()[0]
-			loaded_dict[edge] = [edge_id,config.edge_locations[edge][1]]
-	_apply_map_configuration(loaded_dict,offset)
-
-
-## Clear all cells and placed items
-func clear_map() -> void:
-	clear()
-	var items: Array[Node] = get_tree().get_nodes_in_group(name + "_items")
-	for item: Node in items:
-		if item.has_meta("is_placer_item"):
-			item.queue_free()
 
 
 # Serailize item children into a configuration dictionary
@@ -279,6 +258,35 @@ func _get_grid_location_orientation_and_offset_from_node_transform(item_transfor
 	offset_transform.basis = grid_item_basis.inverse() * offset_transform.basis
 	
 	return [grid_location,grid_item_orientation,offset_transform]
+#endregion
+
+
+#region Configuration Application
+## Apply configuration from [param config] to current map with optional [param offset] and optional [member LoadFlags]
+func apply_map_configuration_resource(config: MinosMapConfiguration, offset: Vector3i = Vector3i(0,0,0), flags: LoadFlags = LoadFlags.NONE) -> void:
+	var loaded_dict: Dictionary[Vector3i,Array] = config.configuration_dict
+	if flags & LoadFlags.INCLUDE_EDGES:
+		loaded_dict = config.configuration_dict.duplicate()
+		assert(mesh_library is MinosMeshLibrary)
+		for edge in config.edge_locations:
+			var edge_id: int
+			edge_id = mesh_library.edge_info.keys()[0]
+			loaded_dict[edge] = [edge_id,config.edge_locations[edge][1]]
+	_apply_map_configuration(loaded_dict,offset)
+
+
+# Apply map configuration defined in [param config] with optional [param offset]
+func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector3i = Vector3i(0,0,0)) -> void:
+	for location: Vector3i in config:
+		var tile_type: int = _get_tile_id_from_id_or_name(config[location][0])
+		var tile_orientation: int = config[location][1]
+		var items: Array = config[location].slice(2)
+		
+		var true_location: Vector3i = location + offset
+		
+		set_cell_item(true_location,tile_type,tile_orientation)
+		
+		_instance_item_array(true_location,tile_orientation,items)
 
 
 func _get_tile_id_from_id_or_name(value: Variant) -> int:
@@ -294,20 +302,16 @@ func _get_tile_id_from_id_or_name(value: Variant) -> int:
 	else:
 		push_error("Malformed argument")
 		return -1
+#endregion
 
 
-# Apply map configuration defined in [param config] with optional [param offset]
-func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector3i = Vector3i(0,0,0)) -> void:
-	for location: Vector3i in config:
-		var tile_type: int = _get_tile_id_from_id_or_name(config[location][0])
-		var tile_orientation: int = config[location][1]
-		var items: Array = config[location].slice(2)
-		
-		var true_location: Vector3i = location + offset
-		
-		set_cell_item(true_location,tile_type,tile_orientation)
-		
-		_instance_item_array(true_location,tile_orientation,items)
+## Clear all cells and placed items
+func clear_map() -> void:
+	clear()
+	var items: Array[Node] = get_tree().get_nodes_in_group(name + "_items")
+	for item: Node in items:
+		if item.has_meta("is_placer_item"):
+			item.queue_free()
 
 
 #region Item Instancing
