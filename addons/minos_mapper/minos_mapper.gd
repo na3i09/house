@@ -40,12 +40,12 @@ func _disable_plugin() -> void:
 func _enter_tree() -> void:
 	# Initialization of the plugin goes here.
 	export_as_menu = get_export_as_menu()
-	minos_mesh_save_dialog = _create_save_dialog(_create_minos_mesh_library)
+	minos_mesh_save_dialog = _create_file_dialog(_create_minos_mesh_library,EditorFileDialog.FILE_MODE_SAVE_FILE)
 	_add_export_as_entry(export_as_menu)
 	editor_selection = EditorInterface.get_selection()
 	_create_placer_bottom_panel()
-	save_dialog = _create_save_dialog(save_callable)
-	load_dialog = _create_load_dialog(load_callable)
+	save_dialog = _create_file_dialog(save_callable,EditorFileDialog.FILE_MODE_SAVE_FILE)
+	load_dialog = _create_file_dialog(load_callable,EditorFileDialog.FILE_MODE_OPEN_FILE)
 	conversion_plugin = ConvertMeshLibToMinos.new()
 	add_resource_conversion_plugin(conversion_plugin)
 	pass
@@ -100,13 +100,13 @@ func _destory_placer_bottom_panel() -> void:
 		bottom_panel.queue_free()
 
 
-func _create_save_dialog(_save_callable: Callable) -> EditorFileDialog:
+func _create_file_dialog(_save_callable: Callable, file_mode: FileDialog.FileMode) -> EditorFileDialog:
 	if not _save_callable.is_valid():
 		return null
 	
 	var _save_dialog := EditorFileDialog.new()
 	
-	_save_dialog.file_mode = EditorFileDialog.FILE_MODE_SAVE_FILE
+	_save_dialog.file_mode = file_mode
 	_save_dialog.access = EditorFileDialog.ACCESS_RESOURCES
 	
 	_save_dialog.add_filter("*.tres", "Godot Resourses")
@@ -123,28 +123,11 @@ func _destory_file_dialog(_dialog: EditorFileDialog) -> void:
 
 
 func show_save_dialog() -> void:
-	save_dialog.popup_centered_clamped(Vector2i(700,500))	
-
-
-func _create_load_dialog(_load_callable: Callable) -> EditorFileDialog:
-	if not _load_callable.is_valid():
-		return null
-	
-	var _load_dialog := EditorFileDialog.new()
-	
-	_load_dialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE
-	_load_dialog.access = EditorFileDialog.ACCESS_RESOURCES
-	
-	_load_dialog.add_filter("*.tres", "Godot Resourses")
-	
-	_load_dialog.file_selected.connect(_load_callable)
-	EditorInterface.get_base_control().add_child(_load_dialog)
-	
-	return _load_dialog
+	save_dialog.popup_centered_clamped(Vector2i(700,500))
 
 
 func show_load_dialog() -> void:
-	load_dialog.popup_centered_clamped(Vector2i(700,500))	
+	load_dialog.popup_centered_clamped(Vector2i(700,500))
 
 
 func _add_export_as_entry(menu: PopupMenu) -> void:
