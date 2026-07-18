@@ -1,3 +1,4 @@
+@tool
 extends MeshLibrary
 class_name MinosMeshLibrary
 
@@ -26,3 +27,23 @@ func add_edge_mate(item_id: int, mate_id: int) -> void:
 func remove_edge_mate(item_id: int, mate_id: int) -> void:
 	if edge_info.has(item_id):
 		edge_info[item_id].erase(mate_id)
+
+
+func get_id_to_name_translation_table() -> Dictionary[int,String]:
+	var translation_table: Dictionary[int,String]
+	
+	for id: int in get_item_list():
+		translation_table[id] = get_item_name(id)
+	
+	return translation_table
+
+
+func get_name_to_id_translation_table() -> Dictionary[String,int]:
+	var translation_table: Dictionary[int,String] = get_id_to_name_translation_table()
+	
+	var inverse_translation_table: Dictionary[String,int]
+	
+	for id in translation_table:
+		inverse_translation_table[translation_table[id]] = id
+	
+	return inverse_translation_table
