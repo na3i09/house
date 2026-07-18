@@ -1,8 +1,6 @@
 extends Resource
 class_name MinosMapConfiguration
 
-const EDGE_NAME: StringName = "Edge"
-
 const COLLISION_MARGIN: float = 0.001
 
 const COLLISION_MARGIN_VECTOR := Vector3(COLLISION_MARGIN,COLLISION_MARGIN,COLLISION_MARGIN)
@@ -25,7 +23,6 @@ var map_size: Vector3i:
 ## to infer the tile id of edges of the map segment to be used in map generation
 static func generate_configuration_resource(configuration: Dictionary[Vector3i,Array], mesh_library: MinosMeshLibrary) -> MinosMapConfiguration:
 	var config_resource: MinosMapConfiguration = MinosMapConfiguration.new()
-	var edge_id: int = mesh_library.find_item_by_name(EDGE_NAME)
 	
 	var edge_ids: Array = mesh_library.edge_info.keys()
 	
