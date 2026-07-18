@@ -3,6 +3,8 @@ extends MeshLibrary
 class_name MinosMeshLibrary
 
 
+## [Dictionary] storing information for all edge type tiles and their mates.
+## Value array is a list of grid item ids of valid mates for this edge.
 @export_storage var edge_info: Dictionary[int,Array]
 
 
