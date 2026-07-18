@@ -4,12 +4,11 @@ class_name NetworkMinosMap
 ## [MinosMap] with automatic networking support.
 
 
+@onready var spawner: MultiplayerSpawner = _initialize_multiplayer_support()
+
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	
-	if multiplayer.has_multiplayer_peer():
-		_initialize_multiplayer_support()
 	
 	if is_multiplayer_authority():
 		if possible_segments and auto_generate:
@@ -32,12 +31,14 @@ func _ready() -> void:
 		_request_map_configuration.rpc_id(1)
 
 
-func _initialize_multiplayer_support() -> void:
+func _initialize_multiplayer_support() -> MultiplayerSpawner:
 	var _spawner: MultiplayerSpawner = _create_multiplayer_spawner()
 	if _spawner:
 		_spawner.spawn_function = _spawn_item
 		_spawn_function = _spawner.spawn
 		_spawner.spawned.connect(_post_spawn_item_processing)
+	
+	return _spawner
 
 
 func _create_multiplayer_spawner() -> MultiplayerSpawner:
