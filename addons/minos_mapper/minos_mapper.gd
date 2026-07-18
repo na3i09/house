@@ -239,7 +239,9 @@ func _build_mesh_library(scene_root: Node) -> MinosMeshLibrary:
 		
 		_apply_metadata_and_suffixes(mesh,item_id,mesh_lib)
 	
-	var previews: Array[Texture2D] = EditorInterface.make_mesh_previews(mesh_preview_dict.values(),64)
+	_validate_and_apply_edge_mates(mesh_lib)
+	
+	var previews: Array[Texture2D] = EditorInterface.make_mesh_previews(mesh_index_dict.values().map(func(mesh_inst: MeshInstance3D): return mesh_inst.mesh),64)
 	
 	for i: int in range(mesh_preview_dict.keys().size()):
 		mesh_lib.set_item_preview(mesh_preview_dict.keys()[i],previews[i])
@@ -274,3 +276,19 @@ func _apply_metadata_and_suffixes(mesh: MeshInstance3D, item_id: int, mesh_lib: 
 
 	if mesh.get_meta("minos_edge",false):
 		mesh_lib.set_edge(item_id)
+	
+	if mesh.has_meta("minos_edge_mates") and mesh_lib.is_edge(item_id):
+		var edge_mates: Array = mesh.get_meta("minos_edge_mates",[])
+		mesh_lib.edge_info[item_id].append_array(edge_mates)
+
+
+func _validate_and_apply_edge_mates(mesh_lib: MinosMeshLibrary) -> void:
+	for id: int in mesh_lib.edge_info:
+		for i: int in range(mesh_lib.edge_info[id].size()):
+			var mate_name: String = mesh_lib.edge_info[id][i]
+			var mate_id: int = mesh_lib.find_item_by_name(mate_name)
+			if not mesh_lib.edge_info.has(mate_id):
+				mate_id = -1
+				push_warning("No matching edge found called: " + mate_name)
+			mesh_lib.edge_info[id][i] = mate_id
+		mesh_lib.edge_info[id] = mesh_lib.edge_info[id].filter(func(id: int): return id != -1)
