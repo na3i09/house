@@ -13,6 +13,10 @@ func remove_edge(item_id: int) -> void:
 	edge_info.erase(item_id)
 
 
+func is_edge(item_id: int) -> bool:
+	return edge_info.has(item_id)
+
+
 func add_edge_mate(item_id: int, mate_id: int) -> void:
 	if edge_info.has(item_id):
 		if not edge_info[item_id].has(mate_id):
