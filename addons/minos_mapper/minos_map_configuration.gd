@@ -5,8 +5,12 @@ const COLLISION_MARGIN: float = 0.001
 
 const COLLISION_MARGIN_VECTOR := Vector3(COLLISION_MARGIN,COLLISION_MARGIN,COLLISION_MARGIN)
 
+## [Dictioanry] of grid cells used in this configuration.
+## The format of the value [Array] is (grid item index,grid item orientation,list of item transform pairs on this grid cell)
 @export_storage var configuration_dict: Dictionary[Vector3i,Array]
 
+## [Dictionary] of edges based on their locations.
+## The format of the value [Array] is (grid item index,grid item orientation,valid edge mates)
 @export_storage var edge_locations: Dictionary[Vector3i,Array]
 
 @export_storage var map_minimum: Vector3i = Vector3i.ZERO
