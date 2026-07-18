@@ -217,11 +217,8 @@ func generate_live_configuration_dictionary() -> Dictionary[Vector3i,Array]:
 ## and items from [member place_dict], [member location_place_dict], and items currently placed in the scene.
 ## The parameter [param make_reliable] saves the configuration in a more reliable, but larger and slower, format.
 func generate_configuration_resource(make_reliable: bool = false) -> MinosMapConfiguration:
-	var dict := generate_tile_configuration_dictionary(self)
-	var item_dict := _serialize_items()
-	for item_loc in item_dict:
-		if dict.has(item_loc):
-			dict[item_loc].append_array(item_dict[item_loc])
+	var dict := generate_live_configuration_dictionary()
+	
 	return MinosMapConfiguration.generate_configuration_resource(
 		dict,
 		mesh_library,
