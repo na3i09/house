@@ -215,7 +215,9 @@ func _generate_segment(map: Dictionary[Vector3i,Array], edge_pool: Dictionary, s
 			continue
 		var true_edge_array: Array = _get_transformed_grid_loc_orient([edge,new_segment.edge_locations[edge][1]],total_transform)
 		if not edge_pool.has(true_edge_array[0]):
-			edge_pool[true_edge_array[0]] = true_edge_array[1]
+			var true_edge_value_array: Array = new_segment.edge_locations[edge].duplicate()
+			true_edge_value_array[1] = true_edge_array[1]
+			edge_pool[true_edge_array[0]] = true_edge_value_array
 	
 	edge_pool.erase(source_edge)
 	
