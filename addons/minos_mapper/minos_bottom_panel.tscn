@@ -13,21 +13,7 @@ func generate_options(option_list: Array[StringName]) -> void:
 		add_item(option)
 "
 
-[sub_resource type="GDScript" id="GDScript_7tkr0"]
-script/source = "@tool
-extends HBoxContainer
-
-
-@export var x_spin_box: SpinBox
-@export var y_spin_box: SpinBox
-@export var z_spin_box: SpinBox
-
-
-func get_location() -> Vector3i:
-	return Vector3i(int(x_spin_box.value),int(y_spin_box.value),int(z_spin_box.value))
-"
-
-[node name="MinosBottomPanel" type="EditorDock" unique_id=981067581 node_paths=PackedStringArray("generation_segments", "item_type_dropdown", "location_selection", "reliable", "load_edges")]
+[node name="MinosBottomPanel" type="EditorDock" unique_id=981067581 node_paths=PackedStringArray("generation_segments", "item_type_dropdown", "reliable", "load_edges")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -40,7 +26,6 @@ available_layouts = 2
 script = ExtResource("1_xcl38")
 generation_segments = NodePath("HBoxContainer/MapGeneration/GenerationSegments")
 item_type_dropdown = NodePath("HBoxContainer/PlaceItem/ItemTypeDropdown")
-location_selection = NodePath("HBoxContainer/PlaceItem/LocationSelection")
 reliable = NodePath("HBoxContainer/SaveAndLoad/Save/Reliable")
 load_edges = NodePath("HBoxContainer/SaveAndLoad/Load/LoadEdges")
 
@@ -105,32 +90,6 @@ layout_mode = 2
 [node name="ItemTypeDropdown" type="OptionButton" parent="HBoxContainer/PlaceItem" unique_id=1897540837]
 layout_mode = 2
 script = SubResource("GDScript_4dhkl")
-
-[node name="LocationSelection" type="HBoxContainer" parent="HBoxContainer/PlaceItem" unique_id=597633066 node_paths=PackedStringArray("x_spin_box", "y_spin_box", "z_spin_box")]
-visible = false
-layout_mode = 2
-script = SubResource("GDScript_7tkr0")
-x_spin_box = NodePath("XSpinBox")
-y_spin_box = NodePath("YSpinBox")
-z_spin_box = NodePath("ZSpinBox")
-
-[node name="XSpinBox" type="SpinBox" parent="HBoxContainer/PlaceItem/LocationSelection" unique_id=300121641]
-layout_mode = 2
-allow_greater = true
-allow_lesser = true
-alignment = 2
-
-[node name="YSpinBox" type="SpinBox" parent="HBoxContainer/PlaceItem/LocationSelection" unique_id=996595443]
-layout_mode = 2
-allow_greater = true
-allow_lesser = true
-alignment = 2
-
-[node name="ZSpinBox" type="SpinBox" parent="HBoxContainer/PlaceItem/LocationSelection" unique_id=1876891985]
-layout_mode = 2
-allow_greater = true
-allow_lesser = true
-alignment = 2
 
 [node name="PlaceItemButton" type="Button" parent="HBoxContainer/PlaceItem" unique_id=253806481]
 layout_mode = 2
