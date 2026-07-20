@@ -283,9 +283,7 @@ func apply_map_configuration_resource(config: MinosMapConfiguration, offset: Vec
 		loaded_dict = config.configuration_dict.duplicate()
 		assert(mesh_library is MinosMeshLibrary)
 		for edge in config.edge_locations:
-			var edge_id: int
-			edge_id = mesh_library.edge_info.keys()[0]
-			loaded_dict[edge] = [edge_id,config.edge_locations[edge][1]]
+			loaded_dict[edge] = config.edge_locations[edge].slice(0,2)
 	_apply_map_configuration(loaded_dict,offset)
 
 
