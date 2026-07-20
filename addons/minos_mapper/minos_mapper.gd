@@ -279,6 +279,9 @@ func _apply_metadata_and_suffixes(mesh: MeshInstance3D, item_id: int, mesh_lib: 
 		elif mesh_item_name.ends_with("-L"):
 			var mate_name: String = mesh_item_name.trim_suffix("-L") + "-R"
 			mesh_lib.edge_info[item_id].append(mate_name)
+		
+		if mesh_lib.edge_info[item_id].is_empty():
+			mesh_lib.edge_info[item_id].append(mesh_lib.get_item_name(item_id))
 
 
 func _validate_and_apply_edge_mates(mesh_lib: MinosMeshLibrary) -> void:
