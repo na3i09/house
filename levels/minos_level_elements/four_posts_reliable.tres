@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="MinosMapConfiguration" format=3 uid="uid://dlfkf5hfhja0p"]
+
+[ext_resource type="Script" uid="uid://bu486f0sfj83e" path="res://addons/minos_mapper/minos_map_configuration.gd" id="1_ijqvl"]
+
+[resource]
+script = ExtResource("1_ijqvl")
+configuration_dict = Dictionary[Vector3i, Array]({
+Vector3i(-2, 0, -1): ["Door", 16],
+Vector3i(-1, 0, -2): ["Floor", 0],
+Vector3i(-1, 0, -1): ["Floor", 0],
+Vector3i(-1, 0, 0): ["Floor", 0],
+Vector3i(0, 0, -3): ["Door", 0],
+Vector3i(0, 0, -2): ["Floor", 0],
+Vector3i(0, 0, -1): ["Floor", 0],
+Vector3i(0, 0, 0): ["Floor", 0],
+Vector3i(0, 0, 1): ["Door", 10],
+Vector3i(1, 0, -2): ["Floor", 0],
+Vector3i(1, 0, -1): ["Floor", 0],
+Vector3i(1, 0, 0): ["Floor", 0],
+Vector3i(2, 0, -1): ["Door", 22]
+})
+edge_locations = Dictionary[Vector3i, Array]({
+Vector3i(-3, 0, -1): ["Edge", 22],
+Vector3i(0, 0, -4): ["Edge", 10],
+Vector3i(0, 0, 2): ["Edge", 0],
+Vector3i(3, 0, -1): ["Edge", 16]
+})
+map_minimum = Vector3i(-2, 0, -3)
+map_maximum = Vector3i(2, 0, 1)
+reliable = true

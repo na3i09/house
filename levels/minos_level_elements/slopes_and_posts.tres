@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="MinosMapConfiguration" format=3 uid="uid://dv2ivtqifcm5p"]
+
+[ext_resource type="Script" uid="uid://bu486f0sfj83e" path="res://addons/minos_mapper/minos_map_configuration.gd" id="1_stkd8"]
+
+[resource]
+script = ExtResource("1_stkd8")
+configuration_dict = Dictionary[Vector3i, Array]({
+Vector3i(-2, 0, -1): ["Door", 16],
+Vector3i(-1, 0, -1): ["Slope", 0],
+Vector3i(-1, 0, 1): ["Corner", 16],
+Vector3i(0, 0, -3): ["Door", 0],
+Vector3i(0, 0, -2): ["Floor", 0],
+Vector3i(0, 0, -1): ["Floor", 0],
+Vector3i(0, 0, 0): ["Floor", 0],
+Vector3i(0, 0, 1): ["Door", 10],
+Vector3i(1, 0, -2): ["Floor", 0],
+Vector3i(1, 0, -1): ["Floor", 0],
+Vector3i(1, 0, 0): ["Floor", 0],
+Vector3i(1, 0, 1): ["Corner", 10],
+Vector3i(2, 0, -1): ["Door", 22]
+})
+edge_locations = Dictionary[Vector3i, Array]({
+Vector3i(-3, 0, -1): ["Edge", 22, "Edge"],
+Vector3i(-1, -1, -1): ["VerticalEdge-L", 14, "VerticalEdge-R"],
+Vector3i(-1, 1, -2): ["VerticalEdge-R", 12, "VerticalEdge-L"],
+Vector3i(0, 0, -4): ["Edge", 10, "Edge"],
+Vector3i(0, 0, 2): ["Edge", 0, "Edge"],
+Vector3i(3, 0, -1): ["Edge", 16, "Edge"]
+})
+map_minimum = Vector3i(-2, 0, -3)
+map_maximum = Vector3i(2, 0, 1)
+reliable = true
