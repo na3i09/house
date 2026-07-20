@@ -183,6 +183,7 @@ func _create_minos_mesh_library(save_path: String) -> void:
 	var mesh_lib: MinosMeshLibrary = _build_mesh_library(scene_root)
 	
 	ResourceSaver.save(mesh_lib,save_path)
+	mesh_lib.take_over_path(save_path)
 	
 	for node in generated_nodes:
 		node.queue_free()

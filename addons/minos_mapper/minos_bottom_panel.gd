@@ -42,6 +42,7 @@ func save_configuration(save_name: String) -> void:
 	if map_placer:
 		var map_config: MinosMapConfiguration = map_placer.generate_configuration_resource(reliable.button_pressed)
 		ResourceSaver.save(map_config,save_name)
+		map_config.take_over_path(save_name)
 
 
 func _on_load_button_pressed() -> void:
