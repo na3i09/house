@@ -123,6 +123,8 @@ func generate_map(segments: Array[MinosMapConfiguration], _max_instances: int, _
 	
 	return generated_map
 
+
+# Generate a single map segment attached to an existing map edge, returning false if a valid segment could not be placed
 func _generate_segment(map: Dictionary[Vector3i,Array], edge_pool: Dictionary, segments: Array[MinosMapConfiguration]) -> bool:
 	if edge_pool.is_empty():
 		return false
@@ -159,6 +161,7 @@ func _generate_segment(map: Dictionary[Vector3i,Array], edge_pool: Dictionary, s
 	return true
 
 
+# Transform all tiles in the [param source] dictionary by the given [Transform3D] and append them to the [param destination] dictionary
 func _add_transformed_tiles_to_dictionary(source: Dictionary[Vector3i,Array], destination: Dictionary[Vector3i,Array], total_transform: Transform3D) -> void:
 	for location: Vector3i in source:
 		var true_tile_array: Array = _get_transformed_grid_loc_orient([location,source[location][1]],total_transform)
@@ -168,6 +171,7 @@ func _add_transformed_tiles_to_dictionary(source: Dictionary[Vector3i,Array], de
 			destination[true_tile_array[0]] = new_array
 
 
+# Transform a grid location and orientation pair by the given [Transform3D] and return the transformed pair
 func _get_transformed_grid_loc_orient(loc_and_orient: Array, _transform: Transform3D) -> Array:
 	var tile_transform: Transform3D = _make_grid_transform.callv(loc_and_orient)
 	var true_transform: Transform3D = _transform * tile_transform
@@ -175,6 +179,7 @@ func _get_transformed_grid_loc_orient(loc_and_orient: Array, _transform: Transfo
 	return [Vector3i(true_transform.origin),get_orthogonal_index_from_basis(true_transform.basis)]
 
 
+# Return true if any cells in the given min and max range are found in the current map
 func _find_overlap_in_range(_map: Dictionary[Vector3i,Array],segment_min: Vector3i,segment_max: Vector3i) -> bool:
 	for x: int in range(segment_min.x,segment_max.x+1):
 		for y: int in range(segment_min.y,segment_max.y+1):
@@ -185,12 +190,14 @@ func _find_overlap_in_range(_map: Dictionary[Vector3i,Array],segment_min: Vector
 	return false
 
 
+# Create a [Transform3D] representing given grid location and orientation
 func _make_grid_transform(location: Vector3i, orientation: int) -> Transform3D:
 	var _basis: Basis = get_basis_with_orthogonal_index(orientation)
 	
 	return Transform3D(_basis,location)
 
 
+# Transform the base [param tile_trasnform] with the source and segment edges to produce a transform in global gridmap space
 func _get_true_grid_transform(tile_transform: Transform3D, source_edge_transform: Transform3D, segment_edge_transform: Transform3D) -> Transform3D:
 	var true_transform: Transform3D = source_edge_transform * _reversed_transform * segment_edge_transform.inverse() * tile_transform
 	true_transform.origin -= source_edge_transform.basis.z
@@ -198,6 +205,7 @@ func _get_true_grid_transform(tile_transform: Transform3D, source_edge_transform
 	return true_transform
 
 
+# Return [Array] of configuration segments that contain valid mates for the given [param edge_type]
 func _get_segments_with_valid_mates(edge_type: Variant, segments: Array[MinosMapConfiguration]) -> Array[MinosMapConfiguration]:
 	var valid_segments: Array[MinosMapConfiguration]
 	
