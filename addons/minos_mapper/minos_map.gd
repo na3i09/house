@@ -128,10 +128,24 @@ func generate_map(segments: Array[MinosMapConfiguration], _max_instances: int, _
 func _generate_segment(map: Dictionary[Vector3i,Array], edge_pool: Dictionary, segments: Array[MinosMapConfiguration]) -> bool:
 	if edge_pool.is_empty():
 		return false
-	var source_edge: Vector3i = edge_pool.keys().pick_random()
-	var source_edge_transform: Transform3D = _make_grid_transform(source_edge,edge_pool[source_edge][1])
 	
-	var valid_segments: Array[MinosMapConfiguration] = _get_segments_with_valid_mates(edge_pool[source_edge][0],segments)
+	var possible_source_edges: Array = edge_pool.keys().duplicate()
+	
+	var source_edge: Vector3i
+	var source_edge_transform: Transform3D
+	var valid_segments: Array[MinosMapConfiguration]
+	
+	while not possible_source_edges.is_empty():
+		source_edge = possible_source_edges.pick_random()
+		source_edge_transform = _make_grid_transform(source_edge,edge_pool[source_edge][1])
+		
+		valid_segments = _get_segments_with_valid_mates(edge_pool[source_edge][0],segments)
+		
+		if not valid_segments.is_empty():
+			break
+		
+		possible_source_edges.erase(source_edge)
+	
 	if valid_segments.is_empty():
 		return false
 	
