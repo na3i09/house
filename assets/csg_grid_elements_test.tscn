@@ -41,22 +41,47 @@ size = Vector3(10, 10.035156, 10)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 2.248291)
 size = Vector3(2, 2, 6.496582)
 
-[node name="VerticalEdgeCSG" type="CSGMesh3D" parent="." unique_id=1769709816]
+[node name="VerticalEdgeCSG-R-edge" type="CSGMesh3D" parent="." unique_id=1769709816]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
 mesh = SubResource("BoxMesh_4dhkl")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="VerticalEdgeCSG" unique_id=406891627]
+[node name="CSGBox3D" type="CSGBox3D" parent="VerticalEdgeCSG-R-edge" unique_id=406891627]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.518, 0.5)
 operation = 2
 size = Vector3(10, 10.035156, 10)
 
-[node name="CSGBox3D" type="CSGBox3D" parent="VerticalEdgeCSG/CSGBox3D" unique_id=1953728791]
+[node name="CSGBox3D" type="CSGBox3D" parent="VerticalEdgeCSG-R-edge/CSGBox3D" unique_id=1953728791]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 2.248291)
 size = Vector3(2, 2, 6.496582)
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="VerticalEdgeCSG/CSGBox3D" unique_id=133752477]
+[node name="CSGBox3D2" type="CSGBox3D" parent="VerticalEdgeCSG-R-edge/CSGBox3D" unique_id=133752477]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.248, -5)
 size = Vector3(2, 6.497, 2)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="VerticalEdgeCSG-R-edge/CSGBox3D" unique_id=897526273]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.8436823, 2.6220608)
+size = Vector3(10, 2, 5.196289)
+
+[node name="VerticalEdgeCSG-L-edge" type="CSGMesh3D" parent="." unique_id=215450161]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, -24)
+mesh = SubResource("BoxMesh_4dhkl")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="VerticalEdgeCSG-L-edge" unique_id=1675867261]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.518, 0.5)
+operation = 2
+size = Vector3(10, 10.035156, 10)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="VerticalEdgeCSG-L-edge/CSGBox3D" unique_id=818264898]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 2.248291)
+size = Vector3(2, 2, 6.496582)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="VerticalEdgeCSG-L-edge/CSGBox3D" unique_id=1161903960]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.248, -5)
+size = Vector3(2, 6.497, 2)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="VerticalEdgeCSG-L-edge/CSGBox3D" unique_id=15541905]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.8436823, 2.6220608)
+size = Vector3(10, 2, 5.196289)
 
 [node name="WallCSG" type="CSGMesh3D" parent="." unique_id=1044724619]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
