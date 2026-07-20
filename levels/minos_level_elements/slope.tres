@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="MinosMapConfiguration" format=3 uid="uid://vi47521d63cc"]
+
+[ext_resource type="Script" uid="uid://bu486f0sfj83e" path="res://addons/minos_mapper/minos_map_configuration.gd" id="1_lquwm"]
+
+[resource]
+script = ExtResource("1_lquwm")
+configuration_dict = Dictionary[Vector3i, Array]({
+Vector3i(0, 0, -1): ["FullBlock", 14],
+Vector3i(0, 0, 0): ["Slope", 0],
+Vector3i(0, 1, -2): ["FullBlock", 14],
+Vector3i(0, 1, -1): ["Slope", 0],
+Vector3i(0, 2, -3): ["FullBlock", 14],
+Vector3i(0, 2, -2): ["Slope", 0]
+})
+edge_locations = Dictionary[Vector3i, Array]({
+Vector3i(0, -1, 0): ["VerticalEdge-L", 14, "VerticalEdge-R"],
+Vector3i(0, 3, -3): ["VerticalEdge-R", 12, "VerticalEdge-L"]
+})
+map_minimum = Vector3i(0, 0, -3)
+map_maximum = Vector3i(0, 2, 0)
+reliable = true

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="MinosMapConfiguration" format=3 uid="uid://qh40bh01qkuy"]
+
+[ext_resource type="Script" uid="uid://bu486f0sfj83e" path="res://addons/minos_mapper/minos_map_configuration.gd" id="1_7le7f"]
+
+[resource]
+script = ExtResource("1_7le7f")
+configuration_dict = Dictionary[Vector3i, Array]({
+Vector3i(0, 0, -1): ["TunnelCorner", 0],
+Vector3i(0, 0, 0): ["Tunnel", 22],
+Vector3i(0, 0, 1): ["Tunnel", 22],
+Vector3i(0, 0, 2): ["Tunnel", 22],
+Vector3i(1, 0, -1): ["Tunnel", 0]
+})
+edge_locations = Dictionary[Vector3i, Array]({
+Vector3i(0, 0, 3): ["Edge", 0, "Edge"],
+Vector3i(2, 0, -1): ["Edge", 16, "Edge"]
+})
+map_minimum = Vector3i(0, 0, -1)
+map_maximum = Vector3i(1, 0, 2)
+reliable = true
