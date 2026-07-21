@@ -207,8 +207,8 @@ func generate_live_configuration_dictionary() -> Dictionary[Vector3i,Array]:
 	var dict := generate_tile_configuration_dictionary(self)
 	var item_dict := _serialize_items()
 	
-	for location: Vector3i in dict:
-		if item_dict.has(location):
+	for location: Vector3i in item_dict:
+		if dict.has(location):
 			dict[location].append_array(item_dict[location])
 	
 	return dict
