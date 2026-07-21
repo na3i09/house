@@ -409,43 +409,45 @@ class GenMap:
 		var source_edge_transform: Transform3D
 		var valid_segments: Array[MinosMapConfiguration]
 		
-		while not possible_source_edges.is_empty():
-			source_edge = possible_source_edges.pick_random()
-			source_edge_transform = map_owner._make_grid_transform(source_edge,edges[source_edge][1])
-			
-			valid_segments = _get_segments_with_valid_mates(edges[source_edge][0],segments)
-			
-			if not valid_segments.is_empty():
-				break
-			
-			possible_source_edges.erase(source_edge)
-		
-		if valid_segments.is_empty():
-			push_warning("Failed to find valid edge mate")
-			return null
-		
 		var new_segment: MinosMapConfiguration
 		var segment_edge: Vector3i
 		var segment_edge_transform: Transform3D
 		
 		var total_transform: Transform3D
 		
-		while not valid_segments.is_empty():
-			new_segment = valid_segments.pick_random()
-			segment_edge = new_segment.get_valid_mates(edges[source_edge][0],map_owner.mesh_library).pick_random()
-			segment_edge_transform = map_owner._make_grid_transform(segment_edge,new_segment.edge_locations[segment_edge][1])
+		while not possible_source_edges.is_empty():
+			source_edge = possible_source_edges.pick_random()
+			source_edge_transform = map_owner._make_grid_transform(source_edge,edges[source_edge][1])
 			
-			total_transform = map_owner._get_true_grid_transform(Transform3D.IDENTITY,source_edge_transform,segment_edge_transform)
+			valid_segments = _get_segments_with_valid_mates(edges[source_edge][0],segments)
 			
-			if _find_overlap_in_range(
-				Vector3i(total_transform * Vector3(new_segment.map_minimum)),
-				Vector3i(total_transform * Vector3(new_segment.map_maximum))
-				):
-				push_warning("Overlap")
-				valid_segments.erase(new_segment)
+			if valid_segments.is_empty():
+				possible_source_edges.erase(source_edge)
 				continue
+		
+			if possible_source_edges.is_empty():
+				push_warning("Failed to find valid edge mate")
+				return null
 			
-			break
+			while not valid_segments.is_empty():
+				new_segment = valid_segments.pick_random()
+				segment_edge = new_segment.get_valid_mates(edges[source_edge][0],map_owner.mesh_library).pick_random()
+				segment_edge_transform = map_owner._make_grid_transform(segment_edge,new_segment.edge_locations[segment_edge][1])
+				
+				total_transform = map_owner._get_true_grid_transform(Transform3D.IDENTITY,source_edge_transform,segment_edge_transform)
+				
+				if _find_overlap_in_range(
+					Vector3i(total_transform * Vector3(new_segment.map_minimum)),
+					Vector3i(total_transform * Vector3(new_segment.map_maximum))
+					):
+					push_warning("Overlap")
+					valid_segments.erase(new_segment)
+					continue
+					
+				if not valid_segments.is_empty():
+					break
+			if not valid_segments.is_empty():
+				break
 		
 		if valid_segments.is_empty():
 			push_warning("Failed to find non overlapping segment")
