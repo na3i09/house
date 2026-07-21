@@ -95,99 +95,33 @@ func generate_random_item_configuration_dictionary() -> Dictionary[Vector3i,Arra
 #region Map Generation
 ## Generate [Dictionary] representing a randomly assembled map made up of [MinosMapConfiguration] segments in [param segments]
 func generate_map(segments: Array[MinosMapConfiguration], _max_instances: int, _origin: Vector3i = Vector3i(0,0,0)) -> Dictionary[Vector3i,Array]:
-	var generated_map: Dictionary[Vector3i,Array] = {}
-	
-	var edge_pool: Dictionary[Vector3i,Array] = {}
+	var map := GenMap.new(self)
 	
 	var first_segment: MinosMapConfiguration = segments.pick_random()
-	generated_map.merge(first_segment.configuration_dict)
+	map.tiles.merge(first_segment.configuration_dict)
 	
-	edge_pool = first_segment.edge_locations.duplicate()
+	map.edges = first_segment.edge_locations.duplicate()
 	
 	var retries: int = 0
 	
 	for i in range(_max_instances - 1):
-		var success: bool = _generate_segment(generated_map,edge_pool,segments)
+		var new_map_segment: GenMap = map.generate_segment(segments)
 		
-		if not success:
+		if not new_map_segment:
 			while retries < RETRY_LIMIT:
 				retries += 1
-				success = _generate_segment(generated_map,edge_pool,segments)
-				if success:
+				new_map_segment = map.generate_segment(segments)
+				if new_map_segment:
 					retries = 0
 					break
 			
 			if retries >= RETRY_LIMIT:
 				push_warning("failed to retry on iteration: " + str(i))
 				break
-	
-	return generated_map
-
-
-# Generate a single map segment attached to an existing map edge, returning false if a valid segment could not be placed
-func _generate_segment(map: Dictionary[Vector3i,Array], edge_pool: Dictionary, segments: Array[MinosMapConfiguration]) -> bool:
-	if edge_pool.is_empty():
-		return false
-	
-	var possible_source_edges: Array = edge_pool.keys().duplicate()
-	
-	var source_edge: Vector3i
-	var source_edge_transform: Transform3D
-	var valid_segments: Array[MinosMapConfiguration]
-	
-	while not possible_source_edges.is_empty():
-		source_edge = possible_source_edges.pick_random()
-		source_edge_transform = _make_grid_transform(source_edge,edge_pool[source_edge][1])
 		
-		valid_segments = _get_segments_with_valid_mates(edge_pool[source_edge][0],segments)
-		
-		if not valid_segments.is_empty():
-			break
-		
-		possible_source_edges.erase(source_edge)
+		map.append(new_map_segment)
 	
-	if valid_segments.is_empty():
-		push_warning("Failed to find valid edge mate")
-		return false
-	
-	var new_segment: MinosMapConfiguration
-	var segment_edge: Vector3i
-	var segment_edge_transform: Transform3D
-	
-	var total_transform: Transform3D
-	
-	while not valid_segments.is_empty():
-		new_segment = valid_segments.pick_random()
-		segment_edge = new_segment.get_valid_mates(map.edges[source_edge][0],mesh_library).pick_random()
-		segment_edge_transform = _make_grid_transform(segment_edge,new_segment.edge_locations[segment_edge][1])
-		
-		total_transform = _get_true_grid_transform(Transform3D.IDENTITY,source_edge_transform,segment_edge_transform)
-		
-		if _find_overlap_in_range(
-			map,
-			Vector3i(total_transform * Vector3(new_segment.map_minimum)),
-			Vector3i(total_transform * Vector3(new_segment.map_maximum))
-			):
-			push_warning("Overlap")
-			valid_segments.erase(new_segment)
-			continue
-		
-		break
-	
-	if valid_segments.is_empty():
-		push_warning("Failed to find non overlapping segment")
-		return false
-	
-	_add_transformed_tiles_to_dictionary(new_segment.configuration_dict,map,total_transform)
-	
-	var unused_segments: Dictionary[Vector3i,Array] = new_segment.edge_locations.duplicate()
-	unused_segments.erase(segment_edge)
-	
-	_add_transformed_tiles_to_dictionary(unused_segments,edge_pool,total_transform)
-	
-	edge_pool.erase(source_edge)
-	
-	return true
+	return map.tiles
 
 
 # Transform all tiles in the [param source] dictionary by the given [Transform3D] and append them to the [param destination] dictionary
@@ -432,3 +366,103 @@ func _create_local_item_transform(location: Vector3i, orientation: int, offset_t
 	
 	return item_transform
 #endregion
+
+
+class GenMap:
+	extends RefCounted
+	
+	
+	var tiles: Dictionary[Vector3i,Array]
+	var edges: Dictionary
+	
+	var aabbs: Array[AABB]
+	
+	var map_owner: MinosMap
+	
+	
+	func _init(_map_owner: MinosMap) -> void:
+		map_owner = _map_owner
+	
+	
+	func append(map: GenMap) -> void:
+		tiles.merge(map.tiles)
+		edges.merge(map.edges)
+		aabbs.append_array(map.aabbs)
+		
+		for location in tiles: # Remove edges that overlap with existing tiles
+			edges.erase(location)
+	
+	
+	# Return true if any cells in the given min and max range are found in the current map
+	func _find_overlap_in_range(segment_min: Vector3i,segment_max: Vector3i) -> bool:
+		for x: int in range(segment_min.x,segment_max.x+1):
+			for y: int in range(segment_min.y,segment_max.y+1):
+				for z: int in range(segment_min.z,segment_max.z+1):
+					if tiles.has(Vector3i(x,y,z)):
+						return true
+		
+		return false
+	
+	
+	func generate_segment(segments: Array[MinosMapConfiguration]) -> GenMap:
+		if edges.is_empty():
+			return null
+		
+		var new_map := GenMap.new(map_owner)
+		
+		var possible_source_edges: Array = edges.keys().duplicate()
+		
+		var source_edge: Vector3i
+		var source_edge_transform: Transform3D
+		var valid_segments: Array[MinosMapConfiguration]
+		
+		while not possible_source_edges.is_empty():
+			source_edge = possible_source_edges.pick_random()
+			source_edge_transform = map_owner._make_grid_transform(source_edge,edges[source_edge][1])
+			
+			valid_segments = map_owner._get_segments_with_valid_mates(edges[source_edge][0],segments)
+			
+			if not valid_segments.is_empty():
+				break
+			
+			possible_source_edges.erase(source_edge)
+		
+		if valid_segments.is_empty():
+			push_warning("Failed to find valid edge mate")
+			return null
+		
+		var new_segment: MinosMapConfiguration
+		var segment_edge: Vector3i
+		var segment_edge_transform: Transform3D
+		
+		var total_transform: Transform3D
+		
+		while not valid_segments.is_empty():
+			new_segment = valid_segments.pick_random()
+			segment_edge = new_segment.get_valid_mates(edges[source_edge][0],map_owner.mesh_library).pick_random()
+			segment_edge_transform = map_owner._make_grid_transform(segment_edge,new_segment.edge_locations[segment_edge][1])
+			
+			total_transform = map_owner._get_true_grid_transform(Transform3D.IDENTITY,source_edge_transform,segment_edge_transform)
+			
+			if _find_overlap_in_range(
+				Vector3i(total_transform * Vector3(new_segment.map_minimum)),
+				Vector3i(total_transform * Vector3(new_segment.map_maximum))
+				):
+				push_warning("Overlap")
+				valid_segments.erase(new_segment)
+				continue
+			
+			break
+		
+		if valid_segments.is_empty():
+			push_warning("Failed to find non overlapping segment")
+			return null
+		
+		new_map.tiles = map_owner._create_transformed_tile_dictionary(new_segment.configuration_dict,total_transform)
+		
+		var unused_segments: Dictionary[Vector3i,Array] = new_segment.edge_locations.duplicate()
+		unused_segments.erase(segment_edge)
+		
+		new_map.edges = map_owner._create_transformed_tile_dictionary(unused_segments,total_transform)
+		
+		return new_map
