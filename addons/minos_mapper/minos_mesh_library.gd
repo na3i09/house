@@ -53,3 +53,18 @@ func get_name_to_id_translation_table() -> Dictionary[String,int]:
 	
 	return inverse_translation_table
 #endregion
+
+
+func get_tile_id_from_id_or_name(value: Variant) -> int:
+	assert(value is int or value is String, "Malformed argument")
+	if value is int:
+		return value
+	elif value is String:
+		var item_id: int = find_item_by_name(value)
+		assert(item_id != -1)
+		if item_id == -1:
+			push_error("Could not find matching mesh library item for name: " + value)
+		return item_id
+	else:
+		push_error("Malformed argument")
+		return -1

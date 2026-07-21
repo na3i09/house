@@ -99,9 +99,10 @@ static func _convert_efficient(config_resource: MinosMapConfiguration, mesh_libr
 #endregion
 
 
-func has_valid_mates(edge_type: int, mesh_library: MinosMeshLibrary) -> bool:
-	assert(mesh_library.is_edge(edge_type))
-	var mate_types: Array = mesh_library.edge_info[edge_type]
+func has_valid_mates(edge_type: Variant, mesh_library: MinosMeshLibrary) -> bool:
+	var edge_id: int = mesh_library.get_tile_id_from_id_or_name(edge_type)
+	assert(mesh_library.is_edge(edge_id))
+	var mate_types: Array = mesh_library.edge_info[edge_id]
 	
 	if mate_types.is_empty():
 		return true
@@ -117,11 +118,12 @@ func has_valid_mates(edge_type: int, mesh_library: MinosMeshLibrary) -> bool:
 	return false
 
 
-func get_valid_mates(edge_type: int, mesh_library: MinosMeshLibrary) -> Array[Vector3i]:
+func get_valid_mates(edge_type: Variant, mesh_library: MinosMeshLibrary) -> Array[Vector3i]:
+	var edge_id: int = mesh_library.get_tile_id_from_id_or_name(edge_type)
 	var valid_mates: Array[Vector3i]
 	
-	assert(mesh_library.is_edge(edge_type))
-	var mate_types: Array = mesh_library.edge_info[edge_type]
+	assert(mesh_library.is_edge(edge_id))
+	var mate_types: Array = mesh_library.edge_info[edge_id]
 	
 	if mate_types.is_empty():
 		return edge_locations.keys()

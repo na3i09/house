@@ -158,7 +158,7 @@ func _generate_segment(map: Dictionary[Vector3i,Array], edge_pool: Dictionary, s
 	
 	while not valid_segments.is_empty():
 		new_segment = valid_segments.pick_random()
-		segment_edge = new_segment.get_valid_mates(_get_tile_id_from_id_or_name(edge_pool[source_edge][0]),mesh_library).pick_random()
+		segment_edge = new_segment.get_valid_mates(map.edges[source_edge][0],mesh_library).pick_random()
 		segment_edge_transform = _make_grid_transform(segment_edge,new_segment.edge_locations[segment_edge][1])
 		
 		total_transform = _get_true_grid_transform(Transform3D.IDENTITY,source_edge_transform,segment_edge_transform)
@@ -239,7 +239,7 @@ func _get_segments_with_valid_mates(edge_type: Variant, segments: Array[MinosMap
 	var valid_segments: Array[MinosMapConfiguration]
 	
 	for segment: MinosMapConfiguration in segments:
-		if segment.has_valid_mates(_get_tile_id_from_id_or_name(edge_type),mesh_library):
+		if segment.has_valid_mates(edge_type,mesh_library):
 			valid_segments.append(segment)
 	
 	return valid_segments
@@ -327,7 +327,7 @@ func apply_map_configuration_resource(config: MinosMapConfiguration, offset: Vec
 # Apply map configuration defined in [param config] with optional [param offset]
 func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector3i = Vector3i(0,0,0)) -> void:
 	for location: Vector3i in config:
-		var tile_type: int = _get_tile_id_from_id_or_name(config[location][0])
+		var tile_type: int = mesh_library.get_tile_id_from_id_or_name(config[location][0])
 		var tile_orientation: int = config[location][1]
 		var items: Array = config[location].slice(2)
 		
@@ -336,21 +336,6 @@ func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector
 		set_cell_item(true_location,tile_type,tile_orientation)
 		
 		_instance_item_array(true_location,tile_orientation,items)
-
-
-func _get_tile_id_from_id_or_name(value: Variant) -> int:
-	assert(value is int or value is String, "Malformed argument")
-	if value is int:
-		return value
-	elif value is String:
-		var item_id: int = mesh_library.find_item_by_name(value)
-		assert(item_id != -1)
-		if item_id == -1:
-			push_error("Could not find matching mesh library item for name: " + value)
-		return item_id
-	else:
-		push_error("Malformed argument")
-		return -1
 #endregion
 
 
