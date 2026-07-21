@@ -393,17 +393,6 @@ class GenMap:
 			edges.erase(location)
 	
 	
-	# Return true if any cells in the given min and max range are found in the current map
-	func _find_overlap_in_range(segment_min: Vector3i,segment_max: Vector3i) -> bool:
-		for x: int in range(segment_min.x,segment_max.x+1):
-			for y: int in range(segment_min.y,segment_max.y+1):
-				for z: int in range(segment_min.z,segment_max.z+1):
-					if tiles.has(Vector3i(x,y,z)):
-						return true
-		
-		return false
-	
-	
 	func generate_segment(segments: Array[MinosMapConfiguration]) -> GenMap:
 		if edges.is_empty():
 			return null
@@ -420,7 +409,7 @@ class GenMap:
 			source_edge = possible_source_edges.pick_random()
 			source_edge_transform = map_owner._make_grid_transform(source_edge,edges[source_edge][1])
 			
-			valid_segments = map_owner._get_segments_with_valid_mates(edges[source_edge][0],segments)
+			valid_segments = _get_segments_with_valid_mates(edges[source_edge][0],segments)
 			
 			if not valid_segments.is_empty():
 				break
@@ -466,3 +455,25 @@ class GenMap:
 		new_map.edges = map_owner._create_transformed_tile_dictionary(unused_segments,total_transform)
 		
 		return new_map
+	
+	
+	# Return [Array] of configuration segments that contain valid mates for the given [param edge_type]
+	func _get_segments_with_valid_mates(edge_type: Variant, segments: Array[MinosMapConfiguration]) -> Array[MinosMapConfiguration]:
+		var valid_segments: Array[MinosMapConfiguration]
+		
+		for segment: MinosMapConfiguration in segments:
+			if segment.has_valid_mates(edge_type,map_owner.mesh_library):
+				valid_segments.append(segment)
+		
+		return valid_segments
+	
+	
+	# Return true if any cells in the given min and max range are found in the current map
+	func _find_overlap_in_range(segment_min: Vector3i,segment_max: Vector3i) -> bool:
+		for x: int in range(segment_min.x,segment_max.x+1):
+			for y: int in range(segment_min.y,segment_max.y+1):
+				for z: int in range(segment_min.z,segment_max.z+1):
+					if tiles.has(Vector3i(x,y,z)):
+						return true
+		
+		return false
