@@ -94,7 +94,7 @@ func generate_random_item_configuration_dictionary() -> Dictionary[Vector3i,Arra
 
 #region Map Generation
 ## Generate [Dictionary] representing a randomly assembled map made up of [MinosMapConfiguration] segments in [param segments]
-func generate_map(segments: Array[MinosMapConfiguration], _max_instances: int, _origin: Vector3i = Vector3i(0,0,0)) -> Dictionary[Vector3i,Array]:
+func generate_map(segments: Array[MinosMapConfiguration], _max_instances: int) -> Dictionary[Vector3i,Array]:
 	var map := GenMap.new(self)
 	
 	var first_segment: MinosMapConfiguration = segments.pick_random()
