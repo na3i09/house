@@ -200,6 +200,19 @@ func _add_transformed_tiles_to_dictionary(source: Dictionary[Vector3i,Array], de
 			destination[true_tile_array[0]] = new_array
 
 
+# Transform all tiles in the [param source] dictionary by the given [Transform3D] and return a new dictionary
+func _create_transformed_tile_dictionary(source: Dictionary[Vector3i,Array], total_transform: Transform3D) -> Dictionary[Vector3i,Array]:
+	var destination: Dictionary[Vector3i,Array]
+	for location: Vector3i in source:
+		var true_tile_array: Array = _get_transformed_grid_loc_orient([location,source[location][1]],total_transform)
+		if not destination.has(true_tile_array[0]):
+			var new_array: Array = source[location].duplicate()
+			new_array[1] = true_tile_array[1]
+			destination[true_tile_array[0]] = new_array
+	
+	return destination
+
+
 # Transform a grid location and orientation pair by the given [Transform3D] and return the transformed pair
 func _get_transformed_grid_loc_orient(loc_and_orient: Array, _transform: Transform3D) -> Array:
 	var tile_transform: Transform3D = _make_grid_transform.callv(loc_and_orient)
