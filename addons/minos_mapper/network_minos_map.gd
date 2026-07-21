@@ -28,6 +28,8 @@ func _ready() -> void:
 
 #region Multiplayer Initialization
 func _initialize_multiplayer_support() -> MultiplayerSpawner:
+	if Engine.is_editor_hint():
+		return null
 	var _spawner: MultiplayerSpawner = _create_multiplayer_spawner()
 	if _spawner:
 		_spawner.spawn_function = _spawn_item
