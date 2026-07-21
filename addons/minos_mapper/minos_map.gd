@@ -98,9 +98,8 @@ func generate_map(segments: Array[MinosMapConfiguration], _max_instances: int) -
 	var map := GenMap.new(self)
 	
 	var first_segment: MinosMapConfiguration = segments.pick_random()
-	map.tiles.merge(first_segment.configuration_dict)
 	
-	map.edges = first_segment.edge_locations.duplicate()
+	map.convert_from_configuration(first_segment)
 	
 	var retries: int = 0
 	
@@ -382,6 +381,11 @@ class GenMap:
 	
 	func _init(_map_owner: MinosMap) -> void:
 		map_owner = _map_owner
+	
+	
+	func convert_from_configuration(config: MinosMapConfiguration) -> void:
+		tiles = config.configuration_dict.duplicate()
+		edges = config.edge_locations.duplicate()
 	
 	
 	func append(map: GenMap) -> void:
