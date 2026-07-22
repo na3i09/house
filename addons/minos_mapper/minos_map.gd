@@ -334,6 +334,9 @@ func _instantiate_item_at_cell_position(item_name: String, location: Vector3i, r
 	
 	inst_scene.set_meta("is_placer_item",true)
 	
+	if not Engine.is_editor_hint():
+		inst_scene.set_meta("location_index",location)
+	
 	return inst_scene
 
 
@@ -342,6 +345,15 @@ func _spawn_item(args: Array) -> Node:
 	assert(args.size() == 5)
 	
 	return _instantiate_item_at_cell_position.callv(args)
+
+
+func _remove_items_from_locations(locations: Array[Vector3i]) -> void:
+	var items: Array[Node] = get_tree().get_nodes_in_group(name + "_items")
+	for item: Node in items:
+		if item.has_meta("is_placer_item") and item.has_meta("location_index"):
+			var item_location: Vector3i = item.get_meta("location_index")
+			if locations.has(item_location):
+				item.queue_free()
 
 
 func _name_item(item_name: String, random_id: int) -> String:
