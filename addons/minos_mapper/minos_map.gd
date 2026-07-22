@@ -276,7 +276,17 @@ func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector
 		_instance_item_array(true_location,tile_orientation,items)
 		
 	configuration_changed.emit()
-#endregion
+
+
+func _remove_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector3i = Vector3i(0,0,0)) -> void:
+	for location: Vector3i in config:
+		var true_location: Vector3i = location + offset
+		
+		set_cell_item(true_location,INVALID_CELL_ITEM)
+	
+	_remove_items_from_locations(config.keys())
+	
+	configuration_changed.emit()
 
 
 ## Clear all cells and placed items
@@ -288,6 +298,7 @@ func clear_map() -> void:
 			item.queue_free()
 	
 	configuration_cleared.emit()
+#endregion
 
 
 #region Item Instancing
