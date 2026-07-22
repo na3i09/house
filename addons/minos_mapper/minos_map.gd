@@ -425,9 +425,8 @@ class GenMap:
 		var possible_source_edges: Array = edges.keys().duplicate()
 		
 		var source_edge: Vector3i
-		var valid_segments: Array[MinosMapConfiguration]
 		
-		var new_segment: MinosMapConfiguration
+		var new_segment: MinosMapConfiguration = null
 		var segment_edge: Vector3i
 		
 		var total_transform: Transform3D
@@ -436,7 +435,7 @@ class GenMap:
 			source_edge = possible_source_edges.pick_random()
 			var source_edge_transform: Transform3D = map_owner._make_grid_transform(source_edge,edges[source_edge][1])
 			
-			valid_segments = _get_segments_with_valid_mates(edges[source_edge][0],segments)
+			var valid_segments: Array[MinosMapConfiguration] = _get_segments_with_valid_mates(edges[source_edge][0],segments)
 			
 			if valid_segments.is_empty():
 				possible_source_edges.erase(source_edge)
@@ -459,14 +458,15 @@ class GenMap:
 					):
 					push_warning("Overlap")
 					valid_segments.erase(new_segment)
+					new_segment = null
 					continue
 					
-				if not valid_segments.is_empty():
+				if new_segment:
 					break
-			if not valid_segments.is_empty():
+			if new_segment:
 				break
 		
-		if valid_segments.is_empty():
+		if not new_segment:
 			push_warning("Failed to find non overlapping segment")
 			return null
 		
