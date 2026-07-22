@@ -7,6 +7,7 @@ class_name MinosMap
 ## while replication of tile configuration is handled via rpc call.
 
 signal configuration_changed
+signal configuration_cleared
 
 enum LoadFlags {
 	NONE = 0,
@@ -296,6 +297,8 @@ func clear_map() -> void:
 	for item: Node in items:
 		if item.has_meta("is_placer_item"):
 			item.queue_free()
+	
+	configuration_cleared.emit()
 
 
 #region Item Instancing
