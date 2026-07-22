@@ -6,6 +6,8 @@ class_name MinosMap
 ## Replication of grid map item configuration is handled via multiplayer spawner synchronization, 
 ## while replication of tile configuration is handled via rpc call.
 
+signal configuration_changed
+
 enum LoadFlags {
 	NONE = 0,
 	INCLUDE_EDGES = 1,
@@ -282,6 +284,8 @@ func _apply_map_configuration(config: Dictionary[Vector3i,Array], offset: Vector
 		set_cell_item(true_location,tile_type,tile_orientation)
 		
 		_instance_item_array(true_location,tile_orientation,items)
+		
+	configuration_changed.emit()
 #endregion
 
 
