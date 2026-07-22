@@ -425,18 +425,16 @@ class GenMap:
 		var possible_source_edges: Array = edges.keys().duplicate()
 		
 		var source_edge: Vector3i
-		var source_edge_transform: Transform3D
 		var valid_segments: Array[MinosMapConfiguration]
 		
 		var new_segment: MinosMapConfiguration
 		var segment_edge: Vector3i
-		var segment_edge_transform: Transform3D
 		
 		var total_transform: Transform3D
 		
 		while not possible_source_edges.is_empty():
 			source_edge = possible_source_edges.pick_random()
-			source_edge_transform = map_owner._make_grid_transform(source_edge,edges[source_edge][1])
+			var source_edge_transform: Transform3D = map_owner._make_grid_transform(source_edge,edges[source_edge][1])
 			
 			valid_segments = _get_segments_with_valid_mates(edges[source_edge][0],segments)
 			
@@ -451,7 +449,7 @@ class GenMap:
 			while not valid_segments.is_empty():
 				new_segment = valid_segments.pick_random()
 				segment_edge = new_segment.get_valid_mates(edges[source_edge][0],map_owner.mesh_library).pick_random()
-				segment_edge_transform = map_owner._make_grid_transform(segment_edge,new_segment.edge_locations[segment_edge][1])
+				var segment_edge_transform: Transform3D = map_owner._make_grid_transform(segment_edge,new_segment.edge_locations[segment_edge][1])
 				
 				total_transform = map_owner._get_true_grid_transform(Transform3D.IDENTITY,source_edge_transform,segment_edge_transform)
 				
