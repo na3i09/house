@@ -183,17 +183,6 @@ func _get_true_grid_transform(tile_transform: Transform3D, source_edge_transform
 	return true_transform
 
 
-# Return [Array] of configuration segments that contain valid mates for the given [param edge_type]
-func _get_segments_with_valid_mates(edge_type: Variant, segments: Array[MinosMapConfiguration]) -> Array[MinosMapConfiguration]:
-	var valid_segments: Array[MinosMapConfiguration]
-	
-	for segment: MinosMapConfiguration in segments:
-		if segment.has_valid_mates(edge_type,mesh_library):
-			valid_segments.append(segment)
-	
-	return valid_segments
-
-
 ## Generate and apply map configuration with [param generation_segments] number of segments
 func generate(generation_segments: int = -1, clear_current_configuration: bool = true) -> void:
 	if clear_current_configuration:
