@@ -416,13 +416,18 @@ class GenMap:
 			edges.erase(location)
 	
 	
-	func generate_segment(segments: Array[MinosMapConfiguration]) -> GenMap:
+	func generate_segment(segments: Array[MinosMapConfiguration], connecting_edges: Array[Vector3i] = []) -> GenMap:
 		if edges.is_empty():
 			return null
 		
 		var new_map := GenMap.new(map_owner)
 		
-		var possible_source_edges: Array = edges.keys().duplicate()
+		var possible_source_edges: Array[Vector3i]
+		
+		if connecting_edges.is_empty():
+			possible_source_edges = edges.keys().duplicate()
+		else:
+			possible_source_edges = connecting_edges.filter(func(edge: Vector3i): return edges.has(edge))
 		
 		var source_edge: Vector3i
 		
