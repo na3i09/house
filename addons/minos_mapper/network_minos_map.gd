@@ -15,6 +15,9 @@ func _ready() -> void:
 			clear_map()
 			generate(auto_generation_segments)
 		
+		configuration_changed.connect(_on_configuration_changed)
+		configuration_cleared.connect(_on_configuration_cleared)
+		
 		var random_item_dict := generate_random_item_configuration_dictionary()
 		
 		for location in random_item_dict:
@@ -50,6 +53,14 @@ func _create_multiplayer_spawner() -> MultiplayerSpawner:
 #endregion
 
 
+func _on_configuration_changed() -> void:
+	_recieve_map_configuration.rpc(generate_tile_configuration_dictionary(self))
+
+
+func _on_configuration_cleared() -> void:
+	_clear_map_configuration.rpc()
+
+
 #region Synchronization RPCs
 @rpc("any_peer","reliable","call_remote")
 func _request_map_configuration() -> void:
@@ -58,5 +69,14 @@ func _request_map_configuration() -> void:
 
 @rpc("authority","reliable","call_remote")
 func _recieve_map_configuration(configuration: Dictionary[Vector3i,Array]) -> void:
+	if OS.has_feature("editor"):
+		push_warning("Recieved map configuration")
 	_apply_map_configuration(configuration)
+
+
+@rpc("authority","reliable","call_remote")
+func _clear_map_configuration() -> void:
+	if OS.has_feature("editor"):
+		push_warning("Map configuration cleared")
+	clear_map()
 #endregion
