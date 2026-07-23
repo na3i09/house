@@ -407,6 +407,8 @@ class GenMap:
 	func convert_from_configuration(config: MinosMapConfiguration) -> void:
 		tiles = config.configuration_dict.duplicate()
 		edges = config.edge_locations.duplicate()
+		
+		aabbs.append(config.get_collision_aabb())
 	
 	
 	func append(map: GenMap) -> void:
@@ -418,7 +420,7 @@ class GenMap:
 			edges.erase(location)
 	
 	
-	func generate_segment(segments: Array[MinosMapConfiguration], connecting_edges: Array[Vector3i] = []) -> GenMap:
+	func generate_segment(segments: Array[MinosMapConfiguration], connecting_edges: Array[Vector3i] = [],sparse: bool = true) -> GenMap:
 		if edges.is_empty():
 			return null
 		
@@ -459,10 +461,15 @@ class GenMap:
 				
 				total_transform = map_owner._get_true_grid_transform(Transform3D.IDENTITY,source_edge_transform,segment_edge_transform)
 				
-				if _find_overlap_in_range(
-					Vector3i(total_transform * Vector3(new_segment.map_minimum)),
-					Vector3i(total_transform * Vector3(new_segment.map_maximum))
-					):
+				var overlap: bool = false
+				if sparse:
+					overlap = _find_sparse_overlap(total_transform * new_segment.get_collision_aabb())
+				else:
+					overlap = _find_overlap_in_range(
+						Vector3i(total_transform * Vector3(new_segment.map_minimum)),
+						Vector3i(total_transform * Vector3(new_segment.map_maximum))
+						)
+				if overlap:
 					push_warning("Overlap")
 					valid_segments.erase(new_segment)
 					new_segment = null
@@ -483,6 +490,8 @@ class GenMap:
 		unused_segments.erase(segment_edge)
 		
 		new_map.edges = map_owner._create_transformed_tile_dictionary(unused_segments,total_transform)
+		
+		new_map.aabbs.append(total_transform * new_segment.get_collision_aabb())
 		
 		return new_map
 	
@@ -505,5 +514,13 @@ class GenMap:
 				for z: int in range(segment_min.z,segment_max.z+1):
 					if tiles.has(Vector3i(x,y,z)):
 						return true
+		
+		return false
+	
+	
+	func _find_sparse_overlap(segment_aabb: AABB) -> bool:
+		for aabb in aabbs:
+			if aabb.intersects(segment_aabb):
+				return true
 		
 		return false
