@@ -6,6 +6,7 @@ extends EditorDock
 @export var reliable: CheckBox
 @export var load_edges: CheckBox
 @export var generation_seed: VBoxContainer
+@export var sparse: CheckBox
 
 
 var show_save_dialog: Callable
@@ -32,7 +33,7 @@ func _on_generate_button_pressed() -> void:
 	if map_placer:
 		if generation_seed.using_fixed_seed:
 			seed(generation_seed.seed)
-		map_placer.generate(int(generation_segments.value))
+		map_placer.generate(int(generation_segments.value),true,sparse.button_pressed)
 		EditorInterface.mark_scene_as_unsaved()
 
 
