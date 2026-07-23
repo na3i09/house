@@ -5,6 +5,7 @@ extends EditorDock
 @export var item_type_dropdown: OptionButton
 @export var reliable: CheckBox
 @export var load_edges: CheckBox
+@export var generation_seed: VBoxContainer
 
 
 var show_save_dialog: Callable
@@ -29,6 +30,8 @@ var map_placer: MinosMap = null:
 
 func _on_generate_button_pressed() -> void:
 	if map_placer:
+		if generation_seed.using_fixed_seed:
+			seed(generation_seed.seed)
 		map_placer.generate(int(generation_segments.value))
 		EditorInterface.mark_scene_as_unsaved()
 

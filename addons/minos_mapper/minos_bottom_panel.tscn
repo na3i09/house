@@ -2,6 +2,25 @@
 
 [ext_resource type="Script" uid="uid://nkjob6chn5sj" path="res://addons/minos_mapper/minos_bottom_panel.gd" id="1_xcl38"]
 
+[sub_resource type="GDScript" id="GDScript_7tkr0"]
+resource_name = "GenerationSeed"
+script/source = "@tool
+extends VBoxContainer
+
+
+@export var fixed_seed: CheckBox
+@export var generation_seed_box: SpinBox
+
+
+var using_fixed_seed: bool:
+	get:
+		return fixed_seed.button_pressed
+
+var seed: int:
+	get:
+		return generation_seed_box.value
+"
+
 [sub_resource type="GDScript" id="GDScript_4dhkl"]
 script/source = "@tool
 extends OptionButton
@@ -13,7 +32,7 @@ func generate_options(option_list: Array[StringName]) -> void:
 		add_item(option)
 "
 
-[node name="MinosBottomPanel" type="EditorDock" unique_id=981067581 node_paths=PackedStringArray("generation_segments", "item_type_dropdown", "reliable", "load_edges")]
+[node name="MinosBottomPanel" type="EditorDock" unique_id=981067581 node_paths=PackedStringArray("generation_segments", "item_type_dropdown", "reliable", "load_edges", "generation_seed")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -24,35 +43,63 @@ transient = true
 default_slot = 8
 available_layouts = 2
 script = ExtResource("1_xcl38")
-generation_segments = NodePath("HBoxContainer/MapGeneration/GenerationSegments")
+generation_segments = NodePath("HBoxContainer/Generation/MapGeneration/GenerationSegments")
 item_type_dropdown = NodePath("HBoxContainer/PlaceItem/ItemTypeDropdown")
 reliable = NodePath("HBoxContainer/SaveAndLoad/Save/Reliable")
 load_edges = NodePath("HBoxContainer/SaveAndLoad/Load/LoadEdges")
+generation_seed = NodePath("HBoxContainer/Generation/GenerationSeed")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1154355250]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="MapGeneration" type="HBoxContainer" parent="HBoxContainer" unique_id=461503527]
+[node name="Generation" type="VBoxContainer" parent="HBoxContainer" unique_id=1238322776]
+layout_mode = 2
+
+[node name="MapGeneration" type="HBoxContainer" parent="HBoxContainer/Generation" unique_id=461503527]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="GenerateButton" type="Button" parent="HBoxContainer/MapGeneration" unique_id=1289700406]
+[node name="GenerateButton" type="Button" parent="HBoxContainer/Generation/MapGeneration" unique_id=1289700406]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 tooltip_text = "Generate map using segments from Possible Segments."
 text = "Generate"
 
-[node name="GenerationSegments" type="SpinBox" parent="HBoxContainer/MapGeneration" unique_id=1939332395]
+[node name="GenerationSegments" type="SpinBox" parent="HBoxContainer/Generation/MapGeneration" unique_id=1939332395]
 layout_mode = 2
 tooltip_text = "Number of segments to generate when pressing the Generate button."
 min_value = 1.0
 value = 1.0
 allow_greater = true
 alignment = 1
+
+[node name="GenerationSeed" type="VBoxContainer" parent="HBoxContainer/Generation" unique_id=1509809709 node_paths=PackedStringArray("fixed_seed", "generation_seed_box")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = SubResource("GDScript_7tkr0")
+fixed_seed = NodePath("FixedSeed")
+generation_seed_box = NodePath("HBoxContainer/GenerationSeedBox")
+
+[node name="FixedSeed" type="CheckBox" parent="HBoxContainer/Generation/GenerationSeed" unique_id=1497805535]
+layout_mode = 2
+text = "Use Fixed Seed"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Generation/GenerationSeed" unique_id=496522518]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="SeedLabel" type="Label" parent="HBoxContainer/Generation/GenerationSeed/HBoxContainer" unique_id=1195431524]
+layout_mode = 2
+text = "Seed"
+
+[node name="GenerationSeedBox" type="SpinBox" parent="HBoxContainer/Generation/GenerationSeed/HBoxContainer" unique_id=15073046]
+layout_mode = 2
 
 [node name="SaveAndLoad" type="VBoxContainer" parent="HBoxContainer" unique_id=1911019459]
 layout_mode = 2
@@ -101,7 +148,7 @@ layout_mode = 2
 tooltip_text = "Place selected item at the currently selected grid tile. Places the item at (0,0,0) if there is no selected tile."
 text = "Place Item"
 
-[connection signal="pressed" from="HBoxContainer/MapGeneration/GenerateButton" to="." method="_on_generate_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/Generation/MapGeneration/GenerateButton" to="." method="_on_generate_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/SaveAndLoad/Save/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/SaveAndLoad/Load/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/SaveAndLoad/ClearButton" to="." method="_on_clear_button_pressed"]
