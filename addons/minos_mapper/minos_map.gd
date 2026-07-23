@@ -388,6 +388,9 @@ func _create_local_item_transform(location: Vector3i, orientation: int, offset_t
 #endregion
 
 
+## Representation of a runtime generated map
+##
+## Supports generating new segments from [MinosMapConfiguration]s
 class GenMap:
 	extends RefCounted
 	
@@ -404,6 +407,7 @@ class GenMap:
 		map_owner = _map_owner
 	
 	
+	## Duplicate contents of [param config] into this map
 	func convert_from_configuration(config: MinosMapConfiguration) -> void:
 		tiles = config.configuration_dict.duplicate()
 		edges = config.edge_locations.duplicate()
@@ -411,6 +415,7 @@ class GenMap:
 		aabbs.append(config.get_collision_aabb())
 	
 	
+	## Append the contents of [param map] into this map
 	func append(map: GenMap) -> void:
 		tiles.merge(map.tiles)
 		edges.merge(map.edges)
@@ -500,7 +505,7 @@ class GenMap:
 		return new_map
 	
 	
-	# Return [Array] of configuration segments that contain valid mates for the given [param edge_type]
+	## Return [Array] of configuration segments that contain valid mates for the given [param edge_type]
 	func _get_segments_with_valid_mates(edge_type: Variant, segments: Array[MinosMapConfiguration]) -> Array[MinosMapConfiguration]:
 		var valid_segments: Array[MinosMapConfiguration]
 		
@@ -511,7 +516,7 @@ class GenMap:
 		return valid_segments
 	
 	
-	# Return true if any cells in the given min and max range are found in the current map
+	## Return true if any cells between [param segment_min] and [param segment_max] are found in the current map
 	func _find_overlap_in_range(segment_min: Vector3i,segment_max: Vector3i) -> bool:
 		for x: int in range(segment_min.x,segment_max.x+1):
 			for y: int in range(segment_min.y,segment_max.y+1):
@@ -521,7 +526,7 @@ class GenMap:
 		
 		return false
 	
-	
+	## Return true if any intersection is found between [param segment_aabb] and the existing set of [AABB]s
 	func _find_sparse_overlap(segment_aabb: AABB) -> bool:
 		for aabb in aabbs:
 			if aabb.intersects(segment_aabb):
