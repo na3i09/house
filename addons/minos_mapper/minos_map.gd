@@ -97,7 +97,7 @@ func generate_random_item_configuration_dictionary() -> Dictionary[Vector3i,Arra
 
 #region Map Generation
 ## Generate [Dictionary] representing a randomly assembled map made up of [MinosMapConfiguration] segments in [param segments]
-func generate_map(segments: Array[MinosMapConfiguration], _max_instances: int) -> Dictionary[Vector3i,Array]:
+func generate_map(segments: Array[MinosMapConfiguration], _max_instances: int, sparse: bool = true) -> Dictionary[Vector3i,Array]:
 	var map := GenMap.new(self)
 	
 	var first_segment: MinosMapConfiguration = segments.pick_random()
@@ -107,12 +107,12 @@ func generate_map(segments: Array[MinosMapConfiguration], _max_instances: int) -
 	var retries: int = 0
 	
 	for i in range(_max_instances - 1):
-		var new_map_segment: GenMap = map.generate_segment(segments)
+		var new_map_segment: GenMap = map.generate_segment(segments,[],sparse)
 		
 		if not new_map_segment:
 			while retries < RETRY_LIMIT:
 				retries += 1
-				new_map_segment = map.generate_segment(segments)
+				new_map_segment = map.generate_segment(segments,[],sparse)
 				if new_map_segment:
 					retries = 0
 					break
@@ -184,10 +184,10 @@ func _get_true_grid_transform(tile_transform: Transform3D, source_edge_transform
 
 
 ## Generate and apply map configuration with [param generation_segments] number of segments
-func generate(generation_segments: int = -1, clear_current_configuration: bool = true) -> void:
+func generate(generation_segments: int = -1, clear_current_configuration: bool = true, sparse: bool = true) -> void:
 	if clear_current_configuration:
 		clear_map()
-	_apply_map_configuration(generate_map(possible_segments,generation_segments))
+	_apply_map_configuration(generate_map(possible_segments,generation_segments,sparse))
 #endregion
 
 
