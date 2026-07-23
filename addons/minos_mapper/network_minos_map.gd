@@ -71,7 +71,15 @@ func _request_map_configuration() -> void:
 func _recieve_map_configuration(configuration: Dictionary[Vector3i,Array]) -> void:
 	if OS.has_feature("editor"):
 		push_warning("Recieved map configuration")
+	_strip_items(configuration)
 	_apply_map_configuration(configuration)
+
+
+func _strip_items(config: Dictionary[Vector3i,Array]) -> Dictionary[Vector3i,Array]:
+	for item: Vector3i in config:
+		config[item].resize(2)
+	
+	return config
 
 
 @rpc("authority","reliable","call_remote")
