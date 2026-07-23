@@ -53,8 +53,8 @@ func _create_multiplayer_spawner() -> MultiplayerSpawner:
 #endregion
 
 
-func _on_configuration_changed() -> void:
-	_recieve_map_configuration.rpc(generate_tile_configuration_dictionary(self))
+func _on_configuration_changed(config: Dictionary[Vector3i,Array]) -> void:
+	_recieve_map_configuration.rpc(config)
 
 
 func _on_configuration_cleared() -> void:
