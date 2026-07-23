@@ -316,7 +316,7 @@ func _instance_item_array(location: Vector3i, orientation: int, items: Array) ->
 # Called only on the authority of the [MinosMap].
 func _instance_item_on_cell(item_name: String, location: Vector3i, orientation: int = 0,offset_transform: Transform3D = Transform3D.IDENTITY) -> Node:
 	var instance: Node = null
-	var random_id: int = randi() #TODO: add collision guards to random id creation
+	var random_id: int = _get_unused_id(item_name)
 	
 	instance = _spawn_function.call([item_name,location,random_id,orientation,offset_transform])
 	
@@ -332,6 +332,7 @@ func _instance_item_on_cell(item_name: String, location: Vector3i, orientation: 
 func _post_spawn_item_processing(item: Node) -> void:
 	if item:
 		item.owner = owner
+		item.unique_name_in_owner = true
 
 
 # Creates and returns the node for the given item
@@ -367,6 +368,18 @@ func _remove_items_from_locations(locations: Array[Vector3i]) -> void:
 			var item_location: Vector3i = item.get_meta("location_index")
 			if locations.has(item_location):
 				item.queue_free()
+
+
+func _get_unused_id(item_name: String) -> int:
+	var i: int = 0
+	var id: int = 0
+	while i < 40: # set hard limit to prevent infinite loop
+		id = randi()
+		if not has_node("%" + _name_item(item_name,id)):
+			break
+		i += 1
+	
+	return id
 
 
 func _name_item(item_name: String, random_id: int) -> String:
