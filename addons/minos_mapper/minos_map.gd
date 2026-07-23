@@ -433,11 +433,15 @@ class GenMap:
 		else:
 			possible_source_edges = connecting_edges.filter(func(edge: Vector3i): return edges.has(edge))
 		
+		## Edge to which the generated segment will be attached
 		var source_edge: Vector3i
 		
+		## Configuration to be used for the generated segment
 		var new_segment: MinosMapConfiguration = null
+		## Edge of the generated segment that will be attached to the source edge
 		var segment_edge: Vector3i
 		
+		## [Transform3D] representing the conversion from configuration space into edge centered map space
 		var total_transform: Transform3D
 		
 		while not possible_source_edges.is_empty():
