@@ -106,8 +106,6 @@ func generate_map(segments: Array[MinosMapConfiguration], _max_instances: int, s
 	else:
 		map = GenMap.new(self)
 	
-	var retries: int = 0
-	
 	for i in range(_max_instances):
 		var new_map_segment: GenMap = map.generate_segment(segments,[],sparse)
 		
