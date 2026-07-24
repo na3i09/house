@@ -106,26 +106,23 @@ func generate(generation_segments: int = -1, clear_current_configuration: bool =
 	_apply_map_configuration(map.tiles)
 
 
-# Generate [Dictionary] representing a randomly assembled map made up of [MinosMapConfiguration] segments in [param segments]
+# Generate map of new segments attached to the currently existing map
 func _generate_map(segments: Array[MinosMapConfiguration], _max_instances: int, sparse: bool = true) -> GenMap:
-	var map: GenMap
-	if _current_map:
-		map = _current_map
-	else:
-		map = GenMap.new(self)
+	var new_map: GenMap = GenMap.new(self)
+	if not _current_map:
+		_current_map = GenMap.new(self)
 	
 	for i in range(_max_instances):
-		var new_map_segment: GenMap = map.generate_segment(segments,[],sparse)
+		var new_map_segment: GenMap = _current_map.generate_segment(segments,[],sparse)
 		
 		if not new_map_segment:
 			push_warning("failed to retry on iteration: " + str(i))
 			break
 		
-		map.append(new_map_segment)
+		_current_map.append(new_map_segment)
+		new_map.append(new_map_segment)
 	
-	_current_map = map
-	
-	return map
+	return new_map
 
 
 # Transform all tiles in the [param source] dictionary by the given [Transform3D] and append them to the [param destination] dictionary
