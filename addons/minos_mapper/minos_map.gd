@@ -399,14 +399,14 @@ class GenMap:
 	
 	
 	## [Dictionary] of used cells in this map
-	var tiles: Dictionary[Vector3i,Array]
+	var tiles: Dictionary[Vector3i,Array] = {}
 	## [Dictionary] of available edges in this map
-	var edges: Dictionary
+	var edges: Dictionary[Vector3i,Array] = {}
 	
 	## [Array] of [AABB]s for each segment used to generate this map
-	var aabbs: Array[AABB]
+	var aabbs: Array[AABB] = []
 	
-	var map_owner: MinosMap
+	var map_owner: MinosMap = null
 	
 	
 	func _init(_map_owner: MinosMap) -> void:
