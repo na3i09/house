@@ -98,8 +98,16 @@ func generate_random_item_configuration_dictionary() -> Dictionary[Vector3i,Arra
 
 
 #region Map Generation
-## Generate [Dictionary] representing a randomly assembled map made up of [MinosMapConfiguration] segments in [param segments]
-func generate_map(segments: Array[MinosMapConfiguration], _max_instances: int, sparse: bool = true) -> GenMap:
+## Generate and apply map configuration with [param generation_segments] number of segments
+func generate(generation_segments: int = -1, clear_current_configuration: bool = true, sparse: bool = true) -> void:
+	if clear_current_configuration:
+		clear_map()
+	var map: GenMap = _generate_map(possible_segments,generation_segments,sparse)
+	_apply_map_configuration(map.tiles)
+
+
+# Generate [Dictionary] representing a randomly assembled map made up of [MinosMapConfiguration] segments in [param segments]
+func _generate_map(segments: Array[MinosMapConfiguration], _max_instances: int, sparse: bool = true) -> GenMap:
 	var map: GenMap
 	if _current_map:
 		map = _current_map
@@ -165,14 +173,6 @@ func _get_true_grid_transform(tile_transform: Transform3D, source_edge_transform
 	true_transform.origin -= source_edge_transform.basis.z
 	
 	return true_transform
-
-
-## Generate and apply map configuration with [param generation_segments] number of segments
-func generate(generation_segments: int = -1, clear_current_configuration: bool = true, sparse: bool = true) -> void:
-	if clear_current_configuration:
-		clear_map()
-	var map: GenMap = generate_map(possible_segments,generation_segments,sparse)
-	_apply_map_configuration(map.tiles)
 #endregion
 
 
