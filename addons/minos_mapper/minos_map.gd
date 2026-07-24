@@ -17,8 +17,6 @@ enum LoadFlags {
 
 const REVERSED_ORIENTATION: int = 10
 
-const RETRY_LIMIT: int = 4
-
 ## [Array] of randomly spawned item definitions
 @export var random_items: Array[RandomItemSelection]
 
@@ -110,16 +108,8 @@ func generate_map(segments: Array[MinosMapConfiguration], _max_instances: int, s
 		var new_map_segment: GenMap = map.generate_segment(segments,[],sparse)
 		
 		if not new_map_segment:
-			while retries < RETRY_LIMIT:
-				retries += 1
-				new_map_segment = map.generate_segment(segments,[],sparse)
-				if new_map_segment:
-					retries = 0
-					break
-			
-			if retries >= RETRY_LIMIT:
-				push_warning("failed to retry on iteration: " + str(i))
-				break
+			push_warning("failed to retry on iteration: " + str(i))
+			break
 		
 		map.append(new_map_segment)
 	
