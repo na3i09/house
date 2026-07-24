@@ -20,10 +20,10 @@ Vector3i(2, 0, 0): ["Tunnel", 10],
 Vector3i(3, 0, 0): ["Tunnel", 10]
 })
 edge_locations = Dictionary[Vector3i, Array]({
-Vector3i(-4, 0, 0): ["Edge", 22, "Edge"],
-Vector3i(0, 0, -4): ["Edge", 10, "Edge"],
-Vector3i(0, 0, 4): ["Edge", 0, "Edge"],
-Vector3i(4, 0, 0): ["Edge", 16, "Edge"]
+Vector3i(-4, 0, 0): ["Edge", 22],
+Vector3i(0, 0, -4): ["Edge", 10],
+Vector3i(0, 0, 4): ["Edge", 0],
+Vector3i(4, 0, 0): ["Edge", 16]
 })
 map_minimum = Vector3i(-3, 0, -3)
 map_maximum = Vector3i(3, 0, 3)
