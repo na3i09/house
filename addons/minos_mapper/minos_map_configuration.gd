@@ -40,7 +40,6 @@ static func generate_configuration_resource(configuration: Dictionary[Vector3i,A
 		for location: Vector3i in configuration.keys():
 			if configuration[location][0] in edge_ids:
 				config_resource.edge_locations[location] = configuration[location].slice(0,2)
-				config_resource.edge_locations[location].append_array(mesh_library.edge_info[config_resource.edge_locations[location][0]])
 				config_resource.configuration_dict.erase(location)
 	
 	config_resource.map_maximum = config_resource.configuration_dict.keys().reduce(_max_vector)
