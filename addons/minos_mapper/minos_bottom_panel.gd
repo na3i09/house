@@ -91,3 +91,9 @@ func _on_clear_button_pressed() -> void:
 		if map_placer.get_used_cells():
 			map_placer.clear_map()
 			EditorInterface.mark_scene_as_unsaved()
+
+
+func _on_step_button_pressed() -> void:
+	if map_placer:
+		map_placer.generate(1,false,sparse.button_pressed)
+		EditorInterface.mark_scene_as_unsaved()

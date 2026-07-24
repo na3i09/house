@@ -65,6 +65,11 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
+[node name="StepButton" type="Button" parent="HBoxContainer/Generation/MapGeneration" unique_id=576731965]
+layout_mode = 2
+tooltip_text = "Step generation forward by one segment"
+text = "Step"
+
 [node name="GenerateButton" type="Button" parent="HBoxContainer/Generation/MapGeneration" unique_id=1289700406]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -158,6 +163,7 @@ layout_mode = 2
 tooltip_text = "Place selected item at the currently selected grid tile. Places the item at (0,0,0) if there is no selected tile."
 text = "Place Item"
 
+[connection signal="pressed" from="HBoxContainer/Generation/MapGeneration/StepButton" to="." method="_on_step_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/Generation/MapGeneration/GenerateButton" to="." method="_on_generate_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/SaveAndLoad/Save/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/SaveAndLoad/Load/LoadButton" to="." method="_on_load_button_pressed"]
