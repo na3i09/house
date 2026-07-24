@@ -398,9 +398,12 @@ class GenMap:
 	extends RefCounted
 	
 	
+	## [Dictionary] of used cells in this map
 	var tiles: Dictionary[Vector3i,Array]
+	## [Dictionary] of available edges in this map
 	var edges: Dictionary
 	
+	## [Array] of [AABB]s for each segment used to generate this map
 	var aabbs: Array[AABB]
 	
 	var map_owner: MinosMap
