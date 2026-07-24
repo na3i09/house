@@ -432,6 +432,12 @@ class GenMap:
 	
 	
 	func generate_segment(segments: Array[MinosMapConfiguration], connecting_edges: Array[Vector3i] = [],sparse: bool = true) -> GenMap:
+		# Special case for generating a segment on an empty map
+		if tiles.is_empty() and edges.is_empty():
+			var map: GenMap = GenMap.new(map_owner)
+			map.convert_from_configuration(segments.pick_random()) 
+			return map
+		
 		if edges.is_empty():
 			return null
 		
