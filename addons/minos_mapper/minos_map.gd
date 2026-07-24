@@ -53,6 +53,10 @@ var _possible_items: Dictionary[StringName,PackedScene]:
 # hard grab reversed basis for mirroring the connecting edge
 var _reversed_transform := Transform3D(get_basis_with_orthogonal_index(REVERSED_ORIENTATION))
 
+
+var _current_map: GenMap = null
+
+
 ## Generate [Dictionary] of cell tile type and orientation
 static func generate_tile_configuration_dictionary(map: GridMap) -> Dictionary[Vector3i,Array]:
 	var dict: Dictionary[Vector3i,Array]
@@ -95,16 +99,16 @@ func generate_random_item_configuration_dictionary() -> Dictionary[Vector3i,Arra
 
 #region Map Generation
 ## Generate [Dictionary] representing a randomly assembled map made up of [MinosMapConfiguration] segments in [param segments]
-func generate_map(segments: Array[MinosMapConfiguration], _max_instances: int, sparse: bool = true) -> Dictionary[Vector3i,Array]:
-	var map := GenMap.new(self)
-	
-	var first_segment: MinosMapConfiguration = segments.pick_random()
-	
-	map.convert_from_configuration(first_segment)
+func generate_map(segments: Array[MinosMapConfiguration], _max_instances: int, sparse: bool = true) -> GenMap:
+	var map: GenMap
+	if _current_map:
+		map = _current_map
+	else:
+		map = GenMap.new(self)
 	
 	var retries: int = 0
 	
-	for i in range(_max_instances - 1):
+	for i in range(_max_instances):
 		var new_map_segment: GenMap = map.generate_segment(segments,[],sparse)
 		
 		if not new_map_segment:
@@ -113,7 +117,9 @@ func generate_map(segments: Array[MinosMapConfiguration], _max_instances: int, s
 		
 		map.append(new_map_segment)
 	
-	return map.tiles
+	_current_map = map
+	
+	return map
 
 
 # Transform all tiles in the [param source] dictionary by the given [Transform3D] and append them to the [param destination] dictionary
@@ -167,7 +173,8 @@ func _get_true_grid_transform(tile_transform: Transform3D, source_edge_transform
 func generate(generation_segments: int = -1, clear_current_configuration: bool = true, sparse: bool = true) -> void:
 	if clear_current_configuration:
 		clear_map()
-	_apply_map_configuration(generate_map(possible_segments,generation_segments,sparse))
+	var map: GenMap = generate_map(possible_segments,generation_segments,sparse)
+	_apply_map_configuration(map.tiles)
 #endregion
 
 
@@ -278,6 +285,8 @@ func clear_map() -> void:
 	for item: Node in items:
 		if item.has_meta("is_placer_item"):
 			item.queue_free()
+	
+	_current_map = null
 	
 	configuration_cleared.emit()
 #endregion
