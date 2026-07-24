@@ -242,10 +242,8 @@ func _get_grid_location_orientation_and_offset_from_node_transform(item_transfor
 func apply_map_configuration_resource(config: MinosMapConfiguration, offset: Vector3i = Vector3i(0,0,0), flags: LoadFlags = LoadFlags.NONE) -> void:
 	var loaded_dict: Dictionary[Vector3i,Array] = config.configuration_dict
 	if flags & LoadFlags.INCLUDE_EDGES:
-		loaded_dict = config.configuration_dict.duplicate()
 		assert(mesh_library is MinosMeshLibrary)
-		for edge in config.edge_locations:
-			loaded_dict[edge] = config.edge_locations[edge].slice(0,2)
+		loaded_dict = config.configuration_dict.merged(config.edge_locations)
 	_apply_map_configuration(loaded_dict,offset)
 
 
