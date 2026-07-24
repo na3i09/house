@@ -157,16 +157,6 @@ func _get_transformed_grid_loc_orient(loc_and_orient: Array, _transform: Transfo
 	return [Vector3i(true_transform.origin),get_orthogonal_index_from_basis(true_transform.basis)]
 
 
-# Return true if any cells in the given min and max range are found in the current map
-func _find_overlap_in_range(_map: Dictionary[Vector3i,Array],segment_min: Vector3i,segment_max: Vector3i) -> bool:
-	for x: int in range(segment_min.x,segment_max.x+1):
-		for y: int in range(segment_min.y,segment_max.y+1):
-			for z: int in range(segment_min.z,segment_max.z+1):
-				if _map.has(Vector3i(x,y,z)):
-					return true
-	
-	return false
-
 
 # Create a [Transform3D] representing given grid location and orientation
 func _make_grid_transform(location: Vector3i, orientation: int) -> Transform3D:
@@ -527,7 +517,7 @@ class GenMap:
 	
 	
 	## Return true if any cells between [param segment_min] and [param segment_max] are found in the current map
-	func _find_overlap_in_range(segment_min: Vector3i,segment_max: Vector3i) -> bool:
+	func _find_semisparse_overlap(segment_min: Vector3i,segment_max: Vector3i) -> bool:
 		for x: int in range(segment_min.x,segment_max.x+1):
 			for y: int in range(segment_min.y,segment_max.y+1):
 				for z: int in range(segment_min.z,segment_max.z+1):
