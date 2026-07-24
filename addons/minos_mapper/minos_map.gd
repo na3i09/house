@@ -487,10 +487,7 @@ class GenMap:
 				if sparse:
 					overlap = _find_sparse_overlap(total_transform * new_segment.get_collision_aabb())
 				else:
-					overlap = _find_overlap_in_range(
-						Vector3i(total_transform * Vector3(new_segment.map_minimum)),
-						Vector3i(total_transform * Vector3(new_segment.map_maximum))
-						)
+					overlap = _find_tight_overlap(new_segment.configuration_dict.keys().map(func(value: Vector3i): return Vector3i(total_transform * Vector3(value))))
 				if overlap:
 					push_warning("Overlap")
 					valid_segments.erase(new_segment)
@@ -538,6 +535,12 @@ class GenMap:
 						return true
 		
 		return false
+	
+	
+	## Return true if any cells in [param segment_tiles] are found in the current map
+	func _find_tight_overlap(segment_tiles: Array) -> bool:
+		return segment_tiles.any(func(value: Vector3i): return tiles.keys().has(value))
+	
 	
 	## Return true if any intersection is found between [param segment_aabb] and the existing set of [AABB]s
 	func _find_sparse_overlap(segment_aabb: AABB) -> bool:
