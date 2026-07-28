@@ -15,8 +15,6 @@ enum LoadFlags {
 	ALL = INCLUDE_EDGES,
 }
 
-const REVERSED_ORIENTATION: int = 10
-
 ## [Array] of randomly spawned item definitions
 @export var random_items: Array[RandomItemSelection]
 
@@ -49,9 +47,6 @@ var _possible_items: Dictionary[StringName,PackedScene]:
 @export_group("Settings")
 @export var auto_generate: bool = false
 @export_range(1,20,1,"or_greater") var auto_generation_segments: int = 1
-
-# hard grab reversed basis for mirroring the connecting edge
-var _reversed_transform := Transform3D(get_basis_with_orthogonal_index(REVERSED_ORIENTATION))
 
 
 var _current_map: GenMap = null
@@ -166,7 +161,7 @@ func _make_grid_transform(location: Vector3i, orientation: int) -> Transform3D:
 
 # Transform the base [param tile_trasnform] with the source and segment edges to produce a transform in global gridmap space
 func _get_true_grid_transform(tile_transform: Transform3D, source_edge_transform: Transform3D, segment_edge_transform: Transform3D) -> Transform3D:
-	var true_transform: Transform3D = source_edge_transform * _reversed_transform * segment_edge_transform.inverse() * tile_transform
+	var true_transform: Transform3D = source_edge_transform * Transform3D.FLIP_Z * segment_edge_transform.inverse() * tile_transform
 	true_transform.origin -= source_edge_transform.basis.z
 	
 	return true_transform
