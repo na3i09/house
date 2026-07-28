@@ -407,6 +407,22 @@ class GenMap:
 			edges.erase(location)
 	
 	
+	## Returns a new copy of this map
+	## 
+	## By default this returns a shallow copy of the map,
+	## with only the [member tiles] and [member edges] dictionaries and [member aabbs] array copied
+	## but not their contents.
+	## If [param deep] is true, a deep copy is returned.
+	func duplicate(deep: bool = false) -> GenMap:
+		var new_map := GenMap.new(map_owner)
+		
+		new_map.tiles = tiles.duplicate(deep)
+		new_map.edges = edges.duplicate(deep)
+		new_map.aabbs = aabbs.duplicate(deep)
+		
+		return new_map
+	
+	
 	func generate_segment(segments: Array[MinosMapConfiguration], connecting_edges: Array[Vector3i] = [],sparse: bool = true) -> GenMap:
 		# Special case for generating a segment on an empty map
 		if tiles.is_empty() and edges.is_empty():
