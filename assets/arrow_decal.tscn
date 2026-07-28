@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ctw70dvpysd83"]
+
+[ext_resource type="Texture2D" uid="uid://cne4rs23vfi1k" path="res://assets/arrow_colorize.png" id="1_8qub3"]
+
+[node name="ArrowDecal" type="Decal" unique_id=1174961947]
+texture_albedo = ExtResource("1_8qub3")

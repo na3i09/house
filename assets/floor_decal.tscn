@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://d0eso0ej13fbj"]
+
+[ext_resource type="PackedScene" uid="uid://ctw70dvpysd83" path="res://assets/arrow_decal.tscn" id="1_yvgsu"]
+
+[node name="FloorDecal" type="Node3D" unique_id=880459542]
+
+[node name="ArrowDecal" parent="." unique_id=1174961947 instance=ExtResource("1_yvgsu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
