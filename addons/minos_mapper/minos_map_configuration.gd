@@ -1,6 +1,14 @@
 @tool
 extends Resource
 class_name MinosMapConfiguration
+## Configuration resource storing a layout of tiles and items that can be loaded into a [MinosMap]
+##
+## Configurations support storing tile and edge information using tile ids or tile names.
+## Storing using tile ids results in faster loading and smaller files, but will break configurations
+## if the associated [MinsoMeshLibrary] changes.
+## Storing using tile names is slower and results in larger files, but makes the configuration reliable
+## between changes to the associated [MinosMeshLibrary] as long as the names of tiles used in the configuration do not change
+
 
 const COLLISION_MARGIN: float = 0.001
 

@@ -1,6 +1,9 @@
 @tool
 extends MeshLibrary
 class_name MinosMeshLibrary
+## [MeshLibrary] which stores specialize information for use in [MinosMap]s
+##
+## Stores information about which tiles count as edges and which edges they can mate with.
 
 
 ## [Dictionary] storing information for all edge type tiles and their mates.

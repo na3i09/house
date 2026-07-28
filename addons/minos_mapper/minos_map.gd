@@ -1,7 +1,8 @@
 @tool
 extends GridMap
 class_name MinosMap
-## [GridMap] with support for placing packed scenes into locations on the grid map
+## [GridMap] with support for segment based random generation and placing [PackedScene] items
+## onto the map
 
 
 signal configuration_changed(configuration: Dictionary[Vector3i,Array])
