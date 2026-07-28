@@ -2,9 +2,7 @@
 extends GridMap
 class_name MinosMap
 ## [GridMap] with support for placing packed scenes into locations on the grid map
-##
-## Replication of grid map item configuration is handled via multiplayer spawner synchronization, 
-## while replication of tile configuration is handled via rpc call.
+
 
 signal configuration_changed(configuration: Dictionary[Vector3i,Array])
 signal configuration_cleared

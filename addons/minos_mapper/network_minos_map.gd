@@ -2,6 +2,9 @@
 extends MinosMap
 class_name NetworkMinosMap
 ## [MinosMap] with automatic networking support.
+##
+## Replication of grid map item configuration is handled via multiplayer spawner synchronization, 
+## while replication of tile configuration is handled via rpc call.
 
 
 @onready var spawner: MultiplayerSpawner = _initialize_multiplayer_support()
