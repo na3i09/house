@@ -157,14 +157,6 @@ func _make_grid_transform(location: Vector3i, orientation: int) -> Transform3D:
 	var _basis: Basis = get_basis_with_orthogonal_index(orientation)
 	
 	return Transform3D(_basis,location)
-
-
-# Transform the base [param tile_trasnform] with the source and segment edges to produce a transform in global gridmap space
-func _get_true_grid_transform(tile_transform: Transform3D, source_edge_transform: Transform3D, segment_edge_transform: Transform3D) -> Transform3D:
-	var true_transform: Transform3D = source_edge_transform * Transform3D.FLIP_Z * segment_edge_transform.inverse() * tile_transform
-	true_transform.origin -= source_edge_transform.basis.z
-	
-	return true_transform
 #endregion
 
 
@@ -467,7 +459,7 @@ class GenMap:
 				segment_edge = new_segment.get_valid_mates(edges[source_edge][0],map_owner.mesh_library).pick_random()
 				var segment_edge_transform: Transform3D = map_owner._make_grid_transform(segment_edge,new_segment.edge_locations[segment_edge][1])
 				
-				total_transform = map_owner._get_true_grid_transform(Transform3D.IDENTITY,source_edge_transform,segment_edge_transform)
+				total_transform = _get_true_grid_transform(Transform3D.IDENTITY,source_edge_transform,segment_edge_transform)
 				
 				var overlap: bool = false
 				if sparse:
@@ -499,6 +491,14 @@ class GenMap:
 		new_map.aabbs.append(total_transform * new_segment.get_collision_aabb())
 		
 		return new_map
+	
+	
+	## Transform the base [param tile_trasnform] with the source and segment edges to produce a transform in global gridmap space
+	func _get_true_grid_transform(tile_transform: Transform3D, source_edge_transform: Transform3D, segment_edge_transform: Transform3D) -> Transform3D:
+		var true_transform: Transform3D = source_edge_transform * Transform3D.FLIP_Z * segment_edge_transform.inverse() * tile_transform
+		true_transform.origin -= source_edge_transform.basis.z
+		
+		return true_transform
 	
 	
 	## Return [Array] of configuration segments that contain valid mates for the given [param edge_type]
