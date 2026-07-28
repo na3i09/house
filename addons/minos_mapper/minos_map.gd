@@ -423,6 +423,7 @@ class GenMap:
 		return new_map
 	
 	
+	## Generates a map segment picked from [param segments], and connected to one of the edges in [param connecting_edges] if provided
 	func generate_segment(segments: Array[MinosMapConfiguration], connecting_edges: Array[Vector3i] = [],sparse: bool = true) -> GenMap:
 		# Special case for generating a segment on an empty map
 		if tiles.is_empty() and edges.is_empty():
