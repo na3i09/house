@@ -373,6 +373,8 @@ class GenMap:
 	extends RefCounted
 	
 	
+	const _reverse_transform: Transform3D = Transform3D.FLIP_Z * Transform3D.FLIP_X
+	
 	## [Dictionary] of used cells in this map
 	var tiles: Dictionary[Vector3i,Array] = {}
 	## [Dictionary] of available edges in this map
@@ -491,7 +493,7 @@ class GenMap:
 	
 	## Transform the base [param tile_trasnform] with the source and segment edges to produce a transform in global gridmap space
 	func _get_true_grid_transform(tile_transform: Transform3D, source_edge_transform: Transform3D, segment_edge_transform: Transform3D) -> Transform3D:
-		var true_transform: Transform3D = source_edge_transform * Transform3D.FLIP_Z * segment_edge_transform.inverse() * tile_transform
+		var true_transform: Transform3D = source_edge_transform * _reverse_transform * segment_edge_transform.inverse() * tile_transform
 		true_transform.origin -= source_edge_transform.basis.z
 		
 		return true_transform
