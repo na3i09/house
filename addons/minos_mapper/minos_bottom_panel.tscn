@@ -130,6 +130,7 @@ text = "Save Configuration"
 [node name="Reliable" type="CheckBox" parent="HBoxContainer/SaveAndLoad/Save" unique_id=46364554]
 layout_mode = 2
 tooltip_text = "Save configuration in a more reliable format via mesh library item names instead of ids."
+button_pressed = true
 text = "Reliable"
 
 [node name="Load" type="HBoxContainer" parent="HBoxContainer/SaveAndLoad" unique_id=1356137559]
