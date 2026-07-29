@@ -100,6 +100,34 @@ func generate(generation_segments: int = -1, clear_current_configuration: bool =
 	_apply_map_configuration(map.tiles)
 
 
+func gerenate_from_edge(generation_segments: int, edge_location: Vector3i, sparse: bool = true) -> bool:
+	if not _current_map.edges.has(edge_location):
+		return false
+	var current_map_copy := _current_map.duplicate()
+	var new_map: GenMap = GenMap.new(self)
+	
+	var possible_edge_locations: Array[Vector3i] = [edge_location]
+	
+	for i in range(generation_segments):
+		var new_map_segment: GenMap = current_map_copy.generate_segment(possible_segments,possible_edge_locations,sparse)
+		
+		if not new_map_segment:
+			if i == 0:
+				return false
+			else:
+				break
+		
+		current_map_copy.append(new_map_segment)
+		new_map.append(new_map_segment)
+		
+		possible_edge_locations = new_map.edges.keys()
+	
+	_current_map.append(new_map)
+	_apply_map_configuration(new_map.tiles)
+	
+	return true
+
+
 # Generate map of new segments attached to the currently existing map
 func _generate_map(segments: Array[MinosMapConfiguration], _max_instances: int, sparse: bool = true) -> GenMap:
 	var new_map: GenMap = GenMap.new(self)
