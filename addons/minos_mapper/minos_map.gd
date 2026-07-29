@@ -89,57 +89,13 @@ func generate_random_item_configuration_dictionary() -> Dictionary[Vector3i,Arra
 
 #region Map Generation
 ## Generate and apply map configuration with [param generation_segments] number of segments
-func generate(generation_segments: int = -1, clear_current_configuration: bool = true, sparse: bool = true) -> void:
+func generate(generation_segments: int, clear_current_configuration: bool = true, sparse: bool = true, edge_pool: Array[Vector3i] = []) -> void:
 	if clear_current_configuration:
 		clear_map()
-	var map: GenMap = _generate_map(possible_segments,generation_segments,sparse)
-	_apply_map_configuration(map.tiles)
-
-
-func gerenate_from_edge(generation_segments: int, edge_location: Vector3i, sparse: bool = true) -> bool:
-	if not _current_map.edges.has(edge_location):
-		return false
-	var new_map: GenMap = GenMap.new(self)
-	
-	var possible_edge_locations: Array[Vector3i] = [edge_location]
-	
-	for i in range(generation_segments):
-		var new_map_segment: GenMap = _current_map.generate_segment(possible_segments,possible_edge_locations,sparse)
-		
-		if not new_map_segment:
-			if i == 0:
-				return false
-			else:
-				break
-		
-		_current_map.append(new_map_segment)
-		new_map.append(new_map_segment)
-		
-		possible_edge_locations = new_map.edges.keys()
-	
-	_current_map.append(new_map)
-	_apply_map_configuration(new_map.tiles)
-	
-	return true
-
-
-# Generate map of new segments attached to the currently existing map
-func _generate_map(segments: Array[MinosMapConfiguration], _max_instances: int, sparse: bool = true) -> GenMap:
-	var new_map: GenMap = GenMap.new(self)
 	if not _current_map:
 		_current_map = GenMap.new(self)
-	
-	for i in range(_max_instances):
-		var new_map_segment: GenMap = _current_map.generate_segment(segments,[],sparse)
-		
-		if not new_map_segment:
-			push_warning("failed to retry on iteration: " + str(i))
-			break
-		
-		_current_map.append(new_map_segment)
-		new_map.append(new_map_segment)
-	
-	return new_map
+	var map: GenMap = _current_map.generate(generation_segments,possible_segments,edge_pool,sparse)
+	_apply_map_configuration(map.tiles)
 
 
 # Transform all tiles in the [param source] dictionary by the given [Transform3D] and append them to the [param destination] dictionary
@@ -167,7 +123,6 @@ func _get_transformed_grid_loc_orient(loc_and_orient: Array, _transform: Transfo
 	var true_transform: Transform3D = _transform * tile_transform
 	
 	return [Vector3i(true_transform.origin),get_orthogonal_index_from_basis(true_transform.basis)]
-
 
 
 # Create a [Transform3D] representing given grid location and orientation
