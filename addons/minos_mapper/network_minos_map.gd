@@ -7,6 +7,11 @@ class_name NetworkMinosMap
 ## while replication of tile configuration is handled via rpc call.
 
 
+@export_group("Settings")
+@export var auto_generate: bool = false
+@export_range(1,20,1,"or_greater") var auto_generation_segments: int = 1
+
+
 @onready var spawner: MultiplayerSpawner = _initialize_multiplayer_support()
 
 func _ready() -> void:

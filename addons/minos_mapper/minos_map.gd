@@ -43,10 +43,6 @@ var _possible_items: Dictionary[StringName,PackedScene]:
 		mesh_library = value
 		update_configuration_warnings()
 
-@export_group("Settings")
-@export var auto_generate: bool = false
-@export_range(1,20,1,"or_greater") var auto_generation_segments: int = 1
-
 
 var _current_map: GenMap = null
 
