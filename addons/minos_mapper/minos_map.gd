@@ -99,13 +99,12 @@ func generate(generation_segments: int = -1, clear_current_configuration: bool =
 func gerenate_from_edge(generation_segments: int, edge_location: Vector3i, sparse: bool = true) -> bool:
 	if not _current_map.edges.has(edge_location):
 		return false
-	var current_map_copy := _current_map.duplicate()
 	var new_map: GenMap = GenMap.new(self)
 	
 	var possible_edge_locations: Array[Vector3i] = [edge_location]
 	
 	for i in range(generation_segments):
-		var new_map_segment: GenMap = current_map_copy.generate_segment(possible_segments,possible_edge_locations,sparse)
+		var new_map_segment: GenMap = _current_map.generate_segment(possible_segments,possible_edge_locations,sparse)
 		
 		if not new_map_segment:
 			if i == 0:
@@ -113,7 +112,7 @@ func gerenate_from_edge(generation_segments: int, edge_location: Vector3i, spars
 			else:
 				break
 		
-		current_map_copy.append(new_map_segment)
+		_current_map.append(new_map_segment)
 		new_map.append(new_map_segment)
 		
 		possible_edge_locations = new_map.edges.keys()
