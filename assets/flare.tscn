@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://5peaaaagvq1q"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oh2o0"]
+albedo_color = Color(0.5328794, 0, 0.018614471, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_4dhkl"]
+material = SubResource("StandardMaterial3D_oh2o0")
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.4
+
+[sub_resource type="Curve" id="Curve_0e5ta"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.49438208), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_m7k5b"]
+curve = SubResource("Curve_0e5ta")
+
+[sub_resource type="Curve" id="Curve_vceph"]
+_data = [Vector2(0, 0.17977536), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_auuku"]
+curve = SubResource("Curve_vceph")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7tkr0"]
+lifetime_randomness = 0.2
+direction = Vector3(0, 1, 0)
+spread = 5.0
+initial_velocity_min = 2.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -0.30000222
+linear_accel_max = -0.30000222
+scale_curve = SubResource("CurveTexture_auuku")
+alpha_curve = SubResource("CurveTexture_m7k5b")
+
+[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_vceph"]
+default_input_values = [2, true, 3, 1.0]
+
+[sub_resource type="VisualShaderNodeMultiplyAdd" id="VisualShaderNodeMultiplyAdd_vceph"]
+default_input_values = [0, Vector4(0, 0, 0, 0), 1, Vector4(1, 1, 1, 1), 2, Vector4(0, 0, 0, 0)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_k0dnd"]
+input_name = "color"
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_2cdgf"]
+parameter_name = "ColorParameter"
+default_value_enabled = true
+default_value = Color(0.5409905, 0.5409905, 0.5409905, 1)
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_1sls0"]
+default_input_values = [0, Quaternion(0, 0, 0, 0), 1, Quaternion(0, 0, 0, 0)]
+op_type = 2
+operator = 2
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_prwjs"]
+constant = Color(0.14044744, 0.14044744, 0.14044744, 1)
+
+[sub_resource type="VisualShader" id="VisualShader_wkehp"]
+flags/unshaded = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeFresnel_vceph")
+nodes/fragment/2/position = Vector2(-280, 440)
+nodes/fragment/3/node = SubResource("VisualShaderNodeMultiplyAdd_vceph")
+nodes/fragment/3/position = Vector2(60, 240)
+nodes/fragment/4/node = SubResource("VisualShaderNodeInput_k0dnd")
+nodes/fragment/4/position = Vector2(-560, -80)
+nodes/fragment/5/node = SubResource("VisualShaderNodeColorParameter_2cdgf")
+nodes/fragment/5/position = Vector2(-720, 80)
+nodes/fragment/6/node = SubResource("VisualShaderNodeVectorOp_1sls0")
+nodes/fragment/6/position = Vector2(-200, 40)
+nodes/fragment/7/node = SubResource("VisualShaderNodeColorConstant_prwjs")
+nodes/fragment/7/position = Vector2(-540, 360)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 1, 3, 0, 0, 0, 5, 0, 3, 0, 5, 0, 6, 0, 7, 0, 6, 1, 6, 0, 3, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m7mlg"]
+render_priority = 0
+shader = SubResource("VisualShader_wkehp")
+shader_parameter/ColorParameter = Color(0, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_4dhkl"]
+material = SubResource("ShaderMaterial_m7mlg")
+radius = 0.3
+height = 0.6
+radial_segments = 16
+rings = 8
+
+[node name="Flare" type="Node3D" unique_id=327063874]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=690335631]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.04, 0)
+mesh = SubResource("CylinderMesh_4dhkl")
+
+[node name="Node3D" type="Node3D" parent="MeshInstance3D" unique_id=306654903]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.19786233, 8.648837e-09)
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="MeshInstance3D/Node3D" unique_id=1989110960]
+amount = 64
+lifetime = 4.0
+randomness = 0.2
+process_material = SubResource("ParticleProcessMaterial_7tkr0")
+draw_pass_1 = SubResource("SphereMesh_4dhkl")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="MeshInstance3D/Node3D" unique_id=129921698]
+light_color = Color(0.6434978, 0.18144846, 0, 1)
+light_energy = 3.0
