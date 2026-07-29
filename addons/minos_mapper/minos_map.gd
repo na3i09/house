@@ -446,6 +446,26 @@ class GenMap:
 		return new_map
 	
 	
+	func generate(num_segments: int, segments: Array[MinosMapConfiguration], connecting_edges: Array[Vector3i] = [], sparse: bool = true) -> GenMap:
+		var new_map: GenMap = GenMap.new(map_owner)
+		
+		for edge: Vector3i in connecting_edges:
+			if edges.has(edge):
+				new_map.edges[edge] = edges[edge].duplicate()
+		
+		for i in range(num_segments):
+			var new_map_segment: GenMap = generate_segment(segments,new_map.edges.keys(),sparse)
+			
+			if not new_map_segment:
+				push_warning("failed to retry on iteration: " + str(i))
+				break
+			
+			append(new_map_segment)
+			new_map.append(new_map_segment)
+		
+		return new_map
+	
+	
 	## Generates a map segment picked from [param segments], and connected to one of the edges in [param connecting_edges] if provided
 	func generate_segment(segments: Array[MinosMapConfiguration], connecting_edges: Array[Vector3i] = [],sparse: bool = true) -> GenMap:
 		# Special case for generating a segment on an empty map
