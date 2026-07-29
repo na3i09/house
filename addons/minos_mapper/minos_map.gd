@@ -88,14 +88,22 @@ func generate_random_item_configuration_dictionary() -> Dictionary[Vector3i,Arra
 
 
 #region Map Generation
-## Generate and apply map configuration with [param generation_segments] number of segments
-func generate(generation_segments: int, clear_current_configuration: bool = true, sparse: bool = true, edge_pool: Array[Vector3i] = []) -> void:
+## Generate and apply map configuration with [param generation_segments] number of segments.
+## Returns the number of segments successfully generated before stopping.
+func generate(generation_segments: int, clear_current_configuration: bool = true, sparse: bool = true, edge_pool: Array[Vector3i] = []) -> int:
 	if clear_current_configuration:
 		clear_map()
 	if not _current_map:
 		_current_map = GenMap.new(self)
 	var map: GenMap = _current_map.generate(generation_segments,possible_segments,edge_pool,sparse)
+	if not map:
+		return 0
 	_apply_map_configuration(map.tiles)
+	
+	if OS.has_feature("editor"):
+		print("generated " + str(map.segment_count) + " of " + str(generation_segments) + " segments")
+	
+	return map.segment_count
 
 
 # Transform all tiles in the [param source] dictionary by the given [Transform3D] and append them to the [param destination] dictionary
@@ -417,7 +425,6 @@ class GenMap:
 			var new_map_segment: GenMap = generate_segment(segments,new_map.edges.keys(),sparse)
 			
 			if not new_map_segment:
-				push_warning("failed to retry on iteration: " + str(i))
 				break
 			
 			append(new_map_segment)
