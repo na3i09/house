@@ -360,6 +360,11 @@ class GenMap:
 	## [Array] of [AABB]s for each segment used to generate this map
 	var aabbs: Array[AABB] = []
 	
+	## Number of segments making up this map
+	var segment_count: int:
+		get:
+			return aabbs.size()
+	
 	var map_owner: MinosMap = null
 	
 	
