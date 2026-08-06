@@ -3,6 +3,7 @@ class_name PlayerInput
 
 @export var movement_action: GUIDEAction
 @export var jump_action: GUIDEAction
+@export var scoreboard_action: GUIDEAction
 
 @export var _rollback_synchronizer: RollbackSynchronizer
 
@@ -21,6 +22,11 @@ func _ready() -> void:
 	NetworkTime.before_tick_loop.connect(_gather)
 	NetworkRollback.after_prepare_tick.connect(_predict.unbind(1))
 	jump_action.just_triggered.connect(_jump)
+	scoreboard_action.triggered.connect(_toggle_scoreboard)
+
+func _toggle_scoreboard() -> void:
+	if is_multiplayer_authority():
+		ScoreBoard.visible = not ScoreBoard.visible
 
 func _process(_delta: float) -> void:
 	input_dir_buffer += movement_action.value_axis_2d
