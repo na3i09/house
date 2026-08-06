@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://daxhahnr5yvjr" path="res://levels/base_minos_map.tscn" id="1_p8mep"]
 [ext_resource type="Script" uid="uid://bu486f0sfj83e" path="res://addons/minos_mapper/minos_map_configuration.gd" id="2_34lcs"]
 [ext_resource type="Environment" uid="uid://bwy5o65wfm2bp" path="res://resources/test_environment.tres" id="2_rojct"]
-[ext_resource type="Resource" uid="uid://c3yg870xjx2vk" path="res://levels/minos_level_elements/four_posts.tres" id="4_ycpk3"]
+[ext_resource type="Resource" uid="uid://dlfkf5hfhja0p" path="res://levels/minos_level_elements/four_posts_reliable.tres" id="3_skr2b"]
 
 [sub_resource type="GDScript" id="GDScript_ycpk3"]
 resource_name = "TestMap"
@@ -32,8 +32,8 @@ script = SubResource("GDScript_ycpk3")
 minos_map = NodePath("MinosMap")
 
 [node name="MinosMap" parent="." unique_id=785683228 instance=ExtResource("1_p8mep")]
-possible_segments = Array[ExtResource("2_34lcs")]([ExtResource("4_ycpk3")])
 auto_generate = true
+possible_segments = Array[ExtResource("2_34lcs")]([ExtResource("3_skr2b")])
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1243861345]
 environment = ExtResource("2_rojct")
