@@ -61,6 +61,7 @@ func _on_hit(result: Dictionary) -> void:
 	if result["collider"] is Player:
 		var hit_target: Player = result["collider"]
 		if multiplayer.is_server():
+			ScoreBoard.report_kill(hit_target.name.to_int())
 			hit_target.die()
 		if multiplayer.get_unique_id() == player_peer_id:
 			print("hit " + hit_target.name)
