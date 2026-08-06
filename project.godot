@@ -25,6 +25,7 @@ NetworkEvents="*uid://bdmobxxptryj0"
 NetworkPerformance="*uid://cqgf7aqmjfoa3"
 WindowTiler="*uid://cmqjajhjgffm1"
 NetworkSimulator="*uid://1y2ey1e6qjwr"
+ScoreBoard="*uid://dhrirmxnaeyu8"
 
 [editor_plugins]
 
@@ -33,6 +34,7 @@ enabled=PackedStringArray("res://addons/guide/plugin.cfg", "res://addons/minos_m
 [file_customization]
 
 folder_colors={
+"res://autoloads/": "pink",
 "res://components/": "gray",
 "res://input/": "green",
 "res://materials/": "purple",

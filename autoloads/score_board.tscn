@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://dhrirmxnaeyu8"]
+
+[sub_resource type="GDScript" id="GDScript_w42o0"]
+resource_name = "ScoreBoard"
+script/source = "extends CanvasLayer
+
+@onready var score_list: ItemList = $ScoreList
+
+var scores: Dictionary[int,int]
+
+func _ready() -> void:
+	hide()
+	visibility_changed.connect(_on_shown)
+
+
+func _on_shown() -> void:
+	if visible:
+		rebuild_list()
+
+
+func rebuild_score_table() -> void:
+	var new_scores: Dictionary[int,int]
+	
+	var peer_list := multiplayer.get_peers()
+	peer_list.append(multiplayer.get_unique_id())
+	
+	for id in peer_list:
+		new_scores[id] = scores.get(id,0)
+	
+	scores = new_scores
+	_send_updated_score_list.rpc(scores)
+
+
+func rebuild_list() -> void:
+	score_list.clear()
+	for item: int in scores:
+		score_list.add_item(str(item) + \": \" + str(scores[item]),null,false)
+
+
+func report_kill(killed_id: int) -> void:
+	if multiplayer.is_server():
+		scores[multiplayer.get_remote_sender_id()] += 1
+		_send_updated_score_list.rpc(scores)
+
+
+#region RPCs
+@rpc(\"authority\",\"call_remote\",\"reliable\",6)
+func _send_updated_score_list(score_dict: Dictionary[int,int]) -> void:
+	scores = score_dict
+
+
+@rpc(\"any_peer\",\"call_remote\",\"reliable\")
+func _request_updated_score_list() -> void:
+	_send_updated_score_list.rpc_id(multiplayer.get_remote_sender_id(),scores)
+#endregion
+"
+
+[node name="ScoreBoard" type="CanvasLayer" unique_id=1375145498]
+script = SubResource("GDScript_w42o0")
+
+[node name="ScoreList" type="ItemList" parent="." unique_id=655311792]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+auto_width = true
+auto_height = true
