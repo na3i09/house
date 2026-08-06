@@ -6,11 +6,13 @@
 [ext_resource type="PackedScene" uid="uid://dqvarinahvjmf" path="res://assets/spawnpoint_offset.tscn" id="4_dvbpi"]
 [ext_resource type="PackedScene" uid="uid://b1nm3mwbitohx" path="res://assets/lantern_and_ammo.tscn" id="5_p5y8w"]
 [ext_resource type="PackedScene" uid="uid://d0eso0ej13fbj" path="res://assets/floor_decal.tscn" id="6_i2eki"]
+[ext_resource type="PackedScene" uid="uid://5peaaaagvq1q" path="res://assets/flare.tscn" id="7_dvbpi"]
 
 [resource]
 script = ExtResource("1_puuhx")
 table = Dictionary[StringName, PackedScene]({
 &"ammo_pickup": ExtResource("3_i2eki"),
+&"flare": ExtResource("7_dvbpi"),
 &"floor_decal": ExtResource("6_i2eki"),
 &"lantern": ExtResource("2_dxbwk"),
 &"lantern_and_ammo": ExtResource("5_p5y8w"),
