@@ -4,9 +4,15 @@
 resource_name = "ScoreBoard"
 script/source = "extends CanvasLayer
 
-@onready var score_list: ItemList = $ScoreList
+
+@onready var names: ItemList = $ScorePanel/ScoreBox/Names
+@onready var kills: ItemList = $ScorePanel/ScoreBox/Kills
+@onready var deaths: ItemList = $ScorePanel/ScoreBox/Deaths
+
 
 var scores: Dictionary[int,int]
+
+var death_scores: Dictionary[int,int]
 
 func _ready() -> void:
 	hide()
@@ -20,26 +26,34 @@ func _on_shown() -> void:
 
 func rebuild_score_table() -> void:
 	var new_scores: Dictionary[int,int]
+	var new_death_scores: Dictionary[int,int]
 	
 	var peer_list := multiplayer.get_peers()
 	peer_list.append(multiplayer.get_unique_id())
 	
 	for id in peer_list:
 		new_scores[id] = scores.get(id,0)
+		new_death_scores[id] = death_scores.get(id,0)
 	
 	scores = new_scores
+	death_scores = new_death_scores
 	_send_updated_score_list.rpc(scores)
 
 
 func rebuild_list() -> void:
-	score_list.clear()
+	names.clear()
+	kills.clear()
+	deaths.clear()
 	for item: int in scores:
-		score_list.add_item(str(item) + \": \" + str(scores[item]),null,false)
+		names.add_item(str(item),null,false)
+		kills.add_item(str(scores[item]),null,false)
+		deaths.add_item(str(death_scores[item]),null,false)
 
 
 func report_kill(killed_id: int) -> void:
 	if multiplayer.is_server():
 		scores[multiplayer.get_remote_sender_id()] += 1
+		death_scores[killed_id] += 1
 		_send_updated_score_list.rpc(scores)
 
 
@@ -58,17 +72,37 @@ func _request_updated_score_list() -> void:
 [node name="ScoreBoard" type="CanvasLayer" unique_id=1375145498]
 script = SubResource("GDScript_w42o0")
 
-[node name="ScoreList" type="ItemList" parent="." unique_id=655311792]
+[node name="ScorePanel" type="PanelContainer" parent="." unique_id=1342417273]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -16.0
+offset_top = -50.5
+offset_right = 16.0
+offset_bottom = 50.5
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="ScoreBox" type="HBoxContainer" parent="ScorePanel" unique_id=60348441]
+layout_mode = 2
+alignment = 1
+
+[node name="Names" type="ItemList" parent="ScorePanel/ScoreBox" unique_id=1166163082]
+layout_mode = 2
+allow_search = false
+auto_width = true
+auto_height = true
+
+[node name="Kills" type="ItemList" parent="ScorePanel/ScoreBox" unique_id=323667870]
+layout_mode = 2
+allow_search = false
+auto_width = true
+auto_height = true
+
+[node name="Deaths" type="ItemList" parent="ScorePanel/ScoreBox" unique_id=1713088168]
+layout_mode = 2
+allow_search = false
 auto_width = true
 auto_height = true

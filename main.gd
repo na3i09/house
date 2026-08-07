@@ -48,6 +48,7 @@ func _initialize_host_and_client() -> void:
 func _initialize_host() -> void:
 	multiplayer.peer_connected.connect(ScoreBoard.rebuild_score_table.unbind(1))
 	multiplayer.peer_disconnected.connect(ScoreBoard.rebuild_score_table.unbind(1))
+	ScoreBoard.rebuild_score_table()
 	var level = MapScene.instantiate()
 	add_child(level,true)
 	lobby_menu.start_button.start_match = start_match
